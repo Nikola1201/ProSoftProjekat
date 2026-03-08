@@ -46,7 +46,16 @@
     <Compile Include="Communication\Request.cs" />
     <Compile Include="Communication\Response.cs" />
     <Compile Include="Communication\Sender.cs" />
+    <Compile Include="Domain\Admin.cs" />
+    <Compile Include="Domain\CasVoznje.cs" />
     <Compile Include="Domain\IEntity.cs" />
+    <Compile Include="Domain\Instruktor.cs" />
+    <Compile Include="Domain\Ispit.cs" />
+    <Compile Include="Domain\Kandidat.cs" />
+    <Compile Include="Domain\PaketObuke.cs" />
+    <Compile Include="Domain\Placanje.cs" />
+    <Compile Include="Domain\Upis.cs" />
+    <Compile Include="Domain\Vozilo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
