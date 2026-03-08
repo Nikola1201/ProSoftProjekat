@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server
+namespace Common
 {
-    public class Server
+    public class Class1
     {
-
     }
 }
