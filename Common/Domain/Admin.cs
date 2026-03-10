@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 
 namespace Common.Domain
 {
+    [Serializable]
     public class Admin : IEntity
     {
         public int AdminId { get; set; }
@@ -20,8 +21,7 @@ namespace Common.Domain
             $"'{Ime}', '{Prezime}', '{Username}', '{Lozinka}', '{Email}'";
 
         public object Query =>
-            $"INSERT INTO Admin (Ime, Prezime, Username, Lozinka, Email) " +
-            $"VALUES ({Values})";
+            $"[Username] = '{Username}' and [Lozinka] = '{Lozinka}'";
 
         public object TableKeyColumn => "AdminId";
 

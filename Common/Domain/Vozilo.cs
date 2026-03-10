@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 
 namespace Common.Domain
 {
+    [Serializable]
     public class Vozilo : IEntity
     {
         public int VoziloId { get; set; }

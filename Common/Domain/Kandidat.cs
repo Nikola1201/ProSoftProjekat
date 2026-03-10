@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 
 namespace Common.Domain
 {
+    [Serializable]
     public class Kandidat : IEntity
     {
         public int KandidatId { get; set; }
