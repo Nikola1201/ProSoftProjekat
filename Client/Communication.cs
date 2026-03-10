@@ -1,6 +1,7 @@
 ﻿using Common.Communication;
 using Common.Domain;
 using System;
+using System.Collections.Generic;
 using System.Net.Sockets;
 
 namespace Client
@@ -38,6 +39,29 @@ namespace Client
             {
                 Argument = admin,
                 Operation = Operation.Login
+            };
+            _sender.Send(request);
+            Response response = (Response)_receiver.Receive();
+            return response;
+        }
+
+        internal List<Kategorija> GetAllKategorije()
+        {
+            Request request = new Request()
+            {
+                Operation = Operation.GetAllKategorije
+            };
+            _sender.Send(request);
+            Response response = (Response)_receiver.Receive();
+            return (List<Kategorija>)response.Result;
+        }
+
+        internal Response CreateKandidat(Kandidat kandidat)
+        {
+            Request request = new Request()
+            {
+                Argument = kandidat,
+                Operation = Operation.KreirajKandidata
             };
             _sender.Send(request);
             Response response = (Response)_receiver.Receive();

@@ -9,5 +9,7 @@ namespace Common.Communication
     {
         Login,
         Logout,
+        KreirajKandidata,
+        GetAllKategorije,
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Common.Domain;
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 
@@ -47,6 +48,30 @@ namespace DBBroker
             reader.Close();
             command.Dispose();
             return entity;
+        }
+
+        public IEntity Add(IEntity entity)
+        {
+            SqlCommand command = _connection.CreateCommand();
+            command.CommandText = $"INSERT INTO {entity.TableName} VALUES ({entity.Values})";
+            command.ExecuteNonQuery();
+            command.Dispose();
+
+            return entity;
+
+        }
+
+        public List<IEntity> GetAll(IEntity entity)
+        {
+            SqlCommand command = _connection.CreateCommand();
+            command.CommandText = $"SELECT * FROM {entity.TableName}";
+            SqlDataReader reader = command.ExecuteReader();
+            List<IEntity> entities = entity.GetReaderList(reader);
+            reader.Close();
+            command.Dispose();
+
+            return entities;
+
         }
     }
 }

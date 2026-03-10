@@ -15,14 +15,14 @@ namespace Common.Domain
         public string Email { get; set; }
         public string Adresa { get; set; }
         public DateTime DatumUpisa { get; set; }
-        public string Kategorija { get; set; }  // 'A', 'B', 'C'
+        public Kategorija Kategorija { get; set; }
         public bool Aktivan { get; set; }
 
         public string TableName => "Kandidat";
 
         public string Values =>
             $"'{Ime}', '{Prezime}', '{JMBG}', '{Telefon}', '{Email}', " +
-            $"'{Adresa}', '{DatumUpisa:yyyy-MM-dd}', '{Kategorija}'";
+            $"'{Adresa}', '{DatumUpisa:yyyy-MM-dd}', 1, '{Kategorija.KategorijaID}'";
 
         public object Query =>
             $"INSERT INTO Kandidat (Ime, Prezime, JMBG, Telefon, Email, Adresa, DatumUpisa, Kategorija) " +
@@ -69,7 +69,7 @@ namespace Common.Domain
                 Email = reader["Email"].ToString(),
                 Adresa = reader["Adresa"].ToString(),
                 DatumUpisa = (DateTime)reader["DatumUpisa"],
-                Kategorija = reader["Kategorija"].ToString(),
+                //Kategorija = reader["Kategorija"].ToString(),
                 Aktivan = (bool)reader["Aktivan"]
             };
         }
