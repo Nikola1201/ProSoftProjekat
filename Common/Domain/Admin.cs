@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace Common.Domain
@@ -50,16 +51,20 @@ namespace Common.Domain
 
         public IEntity GetReaderResult(SqlDataReader reader)
         {
-            return new Admin
+            if (reader.Read())
             {
-                AdminId = (int)reader["AdminId"],
-                Ime = reader["Ime"].ToString(),
-                Prezime = reader["Prezime"].ToString(),
-                Username = reader["Username"].ToString(),
-                Lozinka = reader["Lozinka"].ToString(),
-                Email = reader["Email"].ToString(),
-                DatumKreiranja = (DateTime)reader["DatumKreiranja"]
-            };
+                return new Admin
+                {
+                    AdminId = (int)reader["AdminId"],
+                    Ime = reader["Ime"].ToString(),
+                    Prezime = reader["Prezime"].ToString(),
+                    Username = reader["Username"].ToString(),
+                    Lozinka = reader["Lozinka"].ToString(),
+                    Email = reader["Email"].ToString(),
+                    DatumKreiranja = (DateTime)reader["DatumKreiranja"]
+                };
+            }
+            return null;
         }
     }
 }

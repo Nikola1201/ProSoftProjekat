@@ -9,32 +9,32 @@ namespace Server.SystemOperation
 {
     public abstract class SystemOperationBase
     {
-        protected Broker broker;
+        protected Broker _broker;
 
         public SystemOperationBase()
         {
-            broker = new Broker();
+            _broker = new Broker();
         }
 
         public void ExecuteTemplate()
         {
             try
             {
-                broker.OpenConnection();
-                broker.BeginTransaction();
+                _broker.OpenConnection();
+                _broker.BeginTransaction();
 
                 ExecuteConcreteOperation();
 
-                broker.Commit();
+                _broker.Commit();
             }
             catch (Exception ex)
             {
-                broker.Rollback();
+                _broker.Rollback();
                 throw ex;
             }
             finally
             {
-                broker.CloseConnection();
+                _broker.CloseConnection();
             }
         }
         protected abstract void ExecuteConcreteOperation();

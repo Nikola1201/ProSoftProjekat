@@ -1,4 +1,9 @@
-﻿namespace DBBroker
+﻿using Common.Domain;
+using System;
+using System.Data.SqlClient;
+using System.Data.SqlTypes;
+
+namespace DBBroker
 {
     public class Broker
     {
@@ -31,6 +36,17 @@
         public void OpenConnection()
         {
             _connection.OpenConnection();
+        }
+
+        public IEntity GetEntityByID(IEntity entity)
+        {
+            SqlCommand command = _connection.CreateCommand();
+            command.CommandText = $"SELECT * FROM {entity.TableName} WHERE {entity.Query}";
+            SqlDataReader reader = command.ExecuteReader();
+            entity = entity.GetReaderResult(reader);
+            reader.Close();
+            command.Dispose();
+            return entity;
         }
     }
 }

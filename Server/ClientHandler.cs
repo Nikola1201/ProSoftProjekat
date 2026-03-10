@@ -1,11 +1,12 @@
 ﻿using Common.Communication;
+using Common.Domain;
 using System;
 using System.Diagnostics;
 using System.Net.Sockets;
 
 namespace Server
 {
-    internal class ClientHandler
+    public class ClientHandler
     {
         private Socket _clientSocket;
         private Receiver _receiver;
@@ -16,6 +17,11 @@ namespace Server
             _clientSocket = clientSocket;
             _sender = new Sender(clientSocket);
             _receiver = new Receiver(clientSocket);
+        }
+
+        internal void Close()
+        {
+            throw new NotImplementedException();
         }
 
         internal void Handle()
@@ -45,6 +51,7 @@ namespace Server
                 switch (request.Operation)
                 {
                     case Operation.Login:
+                        response.Result = Controller.Instance.Login((Admin)request.Argument);
                         break;
                     default:
                         break;
