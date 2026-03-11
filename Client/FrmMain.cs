@@ -1,4 +1,5 @@
-﻿using Common.Domain;
+﻿using Client.GuiController;
+using Common.Domain;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,11 +19,33 @@ namespace Client
         public FrmMain()
         {
             InitializeComponent();
+            ConfigureMainPanel();
         }
 
         public FrmMain(Admin admin)
         {
             this.admin = admin;
+            InitializeComponent();
+            ConfigureMainPanel();
+            kreirajKandidataToolStripMenuItem.Click += (s, a)
+                => MainCoordinator.Instance.ShowKreirajKandidataPanel();
+        }
+
+        private void ConfigureMainPanel()
+        {
+            pnlMain.AutoSize = false;
+            pnlMain.AutoSizeMode = AutoSizeMode.GrowOnly;
+        }
+
+        internal void ChangePanel(Control control)
+        {
+            if (control == null) return;
+
+            pnlMain.SuspendLayout();
+            pnlMain.Controls.Clear();
+            control.Dock = DockStyle.Fill;
+            pnlMain.Controls.Add(control);
+            pnlMain.ResumeLayout(true);
         }
     }
 }

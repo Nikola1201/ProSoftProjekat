@@ -53,6 +53,12 @@ namespace Server
                     case Operation.Login:
                         response.Result = Controller.Instance.Login((Admin)request.Argument);
                         break;
+                    case Operation.KreirajKandidata:
+                        response.Result = Controller.Instance.KreirajKandidata((Kandidat)request.Argument);
+                        break;
+                    case Operation.GetAllKategorije:
+                        response.Result = Controller.Instance.GetAllKategorije();
+                        break;
                     default:
                         break;
                 }

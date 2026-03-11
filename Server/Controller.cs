@@ -1,5 +1,6 @@
 ﻿using Common.Domain;
 using DBBroker;
+using Server.SystemOperation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,21 @@ namespace Server
             so.ExecuteTemplate();
 
             return (Admin)so.Result;
+        }
+
+        internal Kandidat KreirajKandidata(Kandidat argument)
+        {
+            KreirajKandidataSO so = new KreirajKandidataSO(argument);
+            so.ExecuteTemplate();
+            return (Kandidat)so.Result;
+         
+        }
+
+        internal List<Kategorija> GetAllKategorije()
+        {
+            VratiSveKategorijeSO so = new VratiSveKategorijeSO();
+            so.ExecuteTemplate();
+            return so.Result;
         }
     }
 }
