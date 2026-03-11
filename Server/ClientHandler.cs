@@ -59,6 +59,15 @@ namespace Server
                     case Operation.GetAllKategorije:
                         response.Result = Controller.Instance.GetAllKategorije();
                         break;
+                    case Operation.GetAllKandidati:
+                        response.Result = Controller.Instance.GetAllKandidati((bool)request.Argument);
+                        break;
+                    case Operation.GetAllPaketiObuke:
+                        response.Result = Controller.Instance.GetAllPaketiObuke();
+                        break;
+                    case Operation.UpisiKandidata:
+                        response.Result = Controller.Instance.UpisiKandidata((Upis)request.Argument);
+                        break;
                     default:
                         break;
                 }

@@ -13,7 +13,11 @@ namespace Client.GuiController
     internal class KandidatGuiController
     {
         private UCKreirajKandidata _ucKreirajKandidata;
-        BindingList<Kategorija> kategorije;
+        private UCUpisiKandidata _ucUpisiKandidata;
+        private BindingList<Kategorija> kategorije;
+        private BindingList<Kandidat> kandidati;
+        private BindingList<PaketObuke> paketiObuke;
+        private BindingList<PaketObuke> prikazaniPaketiObuke;
 
         internal Control CreateKandidat()
         {
@@ -24,6 +28,16 @@ namespace Client.GuiController
             return _ucKreirajKandidata;
         }
 
+        internal Control CreateUpisKandidata()
+        {
+            _ucUpisiKandidata = new UCUpisiKandidata();
+            PrepareUCUpisiKandidata();
+            _ucUpisiKandidata.CmbKandidat.SelectedIndexChanged += CmbKandidat_SelectedIndexChanged;
+            _ucUpisiKandidata.BtnUpisi.Click += UpisiKandidata;
+
+            return _ucUpisiKandidata;
+        }
+
         private void PrepareUCKreirajKandidata()
         {
             List<Kategorija> k = Communication.Instance.GetAllKategorije();
@@ -31,7 +45,7 @@ namespace Client.GuiController
             _ucKreirajKandidata.CmbKategorije.DataSource = kategorije;
             _ucKreirajKandidata.CmbKategorije.DisplayMember = nameof(Kategorija.NazivKategorije);
             _ucKreirajKandidata.CmbKategorije.ValueMember = nameof(Kategorija.KategorijaID);
-
+        
         }
         private void KreirajKandidata(object senter, EventArgs e)
         {
@@ -227,6 +241,93 @@ namespace Client.GuiController
 
             _ucKreirajKandidata.TxtIme.Focus();
 
+        }
+
+        private void PrepareUCUpisiKandidata()
+        {
+            List<Kandidat> sviKandidati = Communication.Instance.GetAllKandidati(false) ?? new List<Kandidat>();
+            List<PaketObuke> sviPaketi = Communication.Instance.GetAllPaketiObuke() ?? new List<PaketObuke>();
+
+            kandidati = new BindingList<Kandidat>(sviKandidati);
+            paketiObuke = new BindingList<PaketObuke>(sviPaketi);
+            prikazaniPaketiObuke = new BindingList<PaketObuke>(new List<PaketObuke>());
+
+            _ucUpisiKandidata.CmbKandidat.DataSource = kandidati;
+            _ucUpisiKandidata.CmbPaketObuke.DataSource = prikazaniPaketiObuke;
+
+            RefreshPaketiObuke();
+        }
+
+        private void CmbKandidat_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshPaketiObuke();
+        }
+
+        private void RefreshPaketiObuke()
+        {
+            if (_ucUpisiKandidata == null)
+            {
+                return;
+            }
+
+            Kandidat kandidat = _ucUpisiKandidata.CmbKandidat.SelectedItem as Kandidat;
+            string nazivKategorije = kandidat?.Kategorija?.NazivKategorije;
+
+            List<PaketObuke> filtriraniPaketi = paketiObuke == null
+                ? new List<PaketObuke>()
+                : paketiObuke
+                    .Where(p => p.Kategorija.KategorijaID == kandidat.Kategorija.KategorijaID)
+                    .ToList();
+
+            prikazaniPaketiObuke = new BindingList<PaketObuke>(filtriraniPaketi);
+            _ucUpisiKandidata.CmbPaketObuke.DataSource = prikazaniPaketiObuke;
+        }
+
+        private void UpisiKandidata(object sender, EventArgs e)
+        {
+            Kandidat kandidat = _ucUpisiKandidata.CmbKandidat.SelectedItem as Kandidat;
+            PaketObuke paketObuke = _ucUpisiKandidata.CmbPaketObuke.SelectedItem as PaketObuke;
+
+            if (kandidat == null)
+            {
+                MessageBox.Show("Nema kandidata dostupnih za upis.", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                _ucUpisiKandidata.CmbKandidat.Focus();
+                return;
+            }
+
+            if (paketObuke == null)
+            {
+                MessageBox.Show("Izabrani kandidat nema dostupan paket obuke za svoju kategoriju.", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                _ucUpisiKandidata.CmbPaketObuke.Focus();
+                return;
+            }
+
+            Upis upis = new Upis
+            {
+                KandidatId = kandidat.KandidatId,
+                PaketId = paketObuke.PaketId,
+                DatumUpisa = DateTime.Now.Date,
+                Status = "aktivan",
+                Kandidat = kandidat,
+                Paket = paketObuke
+            };
+
+            try
+            {
+                Response response = Communication.Instance.UpisiKandidata(upis);
+                if (response.Exception != null)
+                {
+                    MessageBox.Show(response.Exception.Message, "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                MessageBox.Show("Sistem je uspesno upisao kandidata.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                PrepareUCUpisiKandidata();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Server je ugasen!", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

@@ -34,6 +34,7 @@
             this.kreirajKandidataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.pnlMain = new System.Windows.Forms.Panel();
+            this.upisiKandidataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,7 +51,8 @@
             // kandidatToolStripMenuItem
             // 
             this.kandidatToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.kreirajKandidataToolStripMenuItem});
+            this.kreirajKandidataToolStripMenuItem,
+            this.upisiKandidataToolStripMenuItem});
             this.kandidatToolStripMenuItem.Name = "kandidatToolStripMenuItem";
             this.kandidatToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
             this.kandidatToolStripMenuItem.Text = "Kandidat";
@@ -58,7 +60,7 @@
             // kreirajKandidataToolStripMenuItem
             // 
             this.kreirajKandidataToolStripMenuItem.Name = "kreirajKandidataToolStripMenuItem";
-            this.kreirajKandidataToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.kreirajKandidataToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.kreirajKandidataToolStripMenuItem.Text = "Kreiraj kandidata";
             // 
             // contextMenuStrip1
@@ -72,6 +74,12 @@
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(776, 411);
             this.pnlMain.TabIndex = 2;
+            // 
+            // upisiKandidataToolStripMenuItem
+            // 
+            this.upisiKandidataToolStripMenuItem.Name = "upisiKandidataToolStripMenuItem";
+            this.upisiKandidataToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.upisiKandidataToolStripMenuItem.Text = "Upisi kandidata";
             // 
             // FrmMain
             // 
@@ -97,5 +105,6 @@
         private System.Windows.Forms.ToolStripMenuItem kreirajKandidataToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.Panel pnlMain;
+        private System.Windows.Forms.ToolStripMenuItem upisiKandidataToolStripMenuItem;
     }
 }

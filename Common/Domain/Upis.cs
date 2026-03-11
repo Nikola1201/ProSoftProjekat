@@ -12,7 +12,8 @@ namespace Common.Domain
         public int PaketId { get; set; }
         public DateTime DatumUpisa { get; set; }
         public string Status { get; set; }  // 'aktivan', 'polozio', 'pao', 'odustao'
-
+        public Kandidat Kandidat { get; set; }
+        public PaketObuke Paket { get; set; }
         public string TableName => "Upis";
 
         public string Values =>

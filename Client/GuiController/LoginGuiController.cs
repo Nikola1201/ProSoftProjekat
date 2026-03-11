@@ -2,6 +2,7 @@
 using Common.Domain;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -73,9 +74,10 @@ namespace Client.GuiController
                     MessageBox.Show("Neuspesna prijava, molimo Vas pokusajte kasnije");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Server je ugasen!");
+                Debug.WriteLine(ex.Message);
+                MessageBox.Show($"Server je ugasen! {ex.Message}");
                 return;
             }
         }

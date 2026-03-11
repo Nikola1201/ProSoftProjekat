@@ -27,6 +27,12 @@ namespace Client.GuiController
         {
             _frmMain.ChangePanel(_kandidatGuiController.CreateKandidat());
         }
+
+        internal void ShowUpisiKandidataPanel()
+        {
+            _frmMain.ChangePanel(_kandidatGuiController.CreateUpisKandidata());
+        }
+
         internal void ShowDefault()
         {
             UCDefault uCDefault = new UCDefault();

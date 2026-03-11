@@ -67,5 +67,40 @@ namespace Client
             Response response = (Response)_receiver.Receive();
             return response;
         }
+
+        internal List<Kandidat> GetAllKandidati(bool upisani)
+        {
+            Request request = new Request()
+            {
+                Argument = upisani,
+                Operation = Operation.GetAllKandidati
+            };
+            _sender.Send(request);
+            Response response = (Response)_receiver.Receive();
+            return (List<Kandidat>)response.Result;
+        }
+
+        internal List<PaketObuke> GetAllPaketiObuke()
+        {
+            Request request = new Request()
+            {
+                Operation = Operation.GetAllPaketiObuke
+            };
+            _sender.Send(request);
+            Response response = (Response)_receiver.Receive();
+            return (List<PaketObuke>)response.Result;
+        }
+
+        internal Response UpisiKandidata(Upis upis)
+        {
+            Request request = new Request()
+            {
+                Argument = upis,
+                Operation = Operation.UpisiKandidata
+            };
+            _sender.Send(request);
+            Response response = (Response)_receiver.Receive();
+            return response;
+        }
     }
 }

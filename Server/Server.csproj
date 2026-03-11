@@ -61,7 +61,10 @@
     <Compile Include="Server.cs" />
     <Compile Include="SystemOperation\KreirajKandidataSO.cs" />
     <Compile Include="SystemOperation\SystemOperationBase.cs" />
+    <Compile Include="SystemOperation\UpisiKandidataSO.cs" />
+    <Compile Include="SystemOperation\VratiSveNeupisaneKandidateSO.cs" />
     <Compile Include="SystemOperation\VratiSveKategorijeSO.cs" />
+    <Compile Include="SystemOperation\VratiSvePaketeObukeSO.cs" />
     <EmbeddedResource Include="FrmServer.resx">
       <DependentUpon>FrmServer.cs</DependentUpon>
     </EmbeddedResource>

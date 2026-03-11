@@ -11,5 +11,8 @@ namespace Common.Communication
         Logout,
         KreirajKandidata,
         GetAllKategorije,
+        GetAllKandidati,
+        GetAllPaketiObuke,
+        UpisiKandidata,
     }
 }

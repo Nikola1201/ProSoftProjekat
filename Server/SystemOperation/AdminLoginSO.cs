@@ -15,7 +15,7 @@ namespace Server
 
         protected override void ExecuteConcreteOperation()
         {
-            Result = _broker.GetEntityByID(_admin);
+            Result = _broker.GetEntityByQuery(_admin);
             if (Result != null)
             {
                 foreach (Admin admin in Server.loggedIn)

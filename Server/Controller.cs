@@ -40,5 +40,32 @@ namespace Server
             so.ExecuteTemplate();
             return so.Result;
         }
+
+        internal List<Kandidat> GetAllKandidati(bool upisani)
+        {
+            if(upisani == false)
+            {
+                VratiSveNeupisaneKandidateSO so = new VratiSveNeupisaneKandidateSO();
+                so.ExecuteTemplate();
+                return so.Result;
+            }
+            
+            return new List<Kandidat>();
+          
+        }
+
+        internal List<PaketObuke> GetAllPaketiObuke()
+        {
+            VratiSvePaketeObukeSO so = new VratiSvePaketeObukeSO();
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal Upis UpisiKandidata(Upis argument)
+        {
+            UpisiKandidataSO so = new UpisiKandidataSO(argument);
+            so.ExecuteTemplate();
+            return (Upis)so.Result;
+        }
     }
 }

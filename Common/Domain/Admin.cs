@@ -29,8 +29,7 @@ namespace Common.Domain
         public object SearchQuery =>
             $"SELECT * FROM Admin WHERE Ime LIKE '%{Ime}%' OR Prezime LIKE '%{Prezime}%'";
 
-        public object TableKeyQuery =>
-            $"SELECT * FROM Admin WHERE AdminId = {AdminId}";
+        public object TableKeyQuery => throw new NotImplementedException();
 
         public object Update =>
             $"UPDATE Admin SET " +
@@ -44,8 +43,22 @@ namespace Common.Domain
         public List<IEntity> GetReaderList(SqlDataReader reader)
         {
             var list = new List<IEntity>();
+            Admin a = new Admin();
             while (reader.Read())
-                list.Add(GetReaderResult(reader));
+            {
+                list.Add(new Admin
+                    {
+                        AdminId = (int)reader["AdminId"],
+                        Ime = reader["Ime"].ToString(),
+                        Prezime = reader["Prezime"].ToString(),
+                        Username = reader["Username"].ToString(),
+                        Lozinka = reader["Lozinka"].ToString(),
+                        Email = reader["Email"].ToString(),
+                        DatumKreiranja = (DateTime)reader["DatumKreiranja"]
+                    }
+                );
+
+            }
             return list;
         }
 
