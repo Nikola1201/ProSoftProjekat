@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Domain;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
@@ -14,7 +15,8 @@ namespace Server
     public class Server
     {
         Socket socket;
-
+        public static List<ClientHandler> clients = new List<ClientHandler>();
+        public static List<Admin> loggedIn = new List<Admin>();
         public Server()
         {
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -38,7 +40,7 @@ namespace Server
                 {
                     Socket clientSocket = socket.Accept();
                     ClientHandler handler = new ClientHandler(clientSocket);
-
+                    clients.Add(handler);
                     Thread clientThread = new Thread(handler.Handle);
                     clientThread.Start();
                 }
@@ -50,6 +52,11 @@ namespace Server
         }
         public void Stop()
         {
+            foreach (ClientHandler handler in clients) {
+                handler.Close();
+            }
+            loggedIn.Clear();
+            clients.Clear();
             socket.Close();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Common.Communication;
+using Common.Domain;
 using System;
 using System.Net.Sockets;
 
@@ -15,7 +16,7 @@ namespace Client
 
         private Socket _socket;
         private Sender _sender;
-        private Sender _receiver;
+        private Receiver _receiver;
 
         public void Connect()
         {
@@ -28,7 +29,19 @@ namespace Client
                 throw;
             }
             _sender = new Sender(_socket);
-            _receiver = new Sender(_socket);
+            _receiver = new Receiver(_socket);
+        }
+
+        internal Response Login(Admin admin)
+        {
+            Request request = new Request()
+            {
+                Argument = admin,
+                Operation = Operation.Login
+            };
+            _sender.Send(request);
+            Response response = (Response)_receiver.Receive();
+            return response;
         }
     }
 }

@@ -16,8 +16,11 @@ namespace Server
         public FrmServer()
         {
             InitializeComponent();
+            _server = new Server();
+            _server.Start();
             btnStart.Enabled = false;
-            
+            btnStop.Enabled = true;
+            textBox1.Text = "Server je pokrenut!";
         }
 
         private void btnStart_Click(object sender, EventArgs e)

@@ -1,5 +1,4 @@
-﻿using Common.Domain;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,18 +10,17 @@ using System.Windows.Forms;
 
 namespace Client
 {
-    public partial class FrmMain : Form
+    public partial class FrmLogin : Form
     {
-        private Admin admin;
-
-        public FrmMain()
+        public FrmLogin()
         {
             InitializeComponent();
         }
 
-        public FrmMain(Admin admin)
+        private void FrmLogin_Load(object sender, EventArgs e)
         {
-            this.admin = admin;
+            Communication.Instance.Connect();
+            this.Text = "Login";
         }
     }
 }
