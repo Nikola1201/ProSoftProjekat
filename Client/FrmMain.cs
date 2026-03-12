@@ -31,6 +31,8 @@ namespace Client
                 => MainCoordinator.Instance.ShowKreirajKandidataPanel();
             upisiKandidataToolStripMenuItem.Click += (s, a)
                 => MainCoordinator.Instance.ShowUpisiKandidataPanel();
+            ispisiKandidataToolStripMenuItem.Click += (s, a)
+                => MainCoordinator.Instance.ShowIspisiKandidataPanel();
         }
 
         private void ConfigureMainPanel()

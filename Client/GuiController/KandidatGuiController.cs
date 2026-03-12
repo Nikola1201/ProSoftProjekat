@@ -14,10 +14,14 @@ namespace Client.GuiController
     {
         private UCKreirajKandidata _ucKreirajKandidata;
         private UCUpisiKandidata _ucUpisiKandidata;
+        private UCObrisiKandidata _ucObrisiKandidata;
+
+
         private BindingList<Kategorija> kategorije;
-        private BindingList<Kandidat> kandidati;
+        private BindingList<Kandidat> neupisaniKandidati;
         private BindingList<PaketObuke> paketiObuke;
         private BindingList<PaketObuke> prikazaniPaketiObuke;
+        private BindingList<Kandidat> upisaniKandidati;
 
         internal Control CreateKandidat()
         {
@@ -45,7 +49,7 @@ namespace Client.GuiController
             _ucKreirajKandidata.CmbKategorije.DataSource = kategorije;
             _ucKreirajKandidata.CmbKategorije.DisplayMember = nameof(Kategorija.NazivKategorije);
             _ucKreirajKandidata.CmbKategorije.ValueMember = nameof(Kategorija.KategorijaID);
-        
+
         }
         private void KreirajKandidata(object senter, EventArgs e)
         {
@@ -248,12 +252,23 @@ namespace Client.GuiController
             List<Kandidat> sviKandidati = Communication.Instance.GetAllKandidati(false) ?? new List<Kandidat>();
             List<PaketObuke> sviPaketi = Communication.Instance.GetAllPaketiObuke() ?? new List<PaketObuke>();
 
-            kandidati = new BindingList<Kandidat>(sviKandidati);
+            neupisaniKandidati = new BindingList<Kandidat>(sviKandidati);
             paketiObuke = new BindingList<PaketObuke>(sviPaketi);
             prikazaniPaketiObuke = new BindingList<PaketObuke>(new List<PaketObuke>());
 
-            _ucUpisiKandidata.CmbKandidat.DataSource = kandidati;
+            _ucUpisiKandidata.CmbKandidat.DataSource = neupisaniKandidati;
             _ucUpisiKandidata.CmbPaketObuke.DataSource = prikazaniPaketiObuke;
+
+            bool imaKandidata = neupisaniKandidati.Count > 0;
+            _ucUpisiKandidata.CmbKandidat.Enabled = imaKandidata;
+            _ucUpisiKandidata.CmbPaketObuke.Enabled = imaKandidata;
+            _ucUpisiKandidata.BtnUpisi.Enabled = imaKandidata;
+
+            if (!imaKandidata)
+            {
+                MessageBox.Show("Nema kandidata dostupnih za upisivanje.", "Informacija", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
 
             RefreshPaketiObuke();
         }
@@ -271,7 +286,15 @@ namespace Client.GuiController
             }
 
             Kandidat kandidat = _ucUpisiKandidata.CmbKandidat.SelectedItem as Kandidat;
-            string nazivKategorije = kandidat?.Kategorija?.NazivKategorije;
+
+            if (kandidat == null || kandidat.Kategorija == null)
+            {
+                prikazaniPaketiObuke = new BindingList<PaketObuke>(new List<PaketObuke>());
+                _ucUpisiKandidata.CmbPaketObuke.DataSource = prikazaniPaketiObuke;
+                _ucUpisiKandidata.CmbPaketObuke.Enabled = false;
+                _ucUpisiKandidata.BtnUpisi.Enabled = false;
+                return;
+            }
 
             List<PaketObuke> filtriraniPaketi = paketiObuke == null
                 ? new List<PaketObuke>()
@@ -281,6 +304,10 @@ namespace Client.GuiController
 
             prikazaniPaketiObuke = new BindingList<PaketObuke>(filtriraniPaketi);
             _ucUpisiKandidata.CmbPaketObuke.DataSource = prikazaniPaketiObuke;
+
+            bool imaPaketa = filtriraniPaketi.Count > 0;
+            _ucUpisiKandidata.CmbPaketObuke.Enabled = imaPaketa;
+            _ucUpisiKandidata.BtnUpisi.Enabled = imaPaketa;
         }
 
         private void UpisiKandidata(object sender, EventArgs e)
@@ -327,6 +354,58 @@ namespace Client.GuiController
             catch (Exception)
             {
                 MessageBox.Show("Server je ugasen!", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        internal Control CreateIspisiKandidata()
+        {
+            _ucObrisiKandidata = new UCObrisiKandidata();
+            PrepareUCObrisiKandidata();
+            _ucObrisiKandidata.BtnIspisi.Click += IspisiKandidata;
+
+            return _ucObrisiKandidata;
+        }
+
+        private void IspisiKandidata(object sender, EventArgs e)
+        {
+            Kandidat kandidat = _ucObrisiKandidata.CmbKandidat.SelectedItem as Kandidat;
+            if (kandidat == null)
+            {
+                MessageBox.Show("Nema kandidata dostupnih za brisanje.", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                _ucObrisiKandidata.CmbKandidat.Focus();
+                return;
+            }
+            try
+            {
+                Response response = Communication.Instance.ObrisiKandidata(kandidat);
+                if (response.Exception != null)
+                {
+                    MessageBox.Show(response.Exception.Message, "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                MessageBox.Show("Sistem je uspesno obrisao kandidata.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                PrepareUCObrisiKandidata();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Server je ugasen!", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void PrepareUCObrisiKandidata()
+        {
+            List<Kandidat> upisani = Communication.Instance.GetAllKandidati(upisani: true) ?? new List<Kandidat>();
+            upisaniKandidati = new BindingList<Kandidat>(upisani);
+            _ucObrisiKandidata.CmbKandidat.DataSource = upisaniKandidati;
+
+            bool imaUpisanih = upisaniKandidati.Count > 0;
+            _ucObrisiKandidata.CmbKandidat.Enabled = imaUpisanih;
+            _ucObrisiKandidata.BtnIspisi.Enabled = imaUpisanih;
+
+            if (!imaUpisanih)
+            {
+                MessageBox.Show("Nema upisanih kandidata dostupnih za ispisivanje.", "Informacija", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

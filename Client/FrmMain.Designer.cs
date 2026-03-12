@@ -32,9 +32,10 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.kandidatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.kreirajKandidataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.upisiKandidataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.pnlMain = new System.Windows.Forms.Panel();
-            this.upisiKandidataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ispisiKandidataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,7 +53,8 @@
             // 
             this.kandidatToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.kreirajKandidataToolStripMenuItem,
-            this.upisiKandidataToolStripMenuItem});
+            this.upisiKandidataToolStripMenuItem,
+            this.ispisiKandidataToolStripMenuItem});
             this.kandidatToolStripMenuItem.Name = "kandidatToolStripMenuItem";
             this.kandidatToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
             this.kandidatToolStripMenuItem.Text = "Kandidat";
@@ -62,6 +64,12 @@
             this.kreirajKandidataToolStripMenuItem.Name = "kreirajKandidataToolStripMenuItem";
             this.kreirajKandidataToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.kreirajKandidataToolStripMenuItem.Text = "Kreiraj kandidata";
+            // 
+            // upisiKandidataToolStripMenuItem
+            // 
+            this.upisiKandidataToolStripMenuItem.Name = "upisiKandidataToolStripMenuItem";
+            this.upisiKandidataToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.upisiKandidataToolStripMenuItem.Text = "Upisi kandidata";
             // 
             // contextMenuStrip1
             // 
@@ -75,11 +83,11 @@
             this.pnlMain.Size = new System.Drawing.Size(776, 411);
             this.pnlMain.TabIndex = 2;
             // 
-            // upisiKandidataToolStripMenuItem
+            // ispisiKandidataToolStripMenuItem
             // 
-            this.upisiKandidataToolStripMenuItem.Name = "upisiKandidataToolStripMenuItem";
-            this.upisiKandidataToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.upisiKandidataToolStripMenuItem.Text = "Upisi kandidata";
+            this.ispisiKandidataToolStripMenuItem.Name = "ispisiKandidataToolStripMenuItem";
+            this.ispisiKandidataToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ispisiKandidataToolStripMenuItem.Text = "Ispisi kandidata";
             // 
             // FrmMain
             // 
@@ -106,5 +114,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.Panel pnlMain;
         private System.Windows.Forms.ToolStripMenuItem upisiKandidataToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ispisiKandidataToolStripMenuItem;
     }
 }

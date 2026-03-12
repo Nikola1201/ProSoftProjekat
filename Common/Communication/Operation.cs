@@ -14,5 +14,6 @@ namespace Common.Communication
         GetAllKandidati,
         GetAllPaketiObuke,
         UpisiKandidata,
+        ObrisiKandidata,
     }
 }

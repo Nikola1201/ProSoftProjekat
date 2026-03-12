@@ -80,5 +80,13 @@ namespace DBBroker
             return entities;
 
         }
+
+        public void Delete(IEntity entity)
+        {
+            SqlCommand cmd = _connection.CreateCommand();
+            cmd.CommandText = $"delete from {entity.TableName} where {entity.TableKeyQuery} ";
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+        }
     }
 }

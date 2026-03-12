@@ -68,6 +68,9 @@ namespace Server
                     case Operation.UpisiKandidata:
                         response.Result = Controller.Instance.UpisiKandidata((Upis)request.Argument);
                         break;
+                    case Operation.ObrisiKandidata:
+                        Controller.Instance.ObrisiKandidata((Kandidat)request.Argument);
+                        break;
                     default:
                         break;
                 }

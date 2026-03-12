@@ -102,5 +102,17 @@ namespace Client
             Response response = (Response)_receiver.Receive();
             return response;
         }
+
+        internal Response ObrisiKandidata(Kandidat kandidat)
+        {
+            Request request = new Request()
+            {
+                Argument = kandidat,
+                Operation = Operation.ObrisiKandidata
+            };
+            _sender.Send(request);
+            Response response = (Response)_receiver.Receive();
+            return response;
+        }
     }
 }

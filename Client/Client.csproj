@@ -76,6 +76,12 @@
     <Compile Include="UserControls\UCKandidat\UCKreirajKandidata.Designer.cs">
       <DependentUpon>UCKreirajKandidata.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UCKandidat\UCObrisiKandidata.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UCKandidat\UCObrisiKandidata.Designer.cs">
+      <DependentUpon>UCObrisiKandidata.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UCKandidat\UCUpisiKandidata.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -102,6 +108,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UCKandidat\UCKreirajKandidata.resx">
       <DependentUpon>UCKreirajKandidata.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UCKandidat\UCObrisiKandidata.resx">
+      <DependentUpon>UCObrisiKandidata.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UCKandidat\UCUpisiKandidata.resx">
       <DependentUpon>UCUpisiKandidata.cs</DependentUpon>

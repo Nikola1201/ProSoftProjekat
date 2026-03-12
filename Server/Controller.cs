@@ -31,7 +31,7 @@ namespace Server
             KreirajKandidataSO so = new KreirajKandidataSO(argument);
             so.ExecuteTemplate();
             return (Kandidat)so.Result;
-         
+
         }
 
         internal List<Kategorija> GetAllKategorije()
@@ -43,15 +43,9 @@ namespace Server
 
         internal List<Kandidat> GetAllKandidati(bool upisani)
         {
-            if(upisani == false)
-            {
-                VratiSveNeupisaneKandidateSO so = new VratiSveNeupisaneKandidateSO();
-                so.ExecuteTemplate();
-                return so.Result;
-            }
-            
-            return new List<Kandidat>();
-          
+            VratiSveKandidateSO so = new VratiSveKandidateSO(upisani);
+            so.ExecuteTemplate();
+            return so.Result;
         }
 
         internal List<PaketObuke> GetAllPaketiObuke()
@@ -66,6 +60,13 @@ namespace Server
             UpisiKandidataSO so = new UpisiKandidataSO(argument);
             so.ExecuteTemplate();
             return (Upis)so.Result;
+        }
+
+        internal void ObrisiKandidata(Kandidat argument)
+        {
+            ObrisiKandidataSO so = new ObrisiKandidataSO(argument);
+            so.ExecuteTemplate();
+            
         }
     }
 }
