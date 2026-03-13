@@ -37,6 +37,8 @@ namespace Client
 
             kreirajInstruktoraToolStripMenuItem.Click += (s, a)
                 => MainCoordinator.Instance.ShowKreirajInstruktoraPanel();
+            obrisiInstruktoraToolStripMenuItem.Click += (s, a)
+                => MainCoordinator.Instance.ShowObrisiInstruktoraPanel();
         }
 
         private void ConfigureMainPanel()

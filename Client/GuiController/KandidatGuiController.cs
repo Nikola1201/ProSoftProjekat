@@ -207,10 +207,10 @@ namespace Client.GuiController
             List<PaketObuke> sviPaketi = Communication.Instance.GetAllPaketiObuke() ?? new List<PaketObuke>();
 
             neupisaniKandidati = new BindingList<Kandidat>(sviKandidati);
+            _ucUpisiKandidata.CmbKandidat.DataSource = neupisaniKandidati;
+
             paketiObuke = new BindingList<PaketObuke>(sviPaketi);
             prikazaniPaketiObuke = new BindingList<PaketObuke>(new List<PaketObuke>());
-
-            _ucUpisiKandidata.CmbKandidat.DataSource = neupisaniKandidati;
             _ucUpisiKandidata.CmbPaketObuke.DataSource = prikazaniPaketiObuke;
 
             bool imaKandidata = neupisaniKandidati.Count > 0;
@@ -307,16 +307,16 @@ namespace Client.GuiController
             }
         }
 
-        internal Control CreateIspisiKandidata()
+        internal Control CreateObrisiKandidata()
         {
             _ucObrisiKandidata = new UCObrisiKandidata();
             PrepareUCObrisiKandidata();
-            _ucObrisiKandidata.BtnObrisi.Click += IspisiKandidata;
+            _ucObrisiKandidata.BtnObrisi.Click += ObrisiKandidata;
 
             return _ucObrisiKandidata;
         }
 
-        private void IspisiKandidata(object sender, EventArgs e)
+        private void ObrisiKandidata(object sender, EventArgs e)
         {
             Kandidat kandidat = _ucObrisiKandidata.CmbKandidat.SelectedItem as Kandidat;
             if (kandidat == null)

@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SystemOperation\ObrisiInstruktoraSO.cs" />
     <Compile Include="SystemOperation\AdminLoginSO.cs" />
     <Compile Include="ClientHandler.cs" />
     <Compile Include="Controller.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="SystemOperation\VratiSveKategorijeSO.cs" />
     <Compile Include="SystemOperation\VratiSvePaketeObukeSO.cs" />
     <Compile Include="SystemOperation\VratiSveUpisaneKandidateSO.cs" />
+    <Compile Include="SystemOperation\VratiSveInstruktoreSO.cs" />
     <EmbeddedResource Include="FrmServer.resx">
       <DependentUpon>FrmServer.cs</DependentUpon>
     </EmbeddedResource>

@@ -1,8 +1,11 @@
 ﻿using Client.UserControls.UCInstruktor;
+using Client.UserControls.UCKandidat;
 using Client.Utils;
 using Common.Communication;
 using Common.Domain;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -11,6 +14,9 @@ namespace Client.GuiController
     internal class InstruktorGuiKontroler
     {
         UCKreirajInstruktora _ucKreirajInstruktora;
+        UCObrisiInstruktora _ucObrisiInstruktora;
+        BindingList<Instruktor> instruktori;
+
         internal Control CreateInstruktor()
         {
             _ucKreirajInstruktora = new UCKreirajInstruktora();
@@ -168,6 +174,53 @@ namespace Client.GuiController
             };
 
             return true;
+        }
+
+        internal Control CreateObrisiInstruktor()
+        {
+
+            _ucObrisiInstruktora = new UCObrisiInstruktora();
+            PrepareUCObrisiInstruktora();
+            _ucObrisiInstruktora.BtnObrisi.Click += ObrisiInstruktora;
+
+            return _ucObrisiInstruktora;
+        }
+
+        private void PrepareUCObrisiInstruktora()
+        {
+            List<Instruktor> i = Communication.Instance.GetAllInstruktori();
+            instruktori = new BindingList<Instruktor>(i);
+            _ucObrisiInstruktora.CmbInstruktori.DataSource = instruktori;
+
+
+        }
+
+        private void ObrisiInstruktora(object sender, EventArgs e)
+        {
+            Instruktor instruktor = _ucObrisiInstruktora.CmbInstruktori.SelectedItem as Instruktor;
+            if (instruktor == null)
+            {
+                ShowMessage.Warning("Nema instruktora dostupnih za brisanje.", "Greska");
+                _ucObrisiInstruktora.CmbInstruktori.Focus();
+                return;
+            }
+            try
+            {
+                Response response = Communication.Instance.ObrisiInstruktora(instruktor);
+                if (response.Exception != null)
+                {
+                    ShowMessage.Error(response.Exception.Message);
+                    return;
+                }
+
+                ShowMessage.Success("Sistem je uspesno obrisao instruktora.");
+                PrepareUCObrisiInstruktora();
+            }
+            catch (Exception)
+            {
+                ShowMessage.ServerDown();
+            }
+
         }
     }
 }

@@ -74,6 +74,12 @@ namespace Server
                     case Operation.KreirajInstruktora:
                         response.Result = Controller.Instance.KreirajInstruktora((Instruktor)request.Argument);
                         break;
+                    case Operation.GetAllInstruktori:
+                        response.Result = Controller.Instance.GetAllInstruktori();
+                        break;
+                    case Operation.ObrisiInstruktora:
+                        Controller.Instance.ObrisiInstruktora((Instruktor)request.Argument);
+                        break;
                     default:
                         break;
                 }

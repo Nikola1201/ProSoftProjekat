@@ -75,5 +75,18 @@ namespace Server
             so.ExecuteTemplate();
             return (Instruktor)so.Result;
         }
+
+        internal List<Instruktor> GetAllInstruktori()
+        {
+            VratiSveInstruktoreSO so = new VratiSveInstruktoreSO();
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal void ObrisiInstruktora(Instruktor argument)
+        {
+            ObrisiInstruktoraSO so = new ObrisiInstruktoraSO(argument);
+            so.ExecuteTemplate();
+        }
     }
 }

@@ -77,6 +77,12 @@
     <Compile Include="UserControls\UCInstruktor\UCKreirajInstruktora.Designer.cs">
       <DependentUpon>UCKreirajInstruktora.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UCInstruktor\UCObrisiInstruktora.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UCInstruktor\UCObrisiInstruktora.Designer.cs">
+      <DependentUpon>UCObrisiInstruktora.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UCKandidat\UCKreirajKandidata.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -117,6 +123,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UCInstruktor\UCKreirajInstruktora.resx">
       <DependentUpon>UCKreirajInstruktora.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UCInstruktor\UCObrisiInstruktora.resx">
+      <DependentUpon>UCObrisiInstruktora.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UCKandidat\UCKreirajKandidata.resx">
       <DependentUpon>UCKreirajKandidata.cs</DependentUpon>

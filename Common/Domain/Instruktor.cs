@@ -15,6 +15,7 @@ namespace Common.Domain
         public string Email { get; set; }
         public DateTime DatumZaposlenja { get; set; }
         public bool Aktivan { get; set; }
+        public string PunoIme => $"{Ime} {Prezime}".Trim();
 
         public string TableName => "Instruktor";
 
@@ -29,7 +30,7 @@ namespace Common.Domain
             $"SELECT * FROM Instruktor WHERE Ime LIKE '%{Ime}%' OR Prezime LIKE '%{Prezime}%'";
 
         public object TableKeyQuery =>
-            $"SELECT * FROM Instruktor WHERE InstruktorId = {InstruktorId}";
+            $"{TableKeyColumn} = {InstruktorId}";
 
         public object Update =>
             $"UPDATE Instruktor SET " +
@@ -41,6 +42,7 @@ namespace Common.Domain
             $"DatumZaposlenja = '{DatumZaposlenja:yyyy-MM-dd}', " +
             $"Aktivan = {(Aktivan ? 1 : 0)} " +
             $"WHERE InstruktorId = {InstruktorId}";
+
 
         public List<IEntity> GetReaderList(SqlDataReader reader)
         {
@@ -63,6 +65,11 @@ namespace Common.Domain
                 DatumZaposlenja = (DateTime)reader["DatumZaposlenja"],
                 Aktivan = (bool)reader["Aktivan"]
             };
+        }
+
+        public override string ToString()
+        {
+            return string.IsNullOrWhiteSpace(JMBG) ? PunoIme : $"{PunoIme} ({JMBG})";
         }
     }
 }

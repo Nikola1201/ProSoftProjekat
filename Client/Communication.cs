@@ -126,5 +126,28 @@ namespace Client
             Response response = (Response)_receiver.Receive();
             return response;
         }
+
+        internal List<Instruktor> GetAllInstruktori()
+        {
+            Request request = new Request()
+            {
+                Operation = Operation.GetAllInstruktori
+            };
+            _sender.Send(request);
+            Response response = (Response)_receiver.Receive();
+            return (List<Instruktor>)response.Result;
+        }
+
+        internal Response ObrisiInstruktora(Instruktor instruktor)
+        {
+            Request request = new Request()
+            {
+                Argument = instruktor,
+                Operation = Operation.ObrisiInstruktora
+            };
+            _sender.Send(request);
+            Response response = (Response)_receiver.Receive();
+            return response;
+        }
     }
 }

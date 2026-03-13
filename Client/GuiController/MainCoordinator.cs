@@ -43,12 +43,18 @@ namespace Client.GuiController
 
         internal void ShowIspisiKandidataPanel()
         {
-            _frmMain.ChangePanel(_kandidatGuiController.CreateIspisiKandidata());
+            _frmMain.ChangePanel(_kandidatGuiController.CreateObrisiKandidata());
         }
 
         internal void ShowKreirajInstruktoraPanel()
         {
             _frmMain.ChangePanel(_instruktorGuiKontroler.CreateInstruktor());
+
+        }
+
+        internal void ShowObrisiInstruktoraPanel()
+        {
+            _frmMain.ChangePanel(_instruktorGuiKontroler.CreateObrisiInstruktor());
 
         }
     }
