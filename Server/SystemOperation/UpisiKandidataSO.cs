@@ -66,11 +66,6 @@ namespace Server.SystemOperation
                 throw new Exception("Izabrani paket obuke ne postoji u sistemu.");
             }
 
-            if (kandidatZaUpis.Kategorija.KategorijaID != paketObuke.Kategorija.KategorijaID)
-            {
-                throw new Exception("Izabrani paket obuke ne odgovara kategoriji kandidata.");
-            }
-
             bool imaAktivanUpis = postojeciUpisi.Any(u =>
                 u.KandidatId == upis.KandidatId &&
                 string.Equals(u.Status, "aktivan", StringComparison.OrdinalIgnoreCase));

@@ -1,4 +1,5 @@
 ﻿using Client.UserControls.UCKandidat;
+using Client.Utils;
 using Common.Communication;
 using Common.Domain;
 using System;
@@ -16,8 +17,6 @@ namespace Client.GuiController
         private UCUpisiKandidata _ucUpisiKandidata;
         private UCObrisiKandidata _ucObrisiKandidata;
 
-
-        private BindingList<Kategorija> kategorije;
         private BindingList<Kandidat> neupisaniKandidati;
         private BindingList<PaketObuke> paketiObuke;
         private BindingList<PaketObuke> prikazaniPaketiObuke;
@@ -26,7 +25,6 @@ namespace Client.GuiController
         internal Control CreateKandidat()
         {
             _ucKreirajKandidata = new UCKreirajKandidata();
-            PrepareUCKreirajKandidata();
             _ucKreirajKandidata.BtnKreirajKandidata.Click += KreirajKandidata;
 
             return _ucKreirajKandidata;
@@ -42,15 +40,6 @@ namespace Client.GuiController
             return _ucUpisiKandidata;
         }
 
-        private void PrepareUCKreirajKandidata()
-        {
-            List<Kategorija> k = Communication.Instance.GetAllKategorije();
-            kategorije = new BindingList<Kategorija>(k);
-            _ucKreirajKandidata.CmbKategorije.DataSource = kategorije;
-            _ucKreirajKandidata.CmbKategorije.DisplayMember = nameof(Kategorija.NazivKategorije);
-            _ucKreirajKandidata.CmbKategorije.ValueMember = nameof(Kategorija.KategorijaID);
-
-        }
         private void KreirajKandidata(object senter, EventArgs e)
         {
             if (!TryCreateKandidatFromInput(out Kandidat kandidat))
@@ -63,22 +52,22 @@ namespace Client.GuiController
                 Response response = Communication.Instance.CreateKandidat(kandidat);
                 if (response.Exception != null)
                 {
-                    MessageBox.Show(GetCreateKandidatErrorMessage(response.Exception), "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ShowMessage.Error(GetCreateKandidatErrorMessage(response.Exception));
                     return;
                 }
 
                 if (response.Result == null)
                 {
-                    MessageBox.Show("Sistem ne moze da kreira kandidata.", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ShowMessage.Error("Sistem ne moze da kreira kandidata.");
                     return;
                 }
 
-                MessageBox.Show("Sistem je uspesno kreirao kandidata.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ShowMessage.Success("Sistem je uspesno kreirao kandidata.");
                 ClearForm();
             }
             catch (Exception)
             {
-                MessageBox.Show("Server je ugasen!", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowMessage.ServerDown();
             }
 
 
@@ -95,73 +84,65 @@ namespace Client.GuiController
             string email = _ucKreirajKandidata.TxtEmail.Text.Trim();
             string adresa = _ucKreirajKandidata.TxtAdresa.Text.Trim();
             DateTime datumUpisa = _ucKreirajKandidata.DateTimePicker1.Value.Date;
-            Kategorija kategorija = _ucKreirajKandidata.CmbKategorije.SelectedItem as Kategorija;
 
             if (string.IsNullOrWhiteSpace(ime))
             {
-                ShowValidationError("Unesite ime kandidata.", _ucKreirajKandidata.TxtIme);
+                ShowMessage.Error("Unesite ime kandidata.", _ucKreirajKandidata.TxtIme);
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(prezime))
             {
-                ShowValidationError("Unesite prezime kandidata.", _ucKreirajKandidata.TxtPrezime);
+                ShowMessage.Error("Unesite prezime kandidata.", _ucKreirajKandidata.TxtPrezime);
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(jmbg))
             {
-                ShowValidationError("Unesite JMBG kandidata.", _ucKreirajKandidata.TxtJMBG);
+                ShowMessage.Error("Unesite JMBG kandidata.", _ucKreirajKandidata.TxtJMBG);
                 return false;
             }
 
             if (jmbg.Length != 13 || !jmbg.All(char.IsDigit))
             {
-                ShowValidationError("JMBG mora da sadrzi tacno 13 cifara.", _ucKreirajKandidata.TxtJMBG);
+                ShowMessage.Error("JMBG mora da sadrzi tacno 13 cifara.", _ucKreirajKandidata.TxtJMBG);
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(telefon))
             {
-                ShowValidationError("Unesite broj telefona kandidata.", _ucKreirajKandidata.TxtTelefon);
+                ShowMessage.Error("Unesite broj telefona kandidata.", _ucKreirajKandidata.TxtTelefon);
                 return false;
             }
 
             if (!telefon.All(c => char.IsDigit(c) || c == '+' || c == '/' || c == '-' || c == ' '))
             {
-                ShowValidationError("Telefon moze da sadrzi samo cifre i znakove +, -, /.", _ucKreirajKandidata.TxtTelefon);
+                ShowMessage.Error("Telefon moze da sadrzi samo cifre i znakove +, -, /.", _ucKreirajKandidata.TxtTelefon);
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(email))
             {
-                ShowValidationError("Unesite email kandidata.", _ucKreirajKandidata.TxtEmail);
+                ShowMessage.Error("Unesite email kandidata.", _ucKreirajKandidata.TxtEmail);
                 return false;
             }
 
-            if (!IsValidEmail(email))
+            if (!Validate.Email(email))
             {
-                ShowValidationError("Email adresa nije u ispravnom formatu.", _ucKreirajKandidata.TxtEmail);
+                ShowMessage.Error("Email adresa nije u ispravnom formatu.", _ucKreirajKandidata.TxtEmail);
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(adresa))
             {
-                ShowValidationError("Unesite adresu kandidata.", _ucKreirajKandidata.TxtAdresa);
+                ShowMessage.Error("Unesite adresu kandidata.", _ucKreirajKandidata.TxtAdresa);
                 return false;
             }
 
             if (datumUpisa > DateTime.Now.Date)
             {
-                MessageBox.Show("Datum upisa ne moze biti u buducnosti.", "Greska pri unosu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ShowMessage.Warning("Datum upisa ne moze biti u buducnosti.", "Greska pri unosu");
                 _ucKreirajKandidata.DateTimePicker1.Focus();
-                return false;
-            }
-
-            if (kategorija == null)
-            {
-                MessageBox.Show("Odaberite kategoriju.", "Greska pri unosu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                _ucKreirajKandidata.CmbKategorije.Focus();
                 return false;
             }
 
@@ -174,30 +155,10 @@ namespace Client.GuiController
                 Email = email,
                 Adresa = adresa,
                 DatumUpisa = datumUpisa,
-                Kategorija = kategorija,
                 Aktivan = true
             };
 
             return true;
-        }
-
-        private void ShowValidationError(string message, Control control)
-        {
-            MessageBox.Show(message, "Greska pri unosu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            control.Focus();
-        }
-
-        private bool IsValidEmail(string email)
-        {
-            try
-            {
-                MailAddress mailAddress = new MailAddress(email);
-                return mailAddress.Address == email;
-            }
-            catch
-            {
-                return false;
-            }
         }
 
         private string GetCreateKandidatErrorMessage(Exception exception)
@@ -237,14 +198,7 @@ namespace Client.GuiController
             _ucKreirajKandidata.TxtEmail.Clear();
             _ucKreirajKandidata.TxtAdresa.Clear();
             _ucKreirajKandidata.DateTimePicker1.Value = DateTime.Now;
-
-            if (_ucKreirajKandidata.CmbKategorije.Items.Count > 0)
-            {
-                _ucKreirajKandidata.CmbKategorije.SelectedIndex = 0;
-            }
-
             _ucKreirajKandidata.TxtIme.Focus();
-
         }
 
         private void PrepareUCUpisiKandidata()
@@ -266,7 +220,7 @@ namespace Client.GuiController
 
             if (!imaKandidata)
             {
-                MessageBox.Show("Nema kandidata dostupnih za upisivanje.", "Informacija", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ShowMessage.Info("Nema kandidata dostupnih za upisivanje.");
                 return;
             }
 
@@ -287,7 +241,7 @@ namespace Client.GuiController
 
             Kandidat kandidat = _ucUpisiKandidata.CmbKandidat.SelectedItem as Kandidat;
 
-            if (kandidat == null || kandidat.Kategorija == null)
+            if (kandidat == null)
             {
                 prikazaniPaketiObuke = new BindingList<PaketObuke>(new List<PaketObuke>());
                 _ucUpisiKandidata.CmbPaketObuke.DataSource = prikazaniPaketiObuke;
@@ -296,11 +250,7 @@ namespace Client.GuiController
                 return;
             }
 
-            List<PaketObuke> filtriraniPaketi = paketiObuke == null
-                ? new List<PaketObuke>()
-                : paketiObuke
-                    .Where(p => p.Kategorija.KategorijaID == kandidat.Kategorija.KategorijaID)
-                    .ToList();
+            List<PaketObuke> filtriraniPaketi = paketiObuke.ToList();
 
             prikazaniPaketiObuke = new BindingList<PaketObuke>(filtriraniPaketi);
             _ucUpisiKandidata.CmbPaketObuke.DataSource = prikazaniPaketiObuke;
@@ -317,14 +267,14 @@ namespace Client.GuiController
 
             if (kandidat == null)
             {
-                MessageBox.Show("Nema kandidata dostupnih za upis.", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ShowMessage.Warning("Nema kandidata dostupnih za upis.", "Greska");
                 _ucUpisiKandidata.CmbKandidat.Focus();
                 return;
             }
 
             if (paketObuke == null)
             {
-                MessageBox.Show("Izabrani kandidat nema dostupan paket obuke za svoju kategoriju.", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ShowMessage.Warning("Izabrani kandidat nema dostupan paket obuke za svoju kategoriju.", "Greska");
                 _ucUpisiKandidata.CmbPaketObuke.Focus();
                 return;
             }
@@ -344,16 +294,16 @@ namespace Client.GuiController
                 Response response = Communication.Instance.UpisiKandidata(upis);
                 if (response.Exception != null)
                 {
-                    MessageBox.Show(response.Exception.Message, "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ShowMessage.Error(response.Exception.Message);
                     return;
                 }
 
-                MessageBox.Show("Sistem je uspesno upisao kandidata.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ShowMessage.Success("Sistem je uspesno upisao kandidata.");
                 PrepareUCUpisiKandidata();
             }
             catch (Exception)
             {
-                MessageBox.Show("Server je ugasen!", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowMessage.ServerDown();
             }
         }
 
@@ -361,7 +311,7 @@ namespace Client.GuiController
         {
             _ucObrisiKandidata = new UCObrisiKandidata();
             PrepareUCObrisiKandidata();
-            _ucObrisiKandidata.BtnIspisi.Click += IspisiKandidata;
+            _ucObrisiKandidata.BtnObrisi.Click += IspisiKandidata;
 
             return _ucObrisiKandidata;
         }
@@ -371,7 +321,7 @@ namespace Client.GuiController
             Kandidat kandidat = _ucObrisiKandidata.CmbKandidat.SelectedItem as Kandidat;
             if (kandidat == null)
             {
-                MessageBox.Show("Nema kandidata dostupnih za brisanje.", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ShowMessage.Warning("Nema kandidata dostupnih za brisanje.", "Greska");
                 _ucObrisiKandidata.CmbKandidat.Focus();
                 return;
             }
@@ -380,16 +330,16 @@ namespace Client.GuiController
                 Response response = Communication.Instance.ObrisiKandidata(kandidat);
                 if (response.Exception != null)
                 {
-                    MessageBox.Show(response.Exception.Message, "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ShowMessage.Error(response.Exception.Message);
                     return;
                 }
 
-                MessageBox.Show("Sistem je uspesno obrisao kandidata.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ShowMessage.Success("Sistem je uspesno obrisao kandidata.");
                 PrepareUCObrisiKandidata();
             }
             catch (Exception)
             {
-                MessageBox.Show("Server je ugasen!", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowMessage.ServerDown();
             }
         }
 
@@ -401,11 +351,11 @@ namespace Client.GuiController
 
             bool imaUpisanih = upisaniKandidati.Count > 0;
             _ucObrisiKandidata.CmbKandidat.Enabled = imaUpisanih;
-            _ucObrisiKandidata.BtnIspisi.Enabled = imaUpisanih;
+            _ucObrisiKandidata.BtnObrisi.Enabled = imaUpisanih;
 
             if (!imaUpisanih)
             {
-                MessageBox.Show("Nema upisanih kandidata dostupnih za ispisivanje.", "Informacija", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ShowMessage.Info("Nema upisanih kandidata dostupnih za ispisivanje.");
             }
         }
     }

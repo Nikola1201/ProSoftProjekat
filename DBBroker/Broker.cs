@@ -80,6 +80,17 @@ namespace DBBroker
             return entities;
 
         }
+        public List<IEntity> GetEntitiesByQuery(IEntity entity)
+        {
+            SqlCommand command = _connection.CreateCommand();
+            command.CommandText = $"SELECT * FROM {entity.TableName} WHERE {entity.Query}";
+            SqlDataReader reader = command.ExecuteReader();
+            List<IEntity> entities = entity.GetReaderList(reader);
+            reader.Close();
+            command.Dispose();
+
+            return entities;
+        }
 
         public void Delete(IEntity entity)
         {
@@ -87,6 +98,11 @@ namespace DBBroker
             cmd.CommandText = $"delete from {entity.TableName} where {entity.TableKeyQuery} ";
             cmd.ExecuteNonQuery();
             cmd.Dispose();
+        }
+
+        public void Update(Kandidat kandidat)
+        {
+            throw new NotImplementedException();
         }
     }
 }

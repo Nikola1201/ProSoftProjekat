@@ -15,7 +15,6 @@ namespace Common.Domain
         public string Email { get; set; }
         public string Adresa { get; set; }
         public DateTime DatumUpisa { get; set; }
-        public Kategorija Kategorija { get; set; }
         public bool Aktivan { get; set; }
         public string PunoIme => $"{Ime} {Prezime}".Trim();
 
@@ -23,7 +22,7 @@ namespace Common.Domain
 
         public string Values =>
             $"'{Ime}', '{Prezime}', '{JMBG}', '{Telefon}', '{Email}', " +
-            $"'{Adresa}', '{DatumUpisa:yyyy-MM-dd}', {(Aktivan ? 1 : 0)}, {Kategorija.KategorijaID}";
+            $"'{Adresa}', '{DatumUpisa:yyyy-MM-dd}', {(Aktivan ? 1 : 0)}";
 
         public object Query => throw new NotImplementedException();
         public object TableKeyColumn => "KandidatId";
@@ -43,7 +42,6 @@ namespace Common.Domain
             $"Email = '{Email}', " +
             $"Adresa = '{Adresa}', " +
             $"DatumUpisa = '{DatumUpisa:yyyy-MM-dd}', " +
-            $"Kategorija = {Kategorija.KategorijaID}, " +
             $"Aktivan = {(Aktivan ? 1 : 0)} " +
             $"WHERE KandidatId = {KandidatId}";
 
@@ -62,10 +60,6 @@ namespace Common.Domain
                         Email = reader["Email"].ToString(),
                         Adresa = reader["Adresa"].ToString(),
                         DatumUpisa = (DateTime)reader["DatumUpisa"],
-                        Kategorija = new Kategorija
-                        {
-                            KategorijaID = Convert.ToInt32(reader["KategorijaID"])
-                        },
                         Aktivan = (bool)reader["Aktivan"]
                     }
                 );
@@ -87,10 +81,6 @@ namespace Common.Domain
                     Email = reader["Email"].ToString(),
                     Adresa = reader["Adresa"].ToString(),
                     DatumUpisa = (DateTime)reader["DatumUpisa"],
-                    Kategorija = new Kategorija
-                    {
-                        KategorijaID = Convert.ToInt32(reader["KategorijaID"])
-                    },
                     Aktivan = (bool)reader["Aktivan"]
                 };
             }

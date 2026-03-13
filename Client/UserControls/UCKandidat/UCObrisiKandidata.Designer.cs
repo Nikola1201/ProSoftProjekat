@@ -32,7 +32,7 @@ namespace Client.UserControls.UCKandidat
         {
             this.cmbKandidat = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnIspisi = new System.Windows.Forms.Button();
+            this.btnObriši = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmbKandidat
@@ -52,20 +52,20 @@ namespace Client.UserControls.UCKandidat
             this.label1.TabIndex = 1;
             this.label1.Text = "Kandidat:";
             // 
-            // btnIspisi
+            // btnObriši
             // 
-            this.btnIspisi.Location = new System.Drawing.Point(78, 149);
-            this.btnIspisi.Name = "btnIspisi";
-            this.btnIspisi.Size = new System.Drawing.Size(134, 43);
-            this.btnIspisi.TabIndex = 2;
-            this.btnIspisi.Text = "Ispiši kandidata";
-            this.btnIspisi.UseVisualStyleBackColor = true;
+            this.btnObriši.Location = new System.Drawing.Point(78, 149);
+            this.btnObriši.Name = "btnObriši";
+            this.btnObriši.Size = new System.Drawing.Size(134, 43);
+            this.btnObriši.TabIndex = 2;
+            this.btnObriši.Text = "Obriši kandidata";
+            this.btnObriši.UseVisualStyleBackColor = true;
             // 
             // UCObrisiKandidata
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.btnIspisi);
+            this.Controls.Add(this.btnObriši);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmbKandidat);
             this.Name = "UCObrisiKandidata";
@@ -79,10 +79,10 @@ namespace Client.UserControls.UCKandidat
 
         private System.Windows.Forms.ComboBox cmbKandidat;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnIspisi;
+        private System.Windows.Forms.Button btnObriši;
 
         public ComboBox CmbKandidat { get => cmbKandidat; set => cmbKandidat = value; }
         public Label Label1 { get => label1; set => label1 = value; }
-        public Button BtnIspisi { get => btnIspisi; set => btnIspisi = value; }
+        public Button BtnObrisi { get => btnObriši; set => btnObriši = value; }
     }
 }

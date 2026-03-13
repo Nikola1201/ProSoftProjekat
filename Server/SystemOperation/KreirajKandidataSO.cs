@@ -69,20 +69,6 @@ namespace Server.SystemOperation
                 throw new Exception("Datum upisa ne moze biti u buducnosti.");
             }
 
-            if (kandidat.Kategorija == null || kandidat.Kategorija.KategorijaID <= 0)
-            {
-                throw new Exception("Kategorija kandidata je obavezna.");
-            }
-
-            List<Kategorija> kategorije = _broker.GetAll(new Kategorija()).Cast<Kategorija>().ToList();
-            Kategorija izabranaKategorija = kategorije.FirstOrDefault(k => k.KategorijaID == kandidat.Kategorija.KategorijaID);
-            if (izabranaKategorija == null)
-            {
-                throw new Exception("Izabrana kategorija ne postoji u sistemu.");
-            }
-
-            kandidat.Kategorija = izabranaKategorija;
-
             List<Kandidat> kandidati = _broker.GetAll(new Kandidat()).Cast<Kandidat>().ToList();
             if (kandidati.Any(k => k.JMBG == kandidat.JMBG))
             {

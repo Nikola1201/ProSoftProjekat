@@ -11,10 +11,12 @@ namespace Client.GuiController
 
         private MainCoordinator() {
             _kandidatGuiController = new KandidatGuiController();
+            _instruktorGuiKontroler = new InstruktorGuiKontroler();
         }
 
         private FrmMain _frmMain;
         private KandidatGuiController _kandidatGuiController;
+        private InstruktorGuiKontroler _instruktorGuiKontroler;
 
         internal void ShowFrmMain(Admin admin)
         {
@@ -42,6 +44,12 @@ namespace Client.GuiController
         internal void ShowIspisiKandidataPanel()
         {
             _frmMain.ChangePanel(_kandidatGuiController.CreateIspisiKandidata());
+        }
+
+        internal void ShowKreirajInstruktoraPanel()
+        {
+            _frmMain.ChangePanel(_instruktorGuiKontroler.CreateInstruktor());
+
         }
     }
 }

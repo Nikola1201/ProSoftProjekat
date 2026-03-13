@@ -19,11 +19,9 @@ namespace Common.Domain
         public string TableName => "Instruktor";
 
         public string Values =>
-            $"'{Ime}', '{Prezime}', '{JMBG}', '{Telefon}', '{Email}', '{DatumZaposlenja:yyyy-MM-dd}'";
+            $"'{Ime}', '{Prezime}', '{JMBG}', '{Telefon}', '{Email}', '{DatumZaposlenja:yyyy-MM-dd}',{(Aktivan ? 1 : 0)}";
 
-        public object Query =>
-            $"INSERT INTO Instruktor (Ime, Prezime, JMBG, Telefon, Email, DatumZaposlenja) " +
-            $"VALUES ({Values})";
+        public object Query => throw new NotImplementedException();
 
         public object TableKeyColumn => "InstruktorId";
 

@@ -59,6 +59,7 @@
     <Compile Include="FrmMain.Designer.cs">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="GuiController\InstruktorGuiKontroler.cs" />
     <Compile Include="GuiController\KandidatGuiController.cs" />
     <Compile Include="GuiController\LoginGuiController.cs" />
     <Compile Include="GuiController\MainCoordinator.cs" />
@@ -69,6 +70,12 @@
     </Compile>
     <Compile Include="UserControls\UCDefault.Designer.cs">
       <DependentUpon>UCDefault.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UCInstruktor\UCKreirajInstruktora.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UCInstruktor\UCKreirajInstruktora.Designer.cs">
+      <DependentUpon>UCKreirajInstruktora.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UCKandidat\UCKreirajKandidata.cs">
       <SubType>UserControl</SubType>
@@ -88,6 +95,8 @@
     <Compile Include="UserControls\UCKandidat\UCUpisiKandidata.Designer.cs">
       <DependentUpon>UCUpisiKandidata.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utils\ShowMessage.cs" />
+    <Compile Include="Utils\Validate.cs" />
     <EmbeddedResource Include="FrmLogin.resx">
       <DependentUpon>FrmLogin.cs</DependentUpon>
     </EmbeddedResource>
@@ -105,6 +114,9 @@
     </Compile>
     <EmbeddedResource Include="UserControls\UCDefault.resx">
       <DependentUpon>UCDefault.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UCInstruktor\UCKreirajInstruktora.resx">
+      <DependentUpon>UCKreirajInstruktora.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UCKandidat\UCKreirajKandidata.resx">
       <DependentUpon>UCKreirajKandidata.cs</DependentUpon>
@@ -128,7 +140,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="UserControls\UCCasVoznje\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{B2A2C525-B12B-4E9B-8277-1BF507224874}</Project>

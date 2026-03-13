@@ -15,5 +15,6 @@ namespace Common.Communication
         GetAllPaketiObuke,
         UpisiKandidata,
         ObrisiKandidata,
+        KreirajInstruktora,
     }
 }

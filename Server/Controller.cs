@@ -68,5 +68,12 @@ namespace Server
             so.ExecuteTemplate();
             
         }
+
+        internal Instruktor KreirajInstruktora(Instruktor argument)
+        {
+            KreirajInstruktoraSO so = new KreirajInstruktoraSO(argument);
+            so.ExecuteTemplate();
+            return (Instruktor)so.Result;
+        }
     }
 }

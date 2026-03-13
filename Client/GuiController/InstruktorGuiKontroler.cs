@@ -1,0 +1,173 @@
+﻿using Client.UserControls.UCInstruktor;
+using Client.Utils;
+using Common.Communication;
+using Common.Domain;
+using System;
+using System.Linq;
+using System.Windows.Forms;
+
+namespace Client.GuiController
+{
+    internal class InstruktorGuiKontroler
+    {
+        UCKreirajInstruktora _ucKreirajInstruktora;
+        internal Control CreateInstruktor()
+        {
+            _ucKreirajInstruktora = new UCKreirajInstruktora();
+            _ucKreirajInstruktora.BtnKreiraj.Click += KreirajInstruktora;
+
+            return _ucKreirajInstruktora;
+        }
+
+        private void KreirajInstruktora(object sender, EventArgs e)
+        {
+            if (!TryKrerirajInstruktoraFromInput(out Instruktor instruktor))
+            {
+                return;
+            }
+
+            try
+            {
+                Response response = Communication.Instance.CreateInstruktor(instruktor);
+                if (response.Exception != null)
+                {
+                    ShowMessage.Error(GetCreateInstruktorErrorMessage(response.Exception));
+                    return;
+                }
+
+                if (response.Result == null)
+                {
+                    ShowMessage.Error("Sistem ne moze da kreira instruktora.");
+                    return;
+                }
+
+                ShowMessage.Success("Sistem je uspesno kreirao instruktora.");
+                ClearForm();
+            }
+            catch (Exception)
+            {
+                ShowMessage.ServerDown();
+            }
+
+        }
+
+        private void ClearForm()
+        {
+            _ucKreirajInstruktora.TxtIme.Clear();
+            _ucKreirajInstruktora.TxtPrezime.Clear();
+            _ucKreirajInstruktora.TxtJMBG.Clear();
+            _ucKreirajInstruktora.TxtTelefon.Clear();
+            _ucKreirajInstruktora.TxtEmail.Clear();
+            _ucKreirajInstruktora.DateTP.Value = DateTime.Now;
+            _ucKreirajInstruktora.TxtIme.Focus();
+        }
+
+        private string GetCreateInstruktorErrorMessage(Exception exception)
+        {
+            if (exception == null || string.IsNullOrWhiteSpace(exception.Message))
+            {
+                return "Sistem ne moze da kreira instruktora. Pokusajte ponovo.";
+            }
+
+            string originalMessage = exception.Message.Trim();
+            string message = originalMessage.ToLower();
+
+            if (message.Contains("duplicate") || message.Contains("unique"))
+            {
+                if (message.Contains("jmbg"))
+                {
+                    return "Instruktor sa unetim JMBG vec postoji u sistemu.";
+                }
+
+                if (message.Contains("email"))
+                {
+                    return "Instruktor sa unetom email adresom vec postoji u sistemu.";
+                }
+
+                return "Instruktor sa unetim podacima vec postoji u sistemu.";
+            }
+
+            return originalMessage;
+        }
+
+        private bool TryKrerirajInstruktoraFromInput(out Instruktor instruktor)
+        {
+            instruktor = null;
+
+            string ime = _ucKreirajInstruktora.TxtIme.Text.Trim();
+            string prezime = _ucKreirajInstruktora.TxtPrezime.Text.Trim();
+            string jmbg = _ucKreirajInstruktora.TxtJMBG.Text.Trim();
+            string telefon = _ucKreirajInstruktora.TxtTelefon.Text.Trim();
+            string email = _ucKreirajInstruktora.TxtEmail.Text.Trim();
+            DateTime datumZaposlenja = _ucKreirajInstruktora.DateTP.Value.Date;
+
+            if (string.IsNullOrWhiteSpace(ime))
+            {
+                ShowMessage.Error("Unesite ime instruktora.", _ucKreirajInstruktora.TxtIme);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(prezime))
+            {
+                ShowMessage.Error("Unesite prezime instruktora.", _ucKreirajInstruktora.TxtPrezime);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(jmbg))
+            {
+                ShowMessage.Error("Unesite JMBG instruktora.", _ucKreirajInstruktora.TxtJMBG);
+                return false;
+            }
+
+            if (jmbg.Length != 13 || !jmbg.All(char.IsDigit))
+            {
+                ShowMessage.Error("JMBG mora da sadrzi tacno 13 cifara.", _ucKreirajInstruktora.TxtJMBG);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(telefon))
+            {
+                ShowMessage.Error("Unesite broj telefona instruktora.", _ucKreirajInstruktora.TxtTelefon);
+                return false;
+            }
+
+            if (!telefon.All(c => char.IsDigit(c) || c == '+' || c == '/' || c == '-' || c == ' '))
+            {
+                ShowMessage.Error("Telefon moze da sadrzi samo cifre i znakove +, -, /.", _ucKreirajInstruktora.TxtTelefon);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                ShowMessage.Error("Unesite email instruktora.", _ucKreirajInstruktora.TxtEmail);
+                return false;
+            }
+
+            if (!Validate.Email(email))
+            {
+                ShowMessage.Error("Email adresa nije u ispravnom formatu.", _ucKreirajInstruktora.TxtEmail);
+                return false;
+            }
+
+            if (datumZaposlenja > DateTime.Now.Date)
+            {
+                ShowMessage.Error("Datum zaposlenja ne moze biti u buducnosti.", _ucKreirajInstruktora.DateTP);
+                _ucKreirajInstruktora.DateTP.Focus();
+                return false;
+            }
+
+            instruktor = new Instruktor()
+            {
+                Ime = ime,
+                Prezime = prezime,
+                JMBG = jmbg,
+                Telefon = telefon,
+                Email = email,
+                DatumZaposlenja = datumZaposlenja,
+                Aktivan = true
+            };
+
+            return true;
+        }
+    }
+}

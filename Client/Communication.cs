@@ -114,5 +114,17 @@ namespace Client
             Response response = (Response)_receiver.Receive();
             return response;
         }
+
+        internal Response CreateInstruktor(Instruktor instruktor)
+        {
+            Request request = new Request()
+            {
+                Argument = instruktor,
+                Operation = Operation.KreirajInstruktora
+            };
+            _sender.Send(request);
+            Response response = (Response)_receiver.Receive();
+            return response;
+        }
     }
 }

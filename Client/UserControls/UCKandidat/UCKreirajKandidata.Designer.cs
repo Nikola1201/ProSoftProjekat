@@ -36,7 +36,6 @@ namespace Client.UserControls.UCKandidat
             this.txtTelefon = new System.Windows.Forms.TextBox();
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
-            this.cmbKategorije = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -45,7 +44,6 @@ namespace Client.UserControls.UCKandidat
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.txtAdresa = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
             this.btnKreirajKandidata = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -90,14 +88,6 @@ namespace Client.UserControls.UCKandidat
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(181, 20);
             this.dateTimePicker1.TabIndex = 7;
-            // 
-            // cmbKategorije
-            // 
-            this.cmbKategorije.FormattingEnabled = true;
-            this.cmbKategorije.Location = new System.Drawing.Point(147, 229);
-            this.cmbKategorije.Name = "cmbKategorije";
-            this.cmbKategorije.Size = new System.Drawing.Size(182, 21);
-            this.cmbKategorije.TabIndex = 9;
             // 
             // label1
             // 
@@ -169,15 +159,6 @@ namespace Client.UserControls.UCKandidat
             this.txtAdresa.Size = new System.Drawing.Size(181, 20);
             this.txtAdresa.TabIndex = 17;
             // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(80, 237);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(54, 13);
-            this.label8.TabIndex = 18;
-            this.label8.Text = "Kategorija";
-            // 
             // btnKreirajKandidata
             // 
             this.btnKreirajKandidata.Location = new System.Drawing.Point(130, 284);
@@ -192,7 +173,6 @@ namespace Client.UserControls.UCKandidat
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.btnKreirajKandidata);
-            this.Controls.Add(this.label8);
             this.Controls.Add(this.txtAdresa);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
@@ -201,7 +181,6 @@ namespace Client.UserControls.UCKandidat
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.cmbKategorije);
             this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.txtEmail);
             this.Controls.Add(this.txtTelefon);
@@ -223,7 +202,6 @@ namespace Client.UserControls.UCKandidat
         private System.Windows.Forms.TextBox txtTelefon;
         private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
-        private System.Windows.Forms.ComboBox cmbKategorije;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
@@ -232,7 +210,6 @@ namespace Client.UserControls.UCKandidat
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txtAdresa;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button btnKreirajKandidata;
 
         public TextBox TxtIme { get => txtIme; set => txtIme = value; }
@@ -241,7 +218,6 @@ namespace Client.UserControls.UCKandidat
         public TextBox TxtTelefon { get => txtTelefon; set => txtTelefon = value; }
         public TextBox TxtEmail { get => txtEmail; set => txtEmail = value; }
         public DateTimePicker DateTimePicker1 { get => dateTimePicker1; set => dateTimePicker1 = value; }
-        public ComboBox CmbKategorije { get => cmbKategorije; set => cmbKategorije = value; }
         public Label Label1 { get => label1; set => label1 = value; }
         public Label Label2 { get => label2; set => label2 = value; }
         public Label Label3 { get => label3; set => label3 = value; }
@@ -250,7 +226,6 @@ namespace Client.UserControls.UCKandidat
         public Label Label6 { get => label6; set => label6 = value; }
         public Label Label7 { get => label7; set => label7 = value; }
         public TextBox TxtAdresa { get => txtAdresa; set => txtAdresa = value; }
-        public Label Label8 { get => label8; set => label8 = value; }
         public Button BtnKreirajKandidata { get => btnKreirajKandidata; set => btnKreirajKandidata = value; }
     }
 }

@@ -71,6 +71,9 @@ namespace Server
                     case Operation.ObrisiKandidata:
                         Controller.Instance.ObrisiKandidata((Kandidat)request.Argument);
                         break;
+                    case Operation.KreirajInstruktora:
+                        response.Result = Controller.Instance.KreirajInstruktora((Instruktor)request.Argument);
+                        break;
                     default:
                         break;
                 }

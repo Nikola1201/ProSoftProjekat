@@ -18,8 +18,13 @@ namespace Server.SystemOperation
 
         protected override void ExecuteConcreteOperation()
         {
-            Upis upisKandidata = (Upis)_broker.GetEntityByQuery(new Upis() { KandidatId = argument.KandidatId});
-            _broker.Delete(upisKandidata);
+            List<Upis> upisiKandidata = _broker.GetEntitiesByQuery(new Upis())
+                                        .Cast<Upis>()
+                                        .ToList();
+            foreach(Upis up in upisiKandidata)
+            {
+                _broker.Delete(up);
+            }
             _broker.Delete(argument);
             
         }

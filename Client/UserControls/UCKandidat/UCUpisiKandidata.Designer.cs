@@ -40,24 +40,25 @@ namespace Client.UserControls.UCKandidat
             // cmbKandidat
             // 
             this.cmbKandidat.FormattingEnabled = true;
-            this.cmbKandidat.Location = new System.Drawing.Point(140, 78);
+            this.cmbKandidat.Location = new System.Drawing.Point(113, 105);
             this.cmbKandidat.Name = "cmbKandidat";
-            this.cmbKandidat.Size = new System.Drawing.Size(175, 21);
+            this.cmbKandidat.Size = new System.Drawing.Size(251, 21);
             this.cmbKandidat.TabIndex = 0;
             // 
             // cmbPaketObuke
             // 
             this.cmbPaketObuke.FormattingEnabled = true;
-            this.cmbPaketObuke.Location = new System.Drawing.Point(140, 105);
+            this.cmbPaketObuke.Location = new System.Drawing.Point(113, 132);
             this.cmbPaketObuke.Name = "cmbPaketObuke";
-            this.cmbPaketObuke.Size = new System.Drawing.Size(175, 21);
+            this.cmbPaketObuke.Size = new System.Drawing.Size(251, 21);
             this.cmbPaketObuke.TabIndex = 1;
             // 
             // btnUpisi
             // 
-            this.btnUpisi.Location = new System.Drawing.Point(117, 147);
+            this.btnUpisi.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnUpisi.Location = new System.Drawing.Point(102, 184);
             this.btnUpisi.Name = "btnUpisi";
-            this.btnUpisi.Size = new System.Drawing.Size(160, 37);
+            this.btnUpisi.Size = new System.Drawing.Size(229, 58);
             this.btnUpisi.TabIndex = 2;
             this.btnUpisi.Text = "Upisi";
             this.btnUpisi.UseVisualStyleBackColor = true;
@@ -65,7 +66,7 @@ namespace Client.UserControls.UCKandidat
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(85, 81);
+            this.label1.Location = new System.Drawing.Point(58, 108);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(49, 13);
             this.label1.TabIndex = 4;
@@ -74,7 +75,7 @@ namespace Client.UserControls.UCKandidat
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(64, 108);
+            this.label2.Location = new System.Drawing.Point(37, 135);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(70, 13);
             this.label2.TabIndex = 5;
