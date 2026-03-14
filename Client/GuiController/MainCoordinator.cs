@@ -81,5 +81,10 @@ namespace Client.GuiController
         {
             _frmMain.ChangePanel(_ispitGuiController.CreateIzvestajProlaznosti());
         }
+
+        internal void ShowEvidentirajIspitPanel()
+        {
+            _frmMain.ChangePanel(_ispitGuiController.CreateEvidentirajIspit());
+        }
     }
 }

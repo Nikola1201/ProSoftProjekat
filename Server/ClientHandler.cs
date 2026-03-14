@@ -99,6 +99,9 @@ namespace Server
                     case Operation.PretraziKandidate:
                         response.Result = Controller.Instance.PretraziKandidate((KandidatSearchFilter)request.Argument);
                         break;
+                    case Operation.EvidentirajIspit:
+                        response.Result = Controller.Instance.EvidentirajIspit((EvidentirajIspitRequest)request.Argument);
+                        break;
                     case Operation.KreirajIzvestajProlaznosti:
                         response.Result = Controller.Instance.KreirajIzvestajProlaznosti((IzvestajProlaznostiKriterijum)request.Argument);
                         break;

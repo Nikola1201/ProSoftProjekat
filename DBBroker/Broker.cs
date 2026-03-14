@@ -3,6 +3,7 @@ using Common.Domain.Izvestaji;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace DBBroker
 {
@@ -113,81 +114,81 @@ namespace DBBroker
         {
             SqlCommand command = _connection.CreateCommand();
             command.CommandText = @"
-WITH KandidatAgregat AS
-(
-    SELECT
-        k.KandidatId,
-        k.Ime,
-        k.Prezime,
-        k.Jmbg,
-        kat.NazivKategorije AS Kategorija,
-        SUM(CASE WHEN i.Tip = 'teorijski' THEN 1 ELSE 0 END) AS BrojPokusajaTeorijski,
-        SUM(CASE WHEN i.Tip = 'prakticni' THEN 1 ELSE 0 END) AS BrojPokusajaPrakticni,
-        MAX(CASE WHEN i.Tip = 'teorijski' AND i.Rezultat = 'polozio' THEN 1 ELSE 0 END) AS ImaPolozenTeorijski,
-        MAX(CASE WHEN i.Tip = 'prakticni' AND i.Rezultat = 'polozio' THEN 1 ELSE 0 END) AS ImaPolozenPrakticni,
-        MAX(i.DatumIspita) AS DatumPoslednjegIspita
-    FROM Kandidat k
-    INNER JOIN Upis u ON u.KandidatId = k.KandidatId
-    INNER JOIN PaketObuke p ON p.PaketId = u.PaketId
-    INNER JOIN Kategorija kat ON kat.KategorijaID = p.KategorijaID
-    LEFT JOIN Ispit i
-        ON i.UpisId = u.UpisId
-        AND i.DatumIspita >= @DatumOd
-        AND i.DatumIspita < @DatumDoExclusive
-    WHERE
-        kat.NazivKategorije = @Kategorija
-        AND (@IncludeOnlyAktivanUpis = 0 OR u.Status = 'aktivan')
-    GROUP BY
-        k.KandidatId,
-        k.Ime,
-        k.Prezime,
-        k.Jmbg,
-        kat.NazivKategorije
-)
-SELECT
-    KandidatId,
-    Ime,
-    Prezime,
-    Jmbg,
-    Kategorija,
-    BrojPokusajaTeorijski,
-    BrojPokusajaPrakticni,
-    DatumPoslednjegIspita,
-    CASE
-        WHEN @TipIspita = 2 AND ImaPolozenTeorijski = 1 AND ImaPolozenPrakticni = 1 THEN 'Polozio'
-        WHEN @TipIspita = 0 AND ImaPolozenTeorijski = 1 THEN 'Polozio'
-        WHEN @TipIspita = 1 AND ImaPolozenPrakticni = 1 THEN 'Polozio'
-        WHEN
+            WITH KandidatAgregat AS
             (
+                SELECT
+                    k.KandidatId,
+                    k.Ime,
+                    k.Prezime,
+                    k.Jmbg,
+                    kat.NazivKategorije AS Kategorija,
+                    SUM(CASE WHEN i.Tip = 'teorijski' THEN 1 ELSE 0 END) AS BrojPokusajaTeorijski,
+                    SUM(CASE WHEN i.Tip = 'prakticni' THEN 1 ELSE 0 END) AS BrojPokusajaPrakticni,
+                    MAX(CASE WHEN i.Tip = 'teorijski' AND i.Rezultat = 'polozio' THEN 1 ELSE 0 END) AS ImaPolozenTeorijski,
+                    MAX(CASE WHEN i.Tip = 'prakticni' AND i.Rezultat = 'polozio' THEN 1 ELSE 0 END) AS ImaPolozenPrakticni,
+                    MAX(i.DatumIspita) AS DatumPoslednjegIspita
+                FROM Kandidat k
+                INNER JOIN Upis u ON u.KandidatId = k.KandidatId
+                INNER JOIN PaketObuke p ON p.PaketId = u.PaketId
+                INNER JOIN Kategorija kat ON kat.KategorijaID = p.KategorijaID
+                LEFT JOIN Ispit i
+                    ON i.UpisId = u.UpisId
+                    AND i.DatumIspita >= @DatumOd
+                    AND i.DatumIspita < @DatumDoExclusive
+                WHERE
+                    kat.NazivKategorije = @Kategorija
+                    AND (@IncludeOnlyAktivanUpis = 0 OR u.Status = 'aktivan')
+                GROUP BY
+                    k.KandidatId,
+                    k.Ime,
+                    k.Prezime,
+                    k.Jmbg,
+                    kat.NazivKategorije
+            )
+            SELECT
+                KandidatId,
+                Ime,
+                Prezime,
+                Jmbg,
+                Kategorija,
+                BrojPokusajaTeorijski,
+                BrojPokusajaPrakticni,
+                DatumPoslednjegIspita,
                 CASE
-                    WHEN @TipIspita = 0 THEN BrojPokusajaTeorijski
-                    WHEN @TipIspita = 1 THEN BrojPokusajaPrakticni
-                    ELSE BrojPokusajaTeorijski + BrojPokusajaPrakticni
-                END
-            ) > 0 THEN 'Pao'
-        ELSE 'UToku'
-    END AS Status
-FROM KandidatAgregat
-WHERE
-    @IncludeNoData = 1
-    OR
-    (
-        CASE
-            WHEN @TipIspita = 2 AND ImaPolozenTeorijski = 1 AND ImaPolozenPrakticni = 1 THEN 'Polozio'
-            WHEN @TipIspita = 0 AND ImaPolozenTeorijski = 1 THEN 'Polozio'
-            WHEN @TipIspita = 1 AND ImaPolozenPrakticni = 1 THEN 'Polozio'
-            WHEN
+                    WHEN @TipIspita = 2 AND ImaPolozenTeorijski = 1 AND ImaPolozenPrakticni = 1 THEN 'Polozio'
+                    WHEN @TipIspita = 0 AND ImaPolozenTeorijski = 1 THEN 'Polozio'
+                    WHEN @TipIspita = 1 AND ImaPolozenPrakticni = 1 THEN 'Polozio'
+                    WHEN
+                        (
+                            CASE
+                                WHEN @TipIspita = 0 THEN BrojPokusajaTeorijski
+                                WHEN @TipIspita = 1 THEN BrojPokusajaPrakticni
+                                ELSE BrojPokusajaTeorijski + BrojPokusajaPrakticni
+                            END
+                        ) > 0 THEN 'Pao'
+                    ELSE 'UToku'
+                END AS Status
+            FROM KandidatAgregat
+            WHERE
+                @IncludeNoData = 1
+                OR
                 (
                     CASE
-                        WHEN @TipIspita = 0 THEN BrojPokusajaTeorijski
-                        WHEN @TipIspita = 1 THEN BrojPokusajaPrakticni
-                        ELSE BrojPokusajaTeorijski + BrojPokusajaPrakticni
+                        WHEN @TipIspita = 2 AND ImaPolozenTeorijski = 1 AND ImaPolozenPrakticni = 1 THEN 'Polozio'
+                        WHEN @TipIspita = 0 AND ImaPolozenTeorijski = 1 THEN 'Polozio'
+                        WHEN @TipIspita = 1 AND ImaPolozenPrakticni = 1 THEN 'Polozio'
+                        WHEN
+                            (
+                                CASE
+                                    WHEN @TipIspita = 0 THEN BrojPokusajaTeorijski
+                                    WHEN @TipIspita = 1 THEN BrojPokusajaPrakticni
+                                    ELSE BrojPokusajaTeorijski + BrojPokusajaPrakticni
+                                END
+                            ) > 0 THEN 'Pao'
+                        ELSE 'UToku'
                     END
-                ) > 0 THEN 'Pao'
-            ELSE 'UToku'
-        END
-    ) <> 'UToku'
-ORDER BY Prezime, Ime;";
+                ) <> 'UToku'
+            ORDER BY Prezime, Ime;";
 
             command.Parameters.AddWithValue("@DatumOd", kriterijum.DatumOd.Date);
             command.Parameters.AddWithValue("@DatumDoExclusive", kriterijum.DatumDo.Date.AddDays(1));
@@ -308,6 +309,94 @@ ORDER BY Prezime, Ime;";
             reader.Close();
             command.Dispose();
             return rezultat;
+        }
+
+        public bool KandidatPostoji(int kandidatId)
+        {
+            SqlCommand command = _connection.CreateCommand();
+            command.CommandText = "SELECT COUNT(1) FROM Kandidat WHERE KandidatId = @KandidatId";
+            command.Parameters.AddWithValue("@KandidatId", kandidatId);
+
+            int count = Convert.ToInt32(command.ExecuteScalar());
+            command.Dispose();
+            return count > 0;
+        }
+
+        public Upis GetNajnovijiUpisZaKandidata(int kandidatId)
+        {
+            SqlCommand command = _connection.CreateCommand();
+            command.CommandText = @"
+            SELECT TOP 1 UpisId, KandidatId, PaketId, DatumUpisa, Status
+            FROM Upis
+            WHERE KandidatId = @KandidatId
+            ORDER BY DatumUpisa DESC, UpisId DESC";
+            command.Parameters.AddWithValue("@KandidatId", kandidatId);
+
+            SqlDataReader reader = command.ExecuteReader();
+            Upis upis = null;
+
+            if (reader.Read())
+            {
+                upis = new Upis
+                {
+                    UpisId = (int)reader["UpisId"],
+                    KandidatId = (int)reader["KandidatId"],
+                    PaketId = (int)reader["PaketId"],
+                    DatumUpisa = (DateTime)reader["DatumUpisa"],
+                    Status = reader["Status"].ToString()
+                };
+            }
+
+            reader.Close();
+            command.Dispose();
+            return upis;
+        }
+
+        public bool PostojiIspitIstogTipaIstogDana(int upisId, string tip, DateTime datumIspita)
+        {
+            SqlCommand command = _connection.CreateCommand();
+            command.CommandText = @"
+SELECT COUNT(1)
+FROM Ispit
+WHERE UpisId = @UpisId
+  AND Tip = @Tip
+  AND CAST(DatumIspita AS date) = @DatumIspita";
+
+            command.Parameters.AddWithValue("@UpisId", upisId);
+            command.Parameters.AddWithValue("@Tip", tip);
+            command.Parameters.AddWithValue("@DatumIspita", datumIspita.Date);
+
+            int count = Convert.ToInt32(command.ExecuteScalar());
+            command.Dispose();
+            return count > 0;
+        }
+
+        public bool ImaPolozenIspitZaTip(int upisId, string tip)
+        {
+            SqlCommand command = _connection.CreateCommand();
+            command.CommandText = @"
+SELECT COUNT(1)
+FROM Ispit
+WHERE UpisId = @UpisId
+  AND Tip = @Tip
+  AND Rezultat = 'polozio'";
+
+            command.Parameters.AddWithValue("@UpisId", upisId);
+            command.Parameters.AddWithValue("@Tip", tip);
+
+            int count = Convert.ToInt32(command.ExecuteScalar());
+            command.Dispose();
+            return count > 0;
+        }
+
+        public void AzurirajStatusUpisa(int upisId, string status)
+        {
+            SqlCommand command = _connection.CreateCommand();
+            command.CommandText = "UPDATE Upis SET Status = @Status WHERE UpisId = @UpisId";
+            command.Parameters.AddWithValue("@Status", status);
+            command.Parameters.AddWithValue("@UpisId", upisId);
+            command.ExecuteNonQuery();
+            command.Dispose();
         }
 
     }

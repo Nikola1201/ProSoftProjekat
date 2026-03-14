@@ -48,6 +48,7 @@
     <Compile Include="Communication\Sender.cs" />
     <Compile Include="Domain\Admin.cs" />
     <Compile Include="Domain\CasVoznje.cs" />
+    <Compile Include="Domain\EvidentirajIspitModels.cs" />
     <Compile Include="Domain\IEntity.cs" />
     <Compile Include="Domain\Instruktor.cs" />
     <Compile Include="Domain\Ispit.cs" />

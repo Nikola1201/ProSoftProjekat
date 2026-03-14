@@ -51,6 +51,9 @@ namespace Client
             izvestajProlaznostiToolStripMenuItem.Click += (s, a)
                 => MainCoordinator.Instance.ShowKreirajIzvestajProlaznostiPanel();
 
+            evidentiranjePolaganjaToolStripMenuItem.Click += (s, a)
+                => MainCoordinator.Instance.ShowEvidentirajIspitPanel();
+
          
         }
 

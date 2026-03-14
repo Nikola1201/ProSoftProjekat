@@ -139,6 +139,13 @@ namespace Server
             return so.Result;
         }
 
+        internal EvidentirajIspitResponse EvidentirajIspit(EvidentirajIspitRequest request)
+        {
+            EvidentirajIspitSO so = new EvidentirajIspitSO(request);
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
 
     }
 }

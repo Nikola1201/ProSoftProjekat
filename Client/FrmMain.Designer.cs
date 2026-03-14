@@ -43,6 +43,7 @@
             this.otkažiČasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ispitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.izvestajProlaznostiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.evidentiranjePolaganjaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.pnlMain = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
@@ -142,15 +143,22 @@
             // ispitToolStripMenuItem
             // 
             this.ispitToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.evidentiranjePolaganjaToolStripMenuItem,
             this.izvestajProlaznostiToolStripMenuItem});
             this.ispitToolStripMenuItem.Name = "ispitToolStripMenuItem";
             this.ispitToolStripMenuItem.Size = new System.Drawing.Size(51, 25);
             this.ispitToolStripMenuItem.Text = "Ispit";
             // 
+            // evidentiranjePolaganjaToolStripMenuItem
+            // 
+            this.evidentiranjePolaganjaToolStripMenuItem.Name = "evidentiranjePolaganjaToolStripMenuItem";
+            this.evidentiranjePolaganjaToolStripMenuItem.Size = new System.Drawing.Size(239, 26);
+            this.evidentiranjePolaganjaToolStripMenuItem.Text = "Evidentiranje polaganja";
+            // 
             // izvestajProlaznostiToolStripMenuItem
             // 
             this.izvestajProlaznostiToolStripMenuItem.Name = "izvestajProlaznostiToolStripMenuItem";
-            this.izvestajProlaznostiToolStripMenuItem.Size = new System.Drawing.Size(212, 26);
+            this.izvestajProlaznostiToolStripMenuItem.Size = new System.Drawing.Size(239, 26);
             this.izvestajProlaznostiToolStripMenuItem.Text = "Izveštaj prolaznosti";
             // 
             // contextMenuStrip1
@@ -200,5 +208,6 @@
         private System.Windows.Forms.ToolStripMenuItem otkažiČasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ispitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem izvestajProlaznostiToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem evidentiranjePolaganjaToolStripMenuItem;
     }
 }

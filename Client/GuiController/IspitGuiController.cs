@@ -15,13 +15,162 @@ namespace Client.GuiController
 {
     internal class IspitGuiController
     {
+        private UCEvidentirajIspit _ucEvidentirajIspit;
         private UCKreirajIzvestajOIspitima _ucKreirajIzvestaj;
         private BindingList<Kategorija> _kategorije;
+        private BindingList<Kandidat> _kandidati;
 
         private class TipIspitaOption
         {
             public string Naziv { get; set; }
             public TipIspitaFilter Vrednost { get; set; }
+        }
+
+        private class StringOption
+        {
+            public string Naziv { get; set; }
+            public string Vrednost { get; set; }
+        }
+
+        internal Control CreateEvidentirajIspit()
+        {
+            _ucEvidentirajIspit = new UCEvidentirajIspit();
+            PrepareEvidentirajIspitControl();
+            _ucEvidentirajIspit.BtnSacuvaj.Click += BtnSacuvajIspit_Click;
+            return _ucEvidentirajIspit;
+        }
+
+        private void PrepareEvidentirajIspitControl()
+        {
+            _ucEvidentirajIspit.DtpDatumIspita.Value = DateTime.Today;
+
+            _ucEvidentirajIspit.CmbTip.DisplayMember = "Naziv";
+            _ucEvidentirajIspit.CmbTip.ValueMember = "Vrednost";
+            _ucEvidentirajIspit.CmbTip.DataSource = new List<StringOption>
+            {
+                new StringOption { Naziv = "Teorijski", Vrednost = "teorijski" },
+                new StringOption { Naziv = "Prakticni", Vrednost = "prakticni" }
+            };
+
+            _ucEvidentirajIspit.CmbRezultat.DisplayMember = "Naziv";
+            _ucEvidentirajIspit.CmbRezultat.ValueMember = "Vrednost";
+            _ucEvidentirajIspit.CmbRezultat.DataSource = new List<StringOption>
+            {
+                new StringOption { Naziv = "Polozio", Vrednost = "polozio" },
+                new StringOption { Naziv = "Pao", Vrednost = "pao" },
+                new StringOption { Naziv = "Nije pristupio", Vrednost = "nije_pristupio" }
+            };
+
+            try
+            {
+                List<Kandidat> sviKandidati = Communication.Instance.GetAllKandidati(upisani: true) ?? new List<Kandidat>();
+                _kandidati = new BindingList<Kandidat>(sviKandidati);
+                _ucEvidentirajIspit.CmbKandidat.DataSource = _kandidati;
+
+                bool imaKandidata = _kandidati.Count > 0;
+                _ucEvidentirajIspit.CmbKandidat.Enabled = imaKandidata;
+                _ucEvidentirajIspit.BtnSacuvaj.Enabled = imaKandidata;
+
+                if (!imaKandidata)
+                {
+                    ShowMessage.Info("Nema kandidata za evidentiranje ispita.");
+                }
+            }
+            catch (Exception)
+            {
+                ShowMessage.ServerDown();
+                _ucEvidentirajIspit.BtnSacuvaj.Enabled = false;
+            }
+        }
+
+        private void BtnSacuvajIspit_Click(object sender, EventArgs e)
+        {
+            if (!TryBuildEvidentirajIspitRequest(out EvidentirajIspitRequest request))
+            {
+                return;
+            }
+
+            _ucEvidentirajIspit.BtnSacuvaj.Enabled = false;
+            try
+            {
+                Response response = Communication.Instance.EvidentirajIspit(request);
+
+                if (response.Exception != null)
+                {
+                    ShowMessage.Error(response.Exception.Message);
+                    return;
+                }
+
+                EvidentirajIspitResponse result = response.Result as EvidentirajIspitResponse;
+                if (result == null)
+                {
+                    ShowMessage.Error("Sistem ne moze da evidentira ispit.");
+                    return;
+                }
+
+                ShowMessage.Success(result.Poruka ?? "Ispit je uspesno evidentiran.");
+                ResetEvidentirajIspitForm();
+            }
+            catch (Exception)
+            {
+                ShowMessage.ServerDown();
+            }
+            finally
+            {
+                _ucEvidentirajIspit.BtnSacuvaj.Enabled = true;
+            }
+        }
+
+        private bool TryBuildEvidentirajIspitRequest(out EvidentirajIspitRequest request)
+        {
+            request = null;
+
+            Kandidat kandidat = _ucEvidentirajIspit.CmbKandidat.SelectedItem as Kandidat;
+            if (kandidat == null)
+            {
+                ShowMessage.Error("Izaberite kandidata.", _ucEvidentirajIspit.CmbKandidat);
+                return false;
+            }
+
+            DateTime datumIspita = _ucEvidentirajIspit.DtpDatumIspita.Value.Date;
+            if (datumIspita > DateTime.Today)
+            {
+                ShowMessage.Error("Datum ispita ne moze biti u buducnosti.", _ucEvidentirajIspit.DtpDatumIspita);
+                return false;
+            }
+
+            StringOption tip = _ucEvidentirajIspit.CmbTip.SelectedItem as StringOption;
+            if (tip == null || string.IsNullOrWhiteSpace(tip.Vrednost))
+            {
+                ShowMessage.Error("Izaberite tip ispita.", _ucEvidentirajIspit.CmbTip);
+                return false;
+            }
+
+            StringOption rezultat = _ucEvidentirajIspit.CmbRezultat.SelectedItem as StringOption;
+            if (rezultat == null || string.IsNullOrWhiteSpace(rezultat.Vrednost))
+            {
+                ShowMessage.Error("Izaberite rezultat ispita.", _ucEvidentirajIspit.CmbRezultat);
+                return false;
+            }
+
+            request = new EvidentirajIspitRequest
+            {
+                KandidatId = kandidat.KandidatId,
+                DatumIspita = datumIspita,
+                Tip = tip.Vrednost,
+                Rezultat = rezultat.Vrednost,
+                Napomena = (_ucEvidentirajIspit.TxtNapomena.Text ?? string.Empty).Trim()
+            };
+
+            return true;
+        }
+
+        private void ResetEvidentirajIspitForm()
+        {
+            _ucEvidentirajIspit.DtpDatumIspita.Value = DateTime.Today;
+            _ucEvidentirajIspit.TxtNapomena.Clear();
+            _ucEvidentirajIspit.CmbTip.SelectedIndex = 0;
+            _ucEvidentirajIspit.CmbRezultat.SelectedIndex = 0;
         }
 
         internal Control CreateIzvestajProlaznosti()

@@ -226,6 +226,18 @@ namespace Client
             return (List<Kandidat>)response.Result;
         }
 
+        internal Response EvidentirajIspit(EvidentirajIspitRequest requestModel)
+        {
+            Request request = new Request()
+            {
+                Argument = requestModel,
+                Operation = Operation.EvidentirajIspit
+            };
+
+            _sender.Send(request);
+            return (Response)_receiver.Receive();
+        }
+
         internal Response KreirajIzvestajProlaznosti(IzvestajProlaznostiKriterijum kriterijum)
         {
             Request request = new Request()

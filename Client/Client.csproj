@@ -103,6 +103,9 @@
     <Compile Include="UserControls\UCIspit\UCKreirajIzvestajOIspitima.Designer.cs">
       <DependentUpon>UCKreirajIzvestajOIspitima.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UCIspit\UCEvidentirajIspit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\UCKandidat\UCKreirajKandidata.cs">
       <SubType>UserControl</SubType>
     </Compile>
