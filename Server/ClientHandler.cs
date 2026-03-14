@@ -80,6 +80,15 @@ namespace Server
                     case Operation.ObrisiInstruktora:
                         Controller.Instance.ObrisiInstruktora((Instruktor)request.Argument);
                         break;
+                    case Operation.GetAllVozila:
+                        response.Result = Controller.Instance.GetAllVozila();
+                        break;
+                    case Operation.GetAllUpisi:
+                        response.Result = Controller.Instance.GetAllUpisi();
+                        break;
+                    case Operation.ZakaziCasVoznje:
+                        response.Result = Controller.Instance.ZakaziCasVoznje((CasVoznje)request.Argument);
+                        break;
                     default:
                         break;
                 }

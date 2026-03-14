@@ -48,23 +48,39 @@ namespace Common.Domain
         {
             var list = new List<IEntity>();
             while (reader.Read())
-                list.Add(GetReaderResult(reader));
+            {
+                list.Add(new Instruktor
+                {
+                    InstruktorId = (int)reader["InstruktorId"],
+                    Ime = reader["Ime"].ToString(),
+                    Prezime = reader["Prezime"].ToString(),
+                    JMBG = reader["JMBG"].ToString(),
+                    Telefon = reader["Telefon"].ToString(),
+                    Email = reader["Email"].ToString(),
+                    DatumZaposlenja = (DateTime)reader["DatumZaposlenja"],
+                    Aktivan = (bool)reader["Aktivan"]
+                });
+            }
             return list;
         }
 
         public IEntity GetReaderResult(SqlDataReader reader)
         {
-            return new Instruktor
+            if (reader.Read())
             {
-                InstruktorId = (int)reader["InstruktorId"],
-                Ime = reader["Ime"].ToString(),
-                Prezime = reader["Prezime"].ToString(),
-                JMBG = reader["JMBG"].ToString(),
-                Telefon = reader["Telefon"].ToString(),
-                Email = reader["Email"].ToString(),
-                DatumZaposlenja = (DateTime)reader["DatumZaposlenja"],
-                Aktivan = (bool)reader["Aktivan"]
-            };
+                return new Instruktor
+                {
+                    InstruktorId = (int)reader["InstruktorId"],
+                    Ime = reader["Ime"].ToString(),
+                    Prezime = reader["Prezime"].ToString(),
+                    JMBG = reader["JMBG"].ToString(),
+                    Telefon = reader["Telefon"].ToString(),
+                    Email = reader["Email"].ToString(),
+                    DatumZaposlenja = (DateTime)reader["DatumZaposlenja"],
+                    Aktivan = (bool)reader["Aktivan"]
+                };
+            }
+            return null;
         }
 
         public override string ToString()

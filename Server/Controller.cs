@@ -88,5 +88,26 @@ namespace Server
             ObrisiInstruktoraSO so = new ObrisiInstruktoraSO(argument);
             so.ExecuteTemplate();
         }
+
+        internal List<Vozilo> GetAllVozila()
+        {
+            VratiSveVozilaSO so = new VratiSveVozilaSO();
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal List<Upis> GetAllUpisi()
+        {
+            VratiSveUpiseSO so = new VratiSveUpiseSO();
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal CasVoznje ZakaziCasVoznje(CasVoznje argument)
+        {
+            ZakaziCasVoznjeSO so = new ZakaziCasVoznjeSO(argument);
+            so.ExecuteTemplate();
+            return (CasVoznje)so.Result;
+        }
     }
 }

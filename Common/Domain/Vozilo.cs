@@ -12,16 +12,16 @@ namespace Common.Domain
         public string Model { get; set; }
         public int Godiste { get; set; }
         public string Tablica { get; set; }
-        public string Kategorija { get; set; }  // 'A', 'B', 'C'
+        public int KategorijaID { get; set; }
         public bool Aktivno { get; set; }
 
         public string TableName => "Vozilo";
 
         public string Values =>
-            $"'{Marka}', '{Model}', {Godiste}, '{Tablica}', '{Kategorija}'";
+            $"'{Marka}', '{Model}', {Godiste}, '{Tablica}', {KategorijaID}";
 
         public object Query =>
-            $"INSERT INTO Vozilo (Marka, Model, Godiste, Tablica, Kategorija) " +
+            $"INSERT INTO Vozilo (Marka, Model, Godiste, Tablica, KategorijaID) " +
             $"VALUES ({Values})";
 
         public object TableKeyColumn => "VoziloId";
@@ -30,7 +30,7 @@ namespace Common.Domain
             $"SELECT * FROM Vozilo WHERE Marka LIKE '%{Marka}%' OR Model LIKE '%{Model}%'";
 
         public object TableKeyQuery =>
-            $"SELECT * FROM Vozilo WHERE VoziloId = {VoziloId}";
+            $"{TableKeyColumn} = {VoziloId}";
 
         public object Update =>
             $"UPDATE Vozilo SET " +
@@ -38,7 +38,7 @@ namespace Common.Domain
             $"Model = '{Model}', " +
             $"Godiste = {Godiste}, " +
             $"Tablica = '{Tablica}', " +
-            $"Kategorija = '{Kategorija}', " +
+            $"KategorijaID = {KategorijaID}, " +
             $"Aktivno = {(Aktivno ? 1 : 0)} " +
             $"WHERE VoziloId = {VoziloId}";
 
@@ -46,22 +46,42 @@ namespace Common.Domain
         {
             var list = new List<IEntity>();
             while (reader.Read())
-                list.Add(GetReaderResult(reader));
+            {
+                list.Add(new Vozilo
+                {
+                    VoziloId = (int)reader["VoziloId"],
+                    Marka = reader["Marka"].ToString(),
+                    Model = reader["Model"].ToString(),
+                    Godiste = (int)reader["Godiste"],
+                    Tablica = reader["Tablica"].ToString(),
+                    KategorijaID = (int)reader["KategorijaID"],
+                    Aktivno = (bool)reader["Aktivno"]
+                });
+            }
             return list;
         }
 
         public IEntity GetReaderResult(SqlDataReader reader)
         {
-            return new Vozilo
+            if (reader.Read())
             {
-                VoziloId = (int)reader["VoziloId"],
-                Marka = reader["Marka"].ToString(),
-                Model = reader["Model"].ToString(),
-                Godiste = (int)reader["Godiste"],
-                Tablica = reader["Tablica"].ToString(),
-                Kategorija = reader["Kategorija"].ToString(),
-                Aktivno = (bool)reader["Aktivno"]
-            };
+                return new Vozilo
+                {
+                    VoziloId = (int)reader["VoziloId"],
+                    Marka = reader["Marka"].ToString(),
+                    Model = reader["Model"].ToString(),
+                    Godiste = (int)reader["Godiste"],
+                    Tablica = reader["Tablica"].ToString(),
+                    KategorijaID = (int)reader["KategorijaID"],
+                    Aktivno = (bool)reader["Aktivno"]
+                };
+            }
+            return null;
+        }
+
+        public override string ToString()
+        {
+            return $"{Marka} {Model} ({Tablica}) - Kategorija {KategorijaID}";
         }
     }
 }

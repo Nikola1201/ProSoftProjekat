@@ -149,5 +149,39 @@ namespace Client
             Response response = (Response)_receiver.Receive();
             return response;
         }
+
+        internal List<Vozilo> GetAllVozila()
+        {
+            Request request = new Request()
+            {
+                Operation = Operation.GetAllVozila
+            };
+            _sender.Send(request);
+            Response response = (Response)_receiver.Receive();
+            return (List<Vozilo>)response.Result;
+        }
+
+        internal List<Upis> GetAllUpisi()
+        {
+            Request request = new Request()
+            {
+                Operation = Operation.GetAllUpisi
+            };
+            _sender.Send(request);
+            Response response = (Response)_receiver.Receive();
+            return (List<Upis>)response.Result;
+        }
+
+        internal Response ZakaziCasVoznje(CasVoznje casVoznje)
+        {
+            Request request = new Request()
+            {
+                Argument = casVoznje,
+                Operation = Operation.ZakaziCasVoznje
+            };
+            _sender.Send(request);
+            Response response = (Response)_receiver.Receive();
+            return response;
+        }
     }
 }

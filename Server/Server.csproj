@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SystemOperation\ZakaziCasVoznjeSO.cs" />
+    <Compile Include="SystemOperation\VratiSveUpiseSO.cs" />
+    <Compile Include="SystemOperation\VratiSveVozilaSO.cs" />
     <Compile Include="SystemOperation\ObrisiInstruktoraSO.cs" />
     <Compile Include="SystemOperation\AdminLoginSO.cs" />
     <Compile Include="ClientHandler.cs" />

@@ -1,4 +1,5 @@
 ﻿using Client.UserControls;
+using Client.UserControls.UCCasVoznje;
 using Common.Domain;
 using System;
 
@@ -12,11 +13,13 @@ namespace Client.GuiController
         private MainCoordinator() {
             _kandidatGuiController = new KandidatGuiController();
             _instruktorGuiKontroler = new InstruktorGuiKontroler();
+            _casGuiKontroler = new CasGuiKontroler();
         }
 
         private FrmMain _frmMain;
         private KandidatGuiController _kandidatGuiController;
         private InstruktorGuiKontroler _instruktorGuiKontroler;
+        private CasGuiKontroler _casGuiKontroler;
 
         internal void ShowFrmMain(Admin admin)
         {
@@ -56,6 +59,11 @@ namespace Client.GuiController
         {
             _frmMain.ChangePanel(_instruktorGuiKontroler.CreateObrisiInstruktor());
 
+        }
+
+        internal void ShowZakaziCasPanel()
+        {
+            _frmMain.ChangePanel(_casGuiKontroler.CreateZakaziCas());
         }
     }
 }

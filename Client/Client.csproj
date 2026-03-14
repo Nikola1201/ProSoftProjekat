@@ -59,12 +59,19 @@
     <Compile Include="FrmMain.Designer.cs">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="GuiController\CasGuiKontroler.cs" />
     <Compile Include="GuiController\InstruktorGuiKontroler.cs" />
     <Compile Include="GuiController\KandidatGuiController.cs" />
     <Compile Include="GuiController\LoginGuiController.cs" />
     <Compile Include="GuiController\MainCoordinator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\UCCasVoznje\UCZakaziCasVoznje.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UCCasVoznje\UCZakaziCasVoznje.Designer.cs">
+      <DependentUpon>UCZakaziCasVoznje.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UCDefault.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -118,6 +125,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UserControls\UCCasVoznje\UCZakaziCasVoznje.resx">
+      <DependentUpon>UCZakaziCasVoznje.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UCDefault.resx">
       <DependentUpon>UCDefault.cs</DependentUpon>
     </EmbeddedResource>
@@ -149,9 +159,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UserControls\UCCasVoznje\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{B2A2C525-B12B-4E9B-8277-1BF507224874}</Project>

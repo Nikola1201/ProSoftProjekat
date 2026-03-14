@@ -18,5 +18,8 @@ namespace Common.Communication
         KreirajInstruktora,
         ObrisiInstruktora,
         GetAllInstruktori,
+        GetAllVozila,
+        GetAllUpisi,
+        ZakaziCasVoznje,
     }
 }

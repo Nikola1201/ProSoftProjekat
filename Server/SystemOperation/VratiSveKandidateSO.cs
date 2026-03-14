@@ -22,7 +22,7 @@ namespace Server.SystemOperation
             );
             if (_upisani == false)
             {
-                Result = svi.Where(k => !upisaniIds.Contains(k.KandidatId) && k.Aktivan == true).ToList();
+                Result = svi.Where(k => !upisaniIds.Contains(k.KandidatId) && k.Aktivan == false).ToList();
             }
             else { 
                 Result = svi.Where(k => upisaniIds.Contains(k.KandidatId)).ToList();

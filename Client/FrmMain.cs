@@ -39,6 +39,9 @@ namespace Client
                 => MainCoordinator.Instance.ShowKreirajInstruktoraPanel();
             obrisiInstruktoraToolStripMenuItem.Click += (s, a)
                 => MainCoordinator.Instance.ShowObrisiInstruktoraPanel();
+
+            zakaziČasToolStripMenuItem.Click += (s, a)
+                => MainCoordinator.Instance.ShowZakaziCasPanel();
         }
 
         private void ConfigureMainPanel()
