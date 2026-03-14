@@ -139,11 +139,6 @@ namespace Server
             return so.Result;
         }
 
-        internal IzvestajDugovanjaResponseDto KreirajIzvestajDugovanja(IzvestajDugovanjaKriterijum kriterijum)
-        {
-            KreirajIzvestajDugovanjaSO so = new KreirajIzvestajDugovanjaSO(kriterijum);
-            so.ExecuteTemplate();
-            return so.Result;
-        }
+
     }
 }

@@ -51,8 +51,8 @@
     <Compile Include="Domain\IEntity.cs" />
     <Compile Include="Domain\Instruktor.cs" />
     <Compile Include="Domain\Ispit.cs" />
-    <Compile Include="Domain\Izvestaji\IzvestajDugovanjaModels.cs" />
-    <Compile Include="Domain\Izvestaji\IzvestajProlaznostiModels.cs" />
+    <Compile Include="Domain\Izvestaji\IzvestajDugovanjaKriterijum.cs" />
+    <Compile Include="Domain\Izvestaji\IzvestajProlaznostiKriterijum.cs" />
     <Compile Include="Domain\Kandidat.cs" />
     <Compile Include="Domain\KandidatSearchFilter.cs" />
     <Compile Include="Domain\Kategorija.cs" />

@@ -47,8 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SystemOperation\KreirajIzvestajDugovanjaSO.cs" />
-    <Compile Include="SystemOperation\KreirajIzvestajProlaznostiSO.cs" />
+    <Compile Include="SystemOperation\Class1.cs" />
     <Compile Include="SystemOperation\OtkaziCasVoznjeSO.cs" />
     <Compile Include="SystemOperation\PretraziKandidateSO.cs" />
     <Compile Include="SystemOperation\ZakaziCasVoznjeSO.cs" />
