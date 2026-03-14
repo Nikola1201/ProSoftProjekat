@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Client.GuiController
 {
-    internal class CasGuiKontroler
+    internal class CasGuiController
     {
         private UCZakaziCasVoznje _ucZakaziCasVoznje;
         private UCOtkaziCasVoznje _ucOtkaziCasVoznje;

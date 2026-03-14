@@ -1,5 +1,6 @@
 ﻿using Common.Communication;
 using Common.Domain;
+using Common.Domain.Izvestaji;
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -223,6 +224,30 @@ namespace Client
             }
 
             return (List<Kandidat>)response.Result;
+        }
+
+        internal Response KreirajIzvestajProlaznosti(IzvestajProlaznostiKriterijum kriterijum)
+        {
+            Request request = new Request()
+            {
+                Argument = kriterijum,
+                Operation = Operation.KreirajIzvestajProlaznosti
+            };
+
+            _sender.Send(request);
+            return (Response)_receiver.Receive();
+        }
+
+        internal Response KreirajIzvestajDugovanja(IzvestajDugovanjaKriterijum kriterijum)
+        {
+            Request request = new Request()
+            {
+                Argument = kriterijum,
+                Operation = Operation.KreirajIzvestajDugovanja
+            };
+
+            _sender.Send(request);
+            return (Response)_receiver.Receive();
         }
     }
 }

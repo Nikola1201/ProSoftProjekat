@@ -1,4 +1,5 @@
 ﻿using Common.Domain;
+using Common.Domain.Izvestaji;
 using DBBroker;
 using Server.SystemOperation;
 using System;
@@ -127,6 +128,20 @@ namespace Server
         internal List<Kandidat> PretraziKandidate(KandidatSearchFilter filter)
         {
             PretraziKandidateSO so = new PretraziKandidateSO(filter);
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal IzvestajProlaznostiResponseDto KreirajIzvestajProlaznosti(IzvestajProlaznostiKriterijum kriterijum)
+        {
+            KreirajIzvestajProlaznostiSO so = new KreirajIzvestajProlaznostiSO(kriterijum);
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal IzvestajDugovanjaResponseDto KreirajIzvestajDugovanja(IzvestajDugovanjaKriterijum kriterijum)
+        {
+            KreirajIzvestajDugovanjaSO so = new KreirajIzvestajDugovanjaSO(kriterijum);
             so.ExecuteTemplate();
             return so.Result;
         }

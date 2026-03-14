@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Client.GuiController
 {
-    internal class InstruktorGuiKontroler
+    internal class InstruktorGuiController
     {
         UCKreirajInstruktora _ucKreirajInstruktora;
         UCObrisiInstruktora _ucObrisiInstruktora;

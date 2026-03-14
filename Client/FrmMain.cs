@@ -48,6 +48,10 @@ namespace Client
             otkažiČasToolStripMenuItem.Click += (s, a)
                 => MainCoordinator.Instance.ShowOtkaziCasVoznjePanel();
 
+            izvestajProlaznostiToolStripMenuItem.Click += (s, a)
+                => MainCoordinator.Instance.ShowKreirajIzvestajProlaznostiPanel();
+
+         
         }
 
         private void ConfigureMainPanel()

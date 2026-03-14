@@ -59,8 +59,9 @@
     <Compile Include="FrmMain.Designer.cs">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="GuiController\CasGuiKontroler.cs" />
-    <Compile Include="GuiController\InstruktorGuiKontroler.cs" />
+    <Compile Include="GuiController\CasGuiController.cs" />
+    <Compile Include="GuiController\InstruktorGuiController.cs" />
+    <Compile Include="GuiController\IspitGuiController.cs" />
     <Compile Include="GuiController\KandidatGuiController.cs" />
     <Compile Include="GuiController\LoginGuiController.cs" />
     <Compile Include="GuiController\MainCoordinator.cs" />
@@ -95,6 +96,12 @@
     </Compile>
     <Compile Include="UserControls\UCInstruktor\UCObrisiInstruktora.Designer.cs">
       <DependentUpon>UCObrisiInstruktora.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UCIspit\UCKreirajIzvestajOIspitima.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UCIspit\UCKreirajIzvestajOIspitima.Designer.cs">
+      <DependentUpon>UCKreirajIzvestajOIspitima.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UCKandidat\UCKreirajKandidata.cs">
       <SubType>UserControl</SubType>
@@ -152,6 +159,9 @@
     <EmbeddedResource Include="UserControls\UCInstruktor\UCObrisiInstruktora.resx">
       <DependentUpon>UCObrisiInstruktora.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UCIspit\UCKreirajIzvestajOIspitima.resx">
+      <DependentUpon>UCKreirajIzvestajOIspitima.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UCKandidat\UCKreirajKandidata.resx">
       <DependentUpon>UCKreirajKandidata.cs</DependentUpon>
     </EmbeddedResource>
@@ -177,9 +187,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UserControls\UCIspit\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{B2A2C525-B12B-4E9B-8277-1BF507224874}</Project>

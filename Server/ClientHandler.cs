@@ -1,5 +1,6 @@
 ﻿using Common.Communication;
 using Common.Domain;
+using Common.Domain.Izvestaji;
 using System;
 using System.Diagnostics;
 using System.Net.Sockets;
@@ -97,6 +98,12 @@ namespace Server
                         break;
                     case Operation.PretraziKandidate:
                         response.Result = Controller.Instance.PretraziKandidate((KandidatSearchFilter)request.Argument);
+                        break;
+                    case Operation.KreirajIzvestajProlaznosti:
+                        response.Result = Controller.Instance.KreirajIzvestajProlaznosti((IzvestajProlaznostiKriterijum)request.Argument);
+                        break;
+                    case Operation.KreirajIzvestajDugovanja:
+                        response.Result = Controller.Instance.KreirajIzvestajDugovanja((IzvestajDugovanjaKriterijum)request.Argument);
                         break;
                     default:
                         break;

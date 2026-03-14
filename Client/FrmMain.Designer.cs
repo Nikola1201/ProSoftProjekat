@@ -41,14 +41,16 @@
             this.casToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.zakaziČasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.otkažiČasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ispitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.izvestajProlaznostiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.pnlMain = new System.Windows.Forms.Panel();
-            this.ispitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
+            this.menuStrip1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.kandidatToolStripMenuItem,
             this.instruktorToolStripMenuItem,
@@ -56,7 +58,7 @@
             this.ispitToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(884, 29);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -128,14 +130,28 @@
             // zakaziČasToolStripMenuItem
             // 
             this.zakaziČasToolStripMenuItem.Name = "zakaziČasToolStripMenuItem";
-            this.zakaziČasToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.zakaziČasToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.zakaziČasToolStripMenuItem.Text = "Zakazi čas";
             // 
             // otkažiČasToolStripMenuItem
             // 
             this.otkažiČasToolStripMenuItem.Name = "otkažiČasToolStripMenuItem";
-            this.otkažiČasToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.otkažiČasToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.otkažiČasToolStripMenuItem.Text = "Otkaži čas";
+            // 
+            // ispitToolStripMenuItem
+            // 
+            this.ispitToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.izvestajProlaznostiToolStripMenuItem});
+            this.ispitToolStripMenuItem.Name = "ispitToolStripMenuItem";
+            this.ispitToolStripMenuItem.Size = new System.Drawing.Size(51, 25);
+            this.ispitToolStripMenuItem.Text = "Ispit";
+            // 
+            // izvestajProlaznostiToolStripMenuItem
+            // 
+            this.izvestajProlaznostiToolStripMenuItem.Name = "izvestajProlaznostiToolStripMenuItem";
+            this.izvestajProlaznostiToolStripMenuItem.Size = new System.Drawing.Size(212, 26);
+            this.izvestajProlaznostiToolStripMenuItem.Text = "Izveštaj prolaznosti";
             // 
             // contextMenuStrip1
             // 
@@ -146,20 +162,14 @@
             // 
             this.pnlMain.Location = new System.Drawing.Point(12, 27);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(776, 411);
+            this.pnlMain.Size = new System.Drawing.Size(860, 443);
             this.pnlMain.TabIndex = 2;
-            // 
-            // ispitToolStripMenuItem
-            // 
-            this.ispitToolStripMenuItem.Name = "ispitToolStripMenuItem";
-            this.ispitToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
-            this.ispitToolStripMenuItem.Text = "Ispit";
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(884, 482);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.pnlMain);
             this.MainMenuStrip = this.menuStrip1;
@@ -189,5 +199,6 @@
         private System.Windows.Forms.ToolStripMenuItem zakaziČasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem otkažiČasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ispitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem izvestajProlaznostiToolStripMenuItem;
     }
 }

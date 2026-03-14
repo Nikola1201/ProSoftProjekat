@@ -12,15 +12,16 @@ namespace Client.GuiController
 
         private MainCoordinator() {
             _kandidatGuiController = new KandidatGuiController();
-            _instruktorGuiKontroler = new InstruktorGuiKontroler();
-            _casGuiKontroler = new CasGuiKontroler();
+            _instruktorGuiController = new InstruktorGuiController();
+            _casGuiController = new CasGuiController();
+            _ispitGuiController = new IspitGuiController();
         }
 
         private FrmMain _frmMain;
         private KandidatGuiController _kandidatGuiController;
-        private InstruktorGuiKontroler _instruktorGuiKontroler;
-        private CasGuiKontroler _casGuiKontroler;
-
+        private InstruktorGuiController _instruktorGuiController;
+        private CasGuiController _casGuiController;
+        private IspitGuiController _ispitGuiController;
         internal void ShowFrmMain(Admin admin)
         {
             _frmMain = new FrmMain(admin);
@@ -51,29 +52,34 @@ namespace Client.GuiController
 
         internal void ShowKreirajInstruktoraPanel()
         {
-            _frmMain.ChangePanel(_instruktorGuiKontroler.CreateInstruktor());
+            _frmMain.ChangePanel(_instruktorGuiController.CreateInstruktor());
 
         }
 
         internal void ShowObrisiInstruktoraPanel()
         {
-            _frmMain.ChangePanel(_instruktorGuiKontroler.CreateObrisiInstruktor());
+            _frmMain.ChangePanel(_instruktorGuiController.CreateObrisiInstruktor());
 
         }
 
         internal void ShowZakaziCasPanel()
         {
-            _frmMain.ChangePanel(_casGuiKontroler.CreateZakaziCas());
+            _frmMain.ChangePanel(_casGuiController.CreateZakaziCas());
         }
 
         internal void ShowOtkaziCasVoznjePanel()
         {
-            _frmMain.ChangePanel(_casGuiKontroler.CreateIzmeniCas());
+            _frmMain.ChangePanel(_casGuiController.CreateIzmeniCas());
         }
 
         internal void ShowPretraziKandidataPanel()
         {
             _frmMain.ChangePanel(_kandidatGuiController.CreatePretraziKandidata());
+        }
+
+        internal void ShowKreirajIzvestajProlaznostiPanel()
+        {
+            _frmMain.ChangePanel(_ispitGuiController.CreateIzvestajProlaznosti());
         }
     }
 }

@@ -24,5 +24,7 @@ namespace Common.Communication
         GetAllCasVoznje,
         OtkaziCasVoznje,
         PretraziKandidate,
+        KreirajIzvestajProlaznosti,
+        KreirajIzvestajDugovanja,
     }
 }
