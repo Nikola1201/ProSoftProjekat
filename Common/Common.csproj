@@ -52,6 +52,7 @@
     <Compile Include="Domain\Instruktor.cs" />
     <Compile Include="Domain\Ispit.cs" />
     <Compile Include="Domain\Kandidat.cs" />
+    <Compile Include="Domain\KandidatSearchFilter.cs" />
     <Compile Include="Domain\Kategorija.cs" />
     <Compile Include="Domain\PaketObuke.cs" />
     <Compile Include="Domain\Placanje.cs" />

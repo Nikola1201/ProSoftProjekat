@@ -47,7 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SystemOperation\OtkaziCasVoznjeSO.cs" />
+    <Compile Include="SystemOperation\PretraziKandidateSO.cs" />
     <Compile Include="SystemOperation\ZakaziCasVoznjeSO.cs" />
+    <Compile Include="SystemOperation\VratiSveCasoveVoznjeSO.cs" />
     <Compile Include="SystemOperation\VratiSveUpiseSO.cs" />
     <Compile Include="SystemOperation\VratiSveVozilaSO.cs" />
     <Compile Include="SystemOperation\ObrisiInstruktoraSO.cs" />

@@ -183,5 +183,46 @@ namespace Client
             Response response = (Response)_receiver.Receive();
             return response;
         }
+
+        internal List<CasVoznje> GetAllCasVoznje()
+        {
+            Request request = new Request()
+            {
+                Operation = Operation.GetAllCasVoznje
+            };
+            _sender.Send(request);
+            Response response = (Response)_receiver.Receive();
+            return (List<CasVoznje>)response.Result;
+        }
+
+        internal Response OtkaziCasVoznje(CasVoznje casVoznje)
+        {
+            Request request = new Request()
+            {
+                Argument = casVoznje,
+                Operation = Operation.OtkaziCasVoznje
+            };
+            _sender.Send(request);
+            Response response = (Response)_receiver.Receive();
+            return response;
+        }
+
+        internal List<Kandidat> PretraziKandidate(KandidatSearchFilter filter)
+        {
+            Request request = new Request()
+            {
+                Argument = filter,
+                Operation = Operation.PretraziKandidate
+            };
+            _sender.Send(request);
+            Response response = (Response)_receiver.Receive();
+
+            if (response.Exception != null)
+            {
+                throw response.Exception;
+            }
+
+            return (List<Kandidat>)response.Result;
+        }
     }
 }

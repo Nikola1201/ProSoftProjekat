@@ -65,5 +65,15 @@ namespace Client.GuiController
         {
             _frmMain.ChangePanel(_casGuiKontroler.CreateZakaziCas());
         }
+
+        internal void ShowOtkaziCasVoznjePanel()
+        {
+            _frmMain.ChangePanel(_casGuiKontroler.CreateIzmeniCas());
+        }
+
+        internal void ShowPretraziKandidataPanel()
+        {
+            _frmMain.ChangePanel(_kandidatGuiController.CreatePretraziKandidata());
+        }
     }
 }

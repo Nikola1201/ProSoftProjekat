@@ -21,5 +21,8 @@ namespace Common.Communication
         GetAllVozila,
         GetAllUpisi,
         ZakaziCasVoznje,
+        GetAllCasVoznje,
+        OtkaziCasVoznje,
+        PretraziKandidate,
     }
 }

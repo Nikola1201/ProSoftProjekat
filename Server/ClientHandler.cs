@@ -89,6 +89,15 @@ namespace Server
                     case Operation.ZakaziCasVoznje:
                         response.Result = Controller.Instance.ZakaziCasVoznje((CasVoznje)request.Argument);
                         break;
+                    case Operation.GetAllCasVoznje:
+                        response.Result = Controller.Instance.GetAllCasVoznje();
+                        break;
+                    case Operation.OtkaziCasVoznje:
+                        response.Result = Controller.Instance.OtkaziCasVoznje((CasVoznje)request.Argument);
+                        break;
+                    case Operation.PretraziKandidate:
+                        response.Result = Controller.Instance.PretraziKandidate((KandidatSearchFilter)request.Argument);
+                        break;
                     default:
                         break;
                 }

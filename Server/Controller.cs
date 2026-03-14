@@ -109,5 +109,26 @@ namespace Server
             so.ExecuteTemplate();
             return (CasVoznje)so.Result;
         }
+
+        internal List<CasVoznje> GetAllCasVoznje()
+        {
+            VratiSveCasoveVoznjeSO so = new VratiSveCasoveVoznjeSO();
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal CasVoznje OtkaziCasVoznje(CasVoznje argument)
+        {
+            OtkaziCasVoznjeSO so = new OtkaziCasVoznjeSO(argument);
+            so.ExecuteTemplate();
+            return (CasVoznje)so.Result;
+        }
+
+        internal List<Kandidat> PretraziKandidate(KandidatSearchFilter filter)
+        {
+            PretraziKandidateSO so = new PretraziKandidateSO(filter);
+            so.ExecuteTemplate();
+            return so.Result;
+        }
     }
 }

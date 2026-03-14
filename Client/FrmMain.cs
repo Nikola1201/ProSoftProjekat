@@ -33,6 +33,8 @@ namespace Client
                 => MainCoordinator.Instance.ShowUpisiKandidataPanel();
             ispisiKandidataToolStripMenuItem.Click += (s, a)
                 => MainCoordinator.Instance.ShowIspisiKandidataPanel();
+            pretraživanjeKandidataToolStripMenuItem.Click += (s, a)
+                => MainCoordinator.Instance.ShowPretraziKandidataPanel();
 
 
             kreirajInstruktoraToolStripMenuItem.Click += (s, a)
@@ -42,6 +44,10 @@ namespace Client
 
             zakaziČasToolStripMenuItem.Click += (s, a)
                 => MainCoordinator.Instance.ShowZakaziCasPanel();
+
+            otkažiČasToolStripMenuItem.Click += (s, a)
+                => MainCoordinator.Instance.ShowOtkaziCasVoznjePanel();
+
         }
 
         private void ConfigureMainPanel()

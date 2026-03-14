@@ -100,9 +100,13 @@ namespace DBBroker
             cmd.Dispose();
         }
 
-        public void Update(Kandidat kandidat)
+        public void Update(IEntity entity)
         {
-            throw new NotImplementedException();
+            SqlCommand cmd = _connection.CreateCommand();
+            cmd.CommandText = entity.Update.ToString();
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
         }
+
     }
 }

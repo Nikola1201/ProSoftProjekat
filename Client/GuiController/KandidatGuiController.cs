@@ -16,11 +16,16 @@ namespace Client.GuiController
         private UCKreirajKandidata _ucKreirajKandidata;
         private UCUpisiKandidata _ucUpisiKandidata;
         private UCObrisiKandidata _ucObrisiKandidata;
+        private UCPretraziKandidata _ucPretraziKandidata;
 
         private BindingList<Kandidat> neupisaniKandidati;
         private BindingList<PaketObuke> paketiObuke;
         private BindingList<PaketObuke> prikazaniPaketiObuke;
         private BindingList<Kandidat> upisaniKandidati;
+        private BindingList<Kandidat> pretrazeniKandidati;
+
+        private string _sortKolona = nameof(Kandidat.Prezime);
+        private bool _sortRastuce = true;
 
         internal Control CreateKandidat()
         {
@@ -357,6 +362,200 @@ namespace Client.GuiController
             {
                 ShowMessage.Info("Nema upisanih kandidata dostupnih za ispisivanje.");
             }
+        }
+
+        internal Control CreatePretraziKandidata()
+        {
+            _ucPretraziKandidata = new UCPretraziKandidata();
+            ConfigurePretragaTabela();
+            BindPretragaRezultati(new List<Kandidat>());
+
+            _ucPretraziKandidata.BtnPretrazi.Click += BtnPretrazi_Click;
+            _ucPretraziKandidata.DgvKandidati.ColumnHeaderMouseClick += DgvKandidati_ColumnHeaderMouseClick;
+
+            return _ucPretraziKandidata;
+        }
+
+        private void BtnPretrazi_Click(object sender, EventArgs e)
+        {
+            if (!TryCreatePretragaFilter(out KandidatSearchFilter filter))
+            {
+                return;
+            }
+
+            try
+            {
+                List<Kandidat> rezultat = Communication.Instance.PretraziKandidate(filter) ?? new List<Kandidat>();
+                BindPretragaRezultati(rezultat);
+
+                if (rezultat.Count == 0)
+                {
+                    ShowMessage.Info("Nema kandidata za zadate kriterijume pretrage.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMessage.Error(ex.Message);
+            }
+        }
+
+        private bool TryCreatePretragaFilter(out KandidatSearchFilter filter)
+        {
+            filter = null;
+
+            string ime = _ucPretraziKandidata.TxtIme.Text.Trim();
+            string prezime = _ucPretraziKandidata.TxtPrezime.Text.Trim();
+            string jmbg = _ucPretraziKandidata.TxtJMBG.Text.Trim();
+            string email = _ucPretraziKandidata.TxtEmail.Text.Trim();
+
+            if (!string.IsNullOrWhiteSpace(jmbg) && (jmbg.Length != 13 || !jmbg.All(char.IsDigit)))
+            {
+                ShowMessage.Error("JMBG mora da sadrzi tacno 13 cifara.", _ucPretraziKandidata.TxtJMBG);
+                return false;
+            }
+
+            if (!string.IsNullOrWhiteSpace(email) && !Validate.Email(email))
+            {
+                ShowMessage.Error("Email adresa nije u ispravnom formatu.", _ucPretraziKandidata.TxtEmail);
+                return false;
+            }
+
+            filter = new KandidatSearchFilter
+            {
+                Ime = ime,
+                Prezime = prezime,
+                JMBG = jmbg,
+                Email = email,
+                SamoAktivni = _ucPretraziKandidata.ChkSamoAktivni.Checked
+            };
+
+            return true;
+        }
+
+        private void ConfigurePretragaTabela()
+        {
+            DataGridView dgv = _ucPretraziKandidata.DgvKandidati;
+            dgv.AutoGenerateColumns = false;
+            dgv.ReadOnly = true;
+            dgv.AllowUserToAddRows = false;
+            dgv.AllowUserToDeleteRows = false;
+            dgv.MultiSelect = false;
+            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv.Columns.Clear();
+
+            AddTabelaKolona(nameof(Kandidat.Ime), "Ime");
+            AddTabelaKolona(nameof(Kandidat.Prezime), "Prezime");
+            AddTabelaKolona(nameof(Kandidat.JMBG), "JMBG");
+            AddTabelaKolona(nameof(Kandidat.Telefon), "Telefon");
+            AddTabelaKolona(nameof(Kandidat.Email), "Email");
+            AddTabelaKolona(nameof(Kandidat.Adresa), "Adresa");
+
+            DataGridViewTextBoxColumn datumUpisa = AddTabelaKolona(nameof(Kandidat.DatumUpisa), "DatumUpisa");
+            datumUpisa.DefaultCellStyle.Format = "dd.MM.yyyy";
+
+            AddTabelaKolona(nameof(Kandidat.Aktivan), "Aktivan");
+        }
+
+        private DataGridViewTextBoxColumn AddTabelaKolona(string dataPropertyName, string headerText)
+        {
+            DataGridViewTextBoxColumn kolona = new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = dataPropertyName,
+                HeaderText = headerText,
+                SortMode = DataGridViewColumnSortMode.Programmatic,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            };
+
+            _ucPretraziKandidata.DgvKandidati.Columns.Add(kolona);
+            return kolona;
+        }
+
+        private void BindPretragaRezultati(List<Kandidat> rezultat)
+        {
+            List<Kandidat> source = rezultat ?? new List<Kandidat>();
+            pretrazeniKandidati = new BindingList<Kandidat>(source);
+            _ucPretraziKandidata.DgvKandidati.DataSource = pretrazeniKandidati;
+        }
+
+        private void DgvKandidati_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.ColumnIndex < 0)
+            {
+                return;
+            }
+
+            DataGridViewColumn kolona = _ucPretraziKandidata.DgvKandidati.Columns[e.ColumnIndex];
+            string dataPropertyName = kolona.DataPropertyName;
+
+            if (string.IsNullOrWhiteSpace(dataPropertyName))
+            {
+                return;
+            }
+
+            if (_sortKolona == dataPropertyName)
+            {
+                _sortRastuce = !_sortRastuce;
+            }
+            else
+            {
+                _sortKolona = dataPropertyName;
+                _sortRastuce = true;
+            }
+
+            PrimeniSortiranje();
+            PostaviSortGlyph(kolona);
+        }
+
+        private void PrimeniSortiranje()
+        {
+            if (pretrazeniKandidati == null)
+            {
+                return;
+            }
+
+            IEnumerable<Kandidat> query = pretrazeniKandidati.ToList();
+            bool rastuce = _sortRastuce;
+
+            switch (_sortKolona)
+            {
+                case nameof(Kandidat.Ime):
+                    query = rastuce ? query.OrderBy(k => k.Ime).ThenBy(k => k.Prezime) : query.OrderByDescending(k => k.Ime).ThenByDescending(k => k.Prezime);
+                    break;
+                case nameof(Kandidat.JMBG):
+                    query = rastuce ? query.OrderBy(k => k.JMBG) : query.OrderByDescending(k => k.JMBG);
+                    break;
+                case nameof(Kandidat.Telefon):
+                    query = rastuce ? query.OrderBy(k => k.Telefon) : query.OrderByDescending(k => k.Telefon);
+                    break;
+                case nameof(Kandidat.Email):
+                    query = rastuce ? query.OrderBy(k => k.Email) : query.OrderByDescending(k => k.Email);
+                    break;
+                case nameof(Kandidat.Adresa):
+                    query = rastuce ? query.OrderBy(k => k.Adresa) : query.OrderByDescending(k => k.Adresa);
+                    break;
+                case nameof(Kandidat.DatumUpisa):
+                    query = rastuce ? query.OrderBy(k => k.DatumUpisa) : query.OrderByDescending(k => k.DatumUpisa);
+                    break;
+                case nameof(Kandidat.Aktivan):
+                    query = rastuce ? query.OrderBy(k => k.Aktivan) : query.OrderByDescending(k => k.Aktivan);
+                    break;
+                case nameof(Kandidat.Prezime):
+                default:
+                    query = rastuce ? query.OrderBy(k => k.Prezime).ThenBy(k => k.Ime) : query.OrderByDescending(k => k.Prezime).ThenByDescending(k => k.Ime);
+                    break;
+            }
+
+            BindPretragaRezultati(query.ToList());
+        }
+
+        private void PostaviSortGlyph(DataGridViewColumn aktivnaKolona)
+        {
+            foreach (DataGridViewColumn kolona in _ucPretraziKandidata.DgvKandidati.Columns)
+            {
+                kolona.HeaderCell.SortGlyphDirection = SortOrder.None;
+            }
+
+            aktivnaKolona.HeaderCell.SortGlyphDirection = _sortRastuce ? SortOrder.Ascending : SortOrder.Descending;
         }
     }
 }

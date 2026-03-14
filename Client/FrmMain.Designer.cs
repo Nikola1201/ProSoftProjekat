@@ -34,15 +34,16 @@
             this.kreirajKandidataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.upisiKandidataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ispisiKandidataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pretraživanjeKandidataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.instruktorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.kreirajInstruktoraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.obrisiInstruktoraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.pnlMain = new System.Windows.Forms.Panel();
             this.casToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.zakaziČasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.otkažiČasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pretraživanjeKandidataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.pnlMain = new System.Windows.Forms.Panel();
+            this.ispitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,7 +52,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.kandidatToolStripMenuItem,
             this.instruktorToolStripMenuItem,
-            this.casToolStripMenuItem});
+            this.casToolStripMenuItem,
+            this.ispitToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(800, 24);
@@ -87,6 +89,12 @@
             this.ispisiKandidataToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.ispisiKandidataToolStripMenuItem.Text = "Ispisi kandidata";
             // 
+            // pretraživanjeKandidataToolStripMenuItem
+            // 
+            this.pretraživanjeKandidataToolStripMenuItem.Name = "pretraživanjeKandidataToolStripMenuItem";
+            this.pretraživanjeKandidataToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.pretraživanjeKandidataToolStripMenuItem.Text = "Pretraživanje kandidata";
+            // 
             // instruktorToolStripMenuItem
             // 
             this.instruktorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -107,18 +115,6 @@
             this.obrisiInstruktoraToolStripMenuItem.Name = "obrisiInstruktoraToolStripMenuItem";
             this.obrisiInstruktoraToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.obrisiInstruktoraToolStripMenuItem.Text = "Obrisi instruktora";
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-            // 
-            // pnlMain
-            // 
-            this.pnlMain.Location = new System.Drawing.Point(12, 27);
-            this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(776, 411);
-            this.pnlMain.TabIndex = 2;
             // 
             // casToolStripMenuItem
             // 
@@ -141,11 +137,23 @@
             this.otkažiČasToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.otkažiČasToolStripMenuItem.Text = "Otkaži čas";
             // 
-            // pretraživanjeKandidataToolStripMenuItem
+            // contextMenuStrip1
             // 
-            this.pretraživanjeKandidataToolStripMenuItem.Name = "pretraživanjeKandidataToolStripMenuItem";
-            this.pretraživanjeKandidataToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.pretraživanjeKandidataToolStripMenuItem.Text = "Pretraživanje kandidata";
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // pnlMain
+            // 
+            this.pnlMain.Location = new System.Drawing.Point(12, 27);
+            this.pnlMain.Name = "pnlMain";
+            this.pnlMain.Size = new System.Drawing.Size(776, 411);
+            this.pnlMain.TabIndex = 2;
+            // 
+            // ispitToolStripMenuItem
+            // 
+            this.ispitToolStripMenuItem.Name = "ispitToolStripMenuItem";
+            this.ispitToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.ispitToolStripMenuItem.Text = "Ispit";
             // 
             // FrmMain
             // 
@@ -180,5 +188,6 @@
         private System.Windows.Forms.ToolStripMenuItem casToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem zakaziČasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem otkažiČasToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ispitToolStripMenuItem;
     }
 }

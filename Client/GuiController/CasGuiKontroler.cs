@@ -13,6 +13,8 @@ namespace Client.GuiController
     internal class CasGuiKontroler
     {
         private UCZakaziCasVoznje _ucZakaziCasVoznje;
+        private UCOtkaziCasVoznje _ucOtkaziCasVoznje;
+
 
         private BindingList<Kandidat> kandidati;
         private BindingList<Instruktor> instruktori;
@@ -23,6 +25,9 @@ namespace Client.GuiController
         private List<Vozilo> svaVozila;
         private List<Upis> sviUpisi;
         private List<PaketObuke> sviPaketi;
+        private List<CasVoznje> sviCasovi;
+
+        private BindingList<OtkaziCasGridRow> prikazaniCasovi;
 
         private bool isRefreshing;
 
@@ -290,6 +295,183 @@ namespace Client.GuiController
             _ucZakaziCasVoznje.TextBox1.Clear();
             _ucZakaziCasVoznje.TextBox2.Clear();
             _ucZakaziCasVoznje.DateTimePicker1.Value = DateTime.Now.AddMinutes(30);
+        }
+
+        internal Control CreateIzmeniCas()
+        {
+            _ucOtkaziCasVoznje = new UCOtkaziCasVoznje();
+            PrepareUCOtkaziCasVoznje();
+            _ucOtkaziCasVoznje.DateTimePicker1.ValueChanged += OtkaziCasDatumChanged;
+            _ucOtkaziCasVoznje.BtnOtkazi.Click += OtkaziCasVoznje;
+
+            return _ucOtkaziCasVoznje;
+        }
+
+        private void PrepareUCOtkaziCasVoznje()
+        {
+            try
+            {
+                sviCasovi = Communication.Instance.GetAllCasVoznje() ?? new List<CasVoznje>();
+                sviUpisi = Communication.Instance.GetAllUpisi() ?? new List<Upis>();
+                sviKandidati = Communication.Instance.GetAllKandidati(true) ?? new List<Kandidat>();
+                sviInstruktori = Communication.Instance.GetAllInstruktori() ?? new List<Instruktor>();
+                svaVozila = Communication.Instance.GetAllVozila() ?? new List<Vozilo>();
+
+                FormatDgvCasovi();
+                RefreshOtkaziDgv();
+            }
+            catch (Exception)
+            {
+                ShowMessage.ServerDown();
+            }
+        }
+
+        private void FormatDgvCasovi()
+        {
+            DataGridView dgv = _ucOtkaziCasVoznje.DgvCasovi;
+            dgv.AutoGenerateColumns = false;
+            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv.MultiSelect = false;
+            dgv.ReadOnly = true;
+            dgv.AllowUserToAddRows = false;
+            dgv.AllowUserToDeleteRows = false;
+
+            dgv.Columns.Clear();
+
+            dgv.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Kandidat",
+                HeaderText = "Kandidat",
+                DataPropertyName = "KandidatImePrezime",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                FillWeight = 35
+            });
+
+            dgv.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Instruktor",
+                HeaderText = "Instruktor",
+                DataPropertyName = "InstruktorImePrezime",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                FillWeight = 30
+            });
+
+            dgv.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Vreme",
+                HeaderText = "Vreme",
+                DataPropertyName = "VremeZakazivanja",
+                Width = 130
+            });
+
+            dgv.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Vozilo",
+                HeaderText = "Vozilo",
+                DataPropertyName = "VoziloMarkaModel",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                FillWeight = 35
+            });
+
+            dgv.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Status",
+                HeaderText = "Status",
+                DataPropertyName = "Status",
+                Width = 90
+            });
+        }
+
+        private void OtkaziCasDatumChanged(object sender, EventArgs e)
+        {
+            RefreshOtkaziDgv();
+        }
+
+        private void RefreshOtkaziDgv()
+        {
+            if (_ucOtkaziCasVoznje == null)
+            {
+                return;
+            }
+
+            DateTime izabraniDatum = _ucOtkaziCasVoznje.DateTimePicker1.Value.Date;
+
+            List<OtkaziCasGridRow> casoviZaDatum = sviCasovi
+                .Where(c => c.DatumCas.Date == izabraniDatum)
+                .OrderBy(c => c.DatumCas)
+                .Select(MapToGridRow)
+                .ToList();
+
+            prikazaniCasovi = new BindingList<OtkaziCasGridRow>(casoviZaDatum);
+            _ucOtkaziCasVoznje.DgvCasovi.DataSource = prikazaniCasovi;
+
+            _ucOtkaziCasVoznje.BtnOtkazi.Enabled = prikazaniCasovi.Count > 0;
+
+            if (prikazaniCasovi.Count == 0)
+            {
+                ShowMessage.Info("Nema casova za izabrani datum.");
+            }
+        }
+
+        private OtkaziCasGridRow MapToGridRow(CasVoznje cas)
+        {
+            Upis upis = sviUpisi.FirstOrDefault(u => u.UpisId == cas.UpisId);
+            Kandidat kandidat = upis == null ? null : sviKandidati.FirstOrDefault(k => k.KandidatId == upis.KandidatId);
+            Instruktor instruktor = sviInstruktori.FirstOrDefault(i => i.InstruktorId == cas.InstruktorId);
+            Vozilo vozilo = svaVozila.FirstOrDefault(v => v.VoziloId == cas.VoziloId);
+
+            return new OtkaziCasGridRow
+            {
+                Cas = cas,
+                KandidatImePrezime = kandidat?.PunoIme ?? "-",
+                InstruktorImePrezime = instruktor?.PunoIme ?? "-",
+                VremeZakazivanja = cas.DatumCas.ToString("HH:mm"),
+                VoziloMarkaModel = vozilo == null ? "-" : $"{vozilo.Marka} {vozilo.Model}",
+                Status = cas.Status
+            };
+        }
+
+        private void OtkaziCasVoznje(object sender, EventArgs e)
+        {
+            if (!(_ucOtkaziCasVoznje.DgvCasovi.CurrentRow?.DataBoundItem is OtkaziCasGridRow selected))
+            {
+                ShowMessage.Warning("Izaberite cas koji zelite da otkazete.", "Greska");
+                return;
+            }
+
+            if (selected.Cas == null)
+            {
+                ShowMessage.Warning("Nije moguce pronaci izabrani cas.", "Greska");
+                return;
+            }
+
+            try
+            {
+                selected.Cas.Status = "otkazan";
+                Response response = Communication.Instance.OtkaziCasVoznje(selected.Cas);
+                if (response.Exception != null)
+                {
+                    ShowMessage.Error(response.Exception.Message);
+                    return;
+                }
+
+                ShowMessage.Success("Sistem je uspesno otkazao rezervaciju casa voznje.");
+                PrepareUCOtkaziCasVoznje();
+            }
+            catch (Exception)
+            {
+                ShowMessage.ServerDown();
+            }
+        }
+
+        private class OtkaziCasGridRow
+        {
+            public CasVoznje Cas { get; set; }
+            public string KandidatImePrezime { get; set; }
+            public string InstruktorImePrezime { get; set; }
+            public string VremeZakazivanja { get; set; }
+            public string VoziloMarkaModel { get; set; }
+            public string Status { get; set; }
         }
     }
 }
