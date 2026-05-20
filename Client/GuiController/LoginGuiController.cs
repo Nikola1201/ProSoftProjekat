@@ -47,7 +47,7 @@ namespace Client.GuiController
                     Lozinka = password
                 };
                 Response response = Communication.Instance.Login(admin);
-                if (response.Exception == null)
+                if (string.IsNullOrEmpty(response.ErrorMessage))
                 {
                     if (response.Result == null)
                     {
@@ -55,7 +55,8 @@ namespace Client.GuiController
                     }
                     else
                     {
-                        if (((Admin)response.Result).Ime == "Vec ulogovan")
+                        Admin loggedAdmin = Communication.Instance.ResultAs<Admin>(response);
+                        if (loggedAdmin.Ime == "Vec ulogovan")
                         {
                             MessageBox.Show("Vec ste prijavljeni");
                             return;
@@ -65,7 +66,7 @@ namespace Client.GuiController
 
                             MessageBox.Show("Uspesno ste se prijavili na sistem");
                             _frmLogin.Visible = false;
-                            MainCoordinator.Instance.ShowFrmMain((Admin)response.Result);
+                            MainCoordinator.Instance.ShowFrmMain(loggedAdmin);
                         }
                     }
                 }

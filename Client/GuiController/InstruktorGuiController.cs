@@ -35,9 +35,9 @@ namespace Client.GuiController
             try
             {
                 Response response = Communication.Instance.CreateInstruktor(instruktor);
-                if (response.Exception != null)
+                if (!string.IsNullOrEmpty(response.ErrorMessage))
                 {
-                    ShowMessage.Error(GetCreateInstruktorErrorMessage(response.Exception));
+                    ShowMessage.Error(GetCreateInstruktorErrorMessage(response.ErrorMessage));
                     return;
                 }
 
@@ -68,14 +68,14 @@ namespace Client.GuiController
             _ucKreirajInstruktora.TxtIme.Focus();
         }
 
-        private string GetCreateInstruktorErrorMessage(Exception exception)
+        private string GetCreateInstruktorErrorMessage(string? errorMessage)
         {
-            if (exception == null || string.IsNullOrWhiteSpace(exception.Message))
+            if (string.IsNullOrWhiteSpace(errorMessage))
             {
                 return "Sistem ne moze da kreira instruktora. Pokusajte ponovo.";
             }
 
-            string originalMessage = exception.Message.Trim();
+            string originalMessage = errorMessage.Trim();
             string message = originalMessage.ToLower();
 
             if (message.Contains("duplicate") || message.Contains("unique"))
@@ -207,9 +207,9 @@ namespace Client.GuiController
             try
             {
                 Response response = Communication.Instance.ObrisiInstruktora(instruktor);
-                if (response.Exception != null)
+                if (!string.IsNullOrEmpty(response.ErrorMessage))
                 {
-                    ShowMessage.Error(response.Exception.Message);
+                    ShowMessage.Error(response.ErrorMessage);
                     return;
                 }
 

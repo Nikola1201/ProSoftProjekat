@@ -1,4 +1,4 @@
-﻿using Common.Communication;
+using Common.Communication;
 using Common.Domain;
 using Common.Domain.Izvestaji;
 using System;
@@ -22,17 +22,12 @@ namespace Client
 
         public void Connect()
         {
-            try
-            {
-                _socket.Connect("127.0.0.1", 9999);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _socket.Connect("127.0.0.1", 9999);
             _sender = new Sender(_socket);
             _receiver = new Receiver(_socket);
         }
+
+        internal T ResultAs<T>(Response response) => _receiver.ReadType<T>(response.Result!);
 
         internal Response Login(Admin admin)
         {
@@ -42,8 +37,16 @@ namespace Client
                 Operation = Operation.Login
             };
             _sender.Send(request);
-            Response response = (Response)_receiver.Receive();
-            return response;
+            return _receiver.Receive<Response>();
+        }
+        internal void Logout(Admin admin)
+        {
+            Request request = new Request()
+            {
+                Argument = admin,
+                Operation = Operation.Logout
+            };
+            _sender.Send(request);
         }
 
         internal List<Kategorija> GetAllKategorije()
@@ -53,8 +56,8 @@ namespace Client
                 Operation = Operation.GetAllKategorije
             };
             _sender.Send(request);
-            Response response = (Response)_receiver.Receive();
-            return (List<Kategorija>)response.Result;
+            Response response = _receiver.Receive<Response>();
+            return _receiver.ReadType<List<Kategorija>>(response.Result!);
         }
 
         internal Response CreateKandidat(Kandidat kandidat)
@@ -65,8 +68,7 @@ namespace Client
                 Operation = Operation.KreirajKandidata
             };
             _sender.Send(request);
-            Response response = (Response)_receiver.Receive();
-            return response;
+            return _receiver.Receive<Response>();
         }
 
         internal List<Kandidat> GetAllKandidati(bool upisani)
@@ -77,8 +79,8 @@ namespace Client
                 Operation = Operation.GetAllKandidati
             };
             _sender.Send(request);
-            Response response = (Response)_receiver.Receive();
-            return (List<Kandidat>)response.Result;
+            Response response = _receiver.Receive<Response>();
+            return _receiver.ReadType<List<Kandidat>>(response.Result!);
         }
 
         internal List<PaketObuke> GetAllPaketiObuke()
@@ -88,8 +90,8 @@ namespace Client
                 Operation = Operation.GetAllPaketiObuke
             };
             _sender.Send(request);
-            Response response = (Response)_receiver.Receive();
-            return (List<PaketObuke>)response.Result;
+            Response response = _receiver.Receive<Response>();
+            return _receiver.ReadType<List<PaketObuke>>(response.Result!);
         }
 
         internal Response UpisiKandidata(Upis upis)
@@ -100,8 +102,7 @@ namespace Client
                 Operation = Operation.UpisiKandidata
             };
             _sender.Send(request);
-            Response response = (Response)_receiver.Receive();
-            return response;
+            return _receiver.Receive<Response>();
         }
 
         internal Response ObrisiKandidata(Kandidat kandidat)
@@ -112,8 +113,7 @@ namespace Client
                 Operation = Operation.ObrisiKandidata
             };
             _sender.Send(request);
-            Response response = (Response)_receiver.Receive();
-            return response;
+            return _receiver.Receive<Response>();
         }
 
         internal Response CreateInstruktor(Instruktor instruktor)
@@ -124,8 +124,7 @@ namespace Client
                 Operation = Operation.KreirajInstruktora
             };
             _sender.Send(request);
-            Response response = (Response)_receiver.Receive();
-            return response;
+            return _receiver.Receive<Response>();
         }
 
         internal List<Instruktor> GetAllInstruktori()
@@ -135,8 +134,8 @@ namespace Client
                 Operation = Operation.GetAllInstruktori
             };
             _sender.Send(request);
-            Response response = (Response)_receiver.Receive();
-            return (List<Instruktor>)response.Result;
+            Response response = _receiver.Receive<Response>();
+            return _receiver.ReadType<List<Instruktor>>(response.Result!);
         }
 
         internal Response ObrisiInstruktora(Instruktor instruktor)
@@ -147,8 +146,7 @@ namespace Client
                 Operation = Operation.ObrisiInstruktora
             };
             _sender.Send(request);
-            Response response = (Response)_receiver.Receive();
-            return response;
+            return _receiver.Receive<Response>();
         }
 
         internal List<Vozilo> GetAllVozila()
@@ -158,8 +156,8 @@ namespace Client
                 Operation = Operation.GetAllVozila
             };
             _sender.Send(request);
-            Response response = (Response)_receiver.Receive();
-            return (List<Vozilo>)response.Result;
+            Response response = _receiver.Receive<Response>();
+            return _receiver.ReadType<List<Vozilo>>(response.Result!);
         }
 
         internal List<Upis> GetAllUpisi()
@@ -169,8 +167,8 @@ namespace Client
                 Operation = Operation.GetAllUpisi
             };
             _sender.Send(request);
-            Response response = (Response)_receiver.Receive();
-            return (List<Upis>)response.Result;
+            Response response = _receiver.Receive<Response>();
+            return _receiver.ReadType<List<Upis>>(response.Result!);
         }
 
         internal Response ZakaziCasVoznje(CasVoznje casVoznje)
@@ -181,8 +179,7 @@ namespace Client
                 Operation = Operation.ZakaziCasVoznje
             };
             _sender.Send(request);
-            Response response = (Response)_receiver.Receive();
-            return response;
+            return _receiver.Receive<Response>();
         }
 
         internal List<CasVoznje> GetAllCasVoznje()
@@ -192,8 +189,8 @@ namespace Client
                 Operation = Operation.GetAllCasVoznje
             };
             _sender.Send(request);
-            Response response = (Response)_receiver.Receive();
-            return (List<CasVoznje>)response.Result;
+            Response response = _receiver.Receive<Response>();
+            return _receiver.ReadType<List<CasVoznje>>(response.Result!);
         }
 
         internal Response OtkaziCasVoznje(CasVoznje casVoznje)
@@ -204,8 +201,7 @@ namespace Client
                 Operation = Operation.OtkaziCasVoznje
             };
             _sender.Send(request);
-            Response response = (Response)_receiver.Receive();
-            return response;
+            return _receiver.Receive<Response>();
         }
 
         internal List<Kandidat> PretraziKandidate(KandidatSearchFilter filter)
@@ -216,14 +212,14 @@ namespace Client
                 Operation = Operation.PretraziKandidate
             };
             _sender.Send(request);
-            Response response = (Response)_receiver.Receive();
+            Response response = _receiver.Receive<Response>();
 
-            if (response.Exception != null)
+            if (!string.IsNullOrEmpty(response.ErrorMessage))
             {
-                throw response.Exception;
+                throw new Exception(response.ErrorMessage);
             }
 
-            return (List<Kandidat>)response.Result;
+            return _receiver.ReadType<List<Kandidat>>(response.Result!);
         }
 
         internal Response EvidentirajIspit(EvidentirajIspitRequest requestModel)
@@ -235,7 +231,7 @@ namespace Client
             };
 
             _sender.Send(request);
-            return (Response)_receiver.Receive();
+            return _receiver.Receive<Response>();
         }
 
         internal Response KreirajIzvestajProlaznosti(IzvestajProlaznostiKriterijum kriterijum)
@@ -247,7 +243,7 @@ namespace Client
             };
 
             _sender.Send(request);
-            return (Response)_receiver.Receive();
+            return _receiver.Receive<Response>();
         }
 
         internal Response KreirajIzvestajDugovanja(IzvestajDugovanjaKriterijum kriterijum)
@@ -259,7 +255,8 @@ namespace Client
             };
 
             _sender.Send(request);
-            return (Response)_receiver.Receive();
+            return _receiver.Receive<Response>();
         }
+
     }
 }

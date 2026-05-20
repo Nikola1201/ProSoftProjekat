@@ -34,6 +34,11 @@ namespace Client.Utils
         {
             MessageBox.Show(message, "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+        internal static DialogResult Dialog(string message)
+        {
+            return MessageBox.Show(message, "Potvrda", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+        }
+
 
         internal static void ServerDown()
         {

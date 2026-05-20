@@ -95,18 +95,18 @@ namespace Client.GuiController
             {
                 Response response = Communication.Instance.EvidentirajIspit(request);
 
-                if (response.Exception != null)
+                if (!string.IsNullOrEmpty(response.ErrorMessage))
                 {
-                    ShowMessage.Error(response.Exception.Message);
+                    ShowMessage.Error(response.ErrorMessage);
                     return;
                 }
 
-                EvidentirajIspitResponse result = response.Result as EvidentirajIspitResponse;
-                if (result == null)
+                if (response.Result == null)
                 {
                     ShowMessage.Error("Sistem ne moze da evidentira ispit.");
                     return;
                 }
+                EvidentirajIspitResponse result = Communication.Instance.ResultAs<EvidentirajIspitResponse>(response);
 
                 ShowMessage.Success(result.Poruka ?? "Ispit je uspesno evidentiran.");
                 ResetEvidentirajIspitForm();
@@ -239,18 +239,18 @@ namespace Client.GuiController
             try
             {
                 Response response = Communication.Instance.KreirajIzvestajProlaznosti(kriterijum);
-                if (response.Exception != null)
+                if (!string.IsNullOrEmpty(response.ErrorMessage))
                 {
-                    ShowMessage.Error(response.Exception.Message);
+                    ShowMessage.Error(response.ErrorMessage);
                     return;
                 }
 
-                IzvestajProlaznostiResponseDto result = response.Result as IzvestajProlaznostiResponseDto;
-                if (result == null)
+                if (response.Result == null)
                 {
                     ShowMessage.Error("Sistem ne moze da kreira izvestaj prolaznosti.");
                     return;
                 }
+                IzvestajProlaznostiResponseDto result = Communication.Instance.ResultAs<IzvestajProlaznostiResponseDto>(response);
 
                 BindProlaznostResult(result);
                 if (result.Stavke == null || result.Stavke.Count == 0)

@@ -259,9 +259,9 @@ namespace Client.GuiController
             try
             {
                 Response response = Communication.Instance.ZakaziCasVoznje(cas);
-                if (response.Exception != null)
+                if (!string.IsNullOrEmpty(response.ErrorMessage))
                 {
-                    ShowMessage.Error(response.Exception.Message);
+                    ShowMessage.Error(response.ErrorMessage);
                     return;
                 }
 
@@ -449,9 +449,9 @@ namespace Client.GuiController
             {
                 selected.Cas.Status = "otkazan";
                 Response response = Communication.Instance.OtkaziCasVoznje(selected.Cas);
-                if (response.Exception != null)
+                if (!string.IsNullOrEmpty(response.ErrorMessage))
                 {
-                    ShowMessage.Error(response.Exception.Message);
+                    ShowMessage.Error(response.ErrorMessage);
                     return;
                 }
 

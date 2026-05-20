@@ -1,24 +1,34 @@
-﻿using System.Net.Sockets;
-using System.Runtime.Serialization.Formatters.Binary;
+using System;
+using System.IO;
+using System.Net.Sockets;
+using System.Text.Json;
 
 namespace Common.Communication
 {
     public class Receiver
     {
-        private BinaryFormatter _formatter;
-        private NetworkStream _stream;
-        private Socket _socket;
+        private readonly StreamReader _reader;
 
         public Receiver(Socket socket)
         {
-            _socket = socket;
-            _stream = new NetworkStream(socket);
-            _formatter = new BinaryFormatter();
+            var stream = new NetworkStream(socket);
+            _reader = new StreamReader(stream);
         }
 
-        public object Receive()
+        public T Receive<T>()
         {
-            return _formatter.Deserialize(_stream);
+            string? line = _reader.ReadLine();
+            if (line == null) throw new IOException("Connection closed by peer.");
+            return JsonSerializer.Deserialize<T>(line)!;
+        }
+
+        public T ReadType<T>(object payload)
+        {
+            if (payload is JsonElement element)
+            {
+                return element.Deserialize<T>()!;
+            }
+            return (T)payload;
         }
     }
 }

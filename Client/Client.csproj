@@ -1,204 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DD9C0FC8-B918-471A-9B9F-3210D3C20373}</ProjectGuid>
     <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <RootNamespace>Client</RootNamespace>
     <AssemblyName>Client</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+    <ProjectGuid>{DD9C0FC8-B918-471A-9B9F-3210D3C20373}</ProjectGuid>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Communication.cs" />
-    <Compile Include="FrmLogin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmLogin.Designer.cs">
-      <DependentUpon>FrmLogin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmMain.Designer.cs">
-      <DependentUpon>FrmMain.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GuiController\CasGuiController.cs" />
-    <Compile Include="GuiController\InstruktorGuiController.cs" />
-    <Compile Include="GuiController\IspitGuiController.cs" />
-    <Compile Include="GuiController\KandidatGuiController.cs" />
-    <Compile Include="GuiController\LoginGuiController.cs" />
-    <Compile Include="GuiController\MainCoordinator.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserControls\UCCasVoznje\UCOtkaziCasVoznje.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UCCasVoznje\UCOtkaziCasVoznje.Designer.cs">
-      <DependentUpon>UCOtkaziCasVoznje.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UCCasVoznje\UCZakaziCasVoznje.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UCCasVoznje\UCZakaziCasVoznje.Designer.cs">
-      <DependentUpon>UCZakaziCasVoznje.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UCDefault.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UCDefault.Designer.cs">
-      <DependentUpon>UCDefault.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UCInstruktor\UCKreirajInstruktora.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UCInstruktor\UCKreirajInstruktora.Designer.cs">
-      <DependentUpon>UCKreirajInstruktora.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UCInstruktor\UCObrisiInstruktora.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UCInstruktor\UCObrisiInstruktora.Designer.cs">
-      <DependentUpon>UCObrisiInstruktora.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UCIspit\UCKreirajIzvestajOIspitima.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UCIspit\UCKreirajIzvestajOIspitima.Designer.cs">
-      <DependentUpon>UCKreirajIzvestajOIspitima.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UCIspit\UCEvidentirajIspit.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UCKandidat\UCKreirajKandidata.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UCKandidat\UCKreirajKandidata.Designer.cs">
-      <DependentUpon>UCKreirajKandidata.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UCKandidat\UCObrisiKandidata.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UCKandidat\UCObrisiKandidata.Designer.cs">
-      <DependentUpon>UCObrisiKandidata.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UCKandidat\UCPretraziKandidata.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UCKandidat\UCPretraziKandidata.Designer.cs">
-      <DependentUpon>UCPretraziKandidata.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UCKandidat\UCUpisiKandidata.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UCKandidat\UCUpisiKandidata.Designer.cs">
-      <DependentUpon>UCUpisiKandidata.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Utils\ShowMessage.cs" />
-    <Compile Include="Utils\Validate.cs" />
-    <EmbeddedResource Include="FrmLogin.resx">
-      <DependentUpon>FrmLogin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmMain.resx">
-      <DependentUpon>FrmMain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="UserControls\UCCasVoznje\UCOtkaziCasVoznje.resx">
-      <DependentUpon>UCOtkaziCasVoznje.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UCCasVoznje\UCZakaziCasVoznje.resx">
-      <DependentUpon>UCZakaziCasVoznje.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UCDefault.resx">
-      <DependentUpon>UCDefault.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UCInstruktor\UCKreirajInstruktora.resx">
-      <DependentUpon>UCKreirajInstruktora.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UCInstruktor\UCObrisiInstruktora.resx">
-      <DependentUpon>UCObrisiInstruktora.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UCIspit\UCKreirajIzvestajOIspitima.resx">
-      <DependentUpon>UCKreirajIzvestajOIspitima.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UCKandidat\UCKreirajKandidata.resx">
-      <DependentUpon>UCKreirajKandidata.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UCKandidat\UCObrisiKandidata.resx">
-      <DependentUpon>UCObrisiKandidata.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UCKandidat\UCPretraziKandidata.resx">
-      <DependentUpon>UCPretraziKandidata.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UCKandidat\UCUpisiKandidata.resx">
-      <DependentUpon>UCUpisiKandidata.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{B2A2C525-B12B-4E9B-8277-1BF507224874}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-  </ItemGroup>
+
   <ItemGroup>
     <Content Include="Resources\autoskola.jpg" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

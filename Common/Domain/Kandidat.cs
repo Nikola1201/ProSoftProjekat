@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace Common.Domain
 {
@@ -24,7 +24,7 @@ namespace Common.Domain
             $"'{Ime}', '{Prezime}', '{JMBG}', '{Telefon}', '{Email}', " +
             $"'{Adresa}', '{DatumUpisa:yyyy-MM-dd}', {(Aktivan ? 1 : 0)}";
 
-        public object Query => throw new NotImplementedException();
+        public object Query => $"JMBG = '{JMBG}'";
         public object TableKeyColumn => "KandidatId";
 
         public object SearchQuery =>

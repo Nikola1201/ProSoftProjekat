@@ -27,6 +27,10 @@ namespace Client
             this.admin = admin;
             InitializeComponent();
             ConfigureMainPanel();
+
+            odjaviSeToolStripMenuItem.Click += (s, a)
+                => MainCoordinator.Instance.LogoutDialog(admin);
+
             kreirajKandidataToolStripMenuItem.Click += (s, a)
                 => MainCoordinator.Instance.ShowKreirajKandidataPanel();
             upisiKandidataToolStripMenuItem.Click += (s, a)
@@ -54,7 +58,8 @@ namespace Client
             evidentiranjePolaganjaToolStripMenuItem.Click += (s, a)
                 => MainCoordinator.Instance.ShowEvidentirajIspitPanel();
 
-         
+            this.FormClosed += (s, a) => MainCoordinator.Instance.Logout(admin);
+
         }
 
         private void ConfigureMainPanel()

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Runtime.Remoting.Messaging;
+using Microsoft.Data.SqlClient;
 
 namespace Common.Domain
 {

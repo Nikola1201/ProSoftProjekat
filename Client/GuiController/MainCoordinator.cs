@@ -1,7 +1,9 @@
 ﻿using Client.UserControls;
 using Client.UserControls.UCCasVoznje;
+using Client.Utils;
 using Common.Domain;
 using System;
+using System.Windows.Forms;
 
 namespace Client.GuiController
 {
@@ -28,7 +30,11 @@ namespace Client.GuiController
             _frmMain.AutoSize = true;
             _frmMain.ShowDialog();
         }
+        internal void Logout(Admin admin)
+        {
+            Communication.Instance.Logout(admin);
 
+        }
         internal void ShowKreirajKandidataPanel()
         {
             _frmMain.ChangePanel(_kandidatGuiController.CreateKandidat());
@@ -85,6 +91,16 @@ namespace Client.GuiController
         internal void ShowEvidentirajIspitPanel()
         {
             _frmMain.ChangePanel(_ispitGuiController.CreateEvidentirajIspit());
+        }
+
+        internal void LogoutDialog(Admin admin)
+        {
+            if (ShowMessage.Dialog("Da li ste sigurni da želite da se odjavite?") == DialogResult.OK)
+            {
+                Logout(admin);
+                new FrmLogin().Show();
+                _frmMain.Hide();
+            }
         }
     }
 }

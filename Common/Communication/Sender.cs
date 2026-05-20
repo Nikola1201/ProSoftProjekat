@@ -1,33 +1,32 @@
-﻿using System;
+using System;
 using System.Diagnostics;
+using System.IO;
 using System.Net.Sockets;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.Json;
 
 namespace Common.Communication
 {
     public class Sender
     {
-        private NetworkStream _stream;
-        private BinaryFormatter _formatter;
-        private Socket _socket;
+        private readonly StreamWriter _writer;
 
         public Sender(Socket socket)
         {
-            _socket = socket;
-            _stream = new NetworkStream(socket);
-            _formatter = new BinaryFormatter();
+            var stream = new NetworkStream(socket);
+            _writer = new StreamWriter(stream) { AutoFlush = true };
         }
 
         public void Send(object argument)
         {
             try
             {
-                _formatter.Serialize(_stream, argument);
-
+                string json = JsonSerializer.Serialize(argument, argument.GetType());
+                _writer.WriteLine(json);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+                throw;
             }
         }
     }

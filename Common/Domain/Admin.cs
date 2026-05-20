@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace Common.Domain
 {
@@ -29,7 +29,7 @@ namespace Common.Domain
         public object SearchQuery =>
             $"SELECT * FROM Admin WHERE Ime LIKE '%{Ime}%' OR Prezime LIKE '%{Prezime}%'";
 
-        public object TableKeyQuery => throw new NotImplementedException();
+        public object TableKeyQuery => $"{TableKeyColumn} = {AdminId}";
 
         public object Update =>
             $"UPDATE Admin SET " +

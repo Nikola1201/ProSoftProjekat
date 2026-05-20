@@ -55,9 +55,9 @@ namespace Client.GuiController
             try
             {
                 Response response = Communication.Instance.CreateKandidat(kandidat);
-                if (response.Exception != null)
+                if (!string.IsNullOrEmpty(response.ErrorMessage))
                 {
-                    ShowMessage.Error(GetCreateKandidatErrorMessage(response.Exception));
+                    ShowMessage.Error(GetCreateKandidatErrorMessage(response.ErrorMessage));
                     return;
                 }
 
@@ -166,14 +166,14 @@ namespace Client.GuiController
             return true;
         }
 
-        private string GetCreateKandidatErrorMessage(Exception exception)
+        private string GetCreateKandidatErrorMessage(string? errorMessage)
         {
-            if (exception == null || string.IsNullOrWhiteSpace(exception.Message))
+            if (string.IsNullOrWhiteSpace(errorMessage))
             {
                 return "Sistem ne moze da kreira kandidata. Pokusajte ponovo.";
             }
 
-            string originalMessage = exception.Message.Trim();
+            string originalMessage = errorMessage.Trim();
             string message = originalMessage.ToLower();
 
             if (message.Contains("duplicate") || message.Contains("unique"))
@@ -297,9 +297,9 @@ namespace Client.GuiController
             try
             {
                 Response response = Communication.Instance.UpisiKandidata(upis);
-                if (response.Exception != null)
+                if (!string.IsNullOrEmpty(response.ErrorMessage))
                 {
-                    ShowMessage.Error(response.Exception.Message);
+                    ShowMessage.Error(response.ErrorMessage);
                     return;
                 }
 
@@ -333,9 +333,9 @@ namespace Client.GuiController
             try
             {
                 Response response = Communication.Instance.ObrisiKandidata(kandidat);
-                if (response.Exception != null)
+                if (!string.IsNullOrEmpty(response.ErrorMessage))
                 {
-                    ShowMessage.Error(response.Exception.Message);
+                    ShowMessage.Error(response.ErrorMessage);
                     return;
                 }
 

@@ -1,4 +1,4 @@
-﻿using Common.Communication;
+using Common.Communication;
 using Common.Domain;
 using Common.Domain.Izvestaji;
 using System;
@@ -22,7 +22,7 @@ namespace Server
 
         internal void Close()
         {
-            throw new NotImplementedException();
+           _clientSocket?.Close();
         }
 
         internal void Handle()
@@ -31,17 +31,15 @@ namespace Server
             {
                 while (true)
                 {
-                    Request request = (Request)_receiver.Receive();
+                    Request request = _receiver.Receive<Request>();
                     Response response = ProcessRequest(request);
                     _sender.Send(response);
-
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
             }
-
         }
 
         private Response ProcessRequest(Request request)
@@ -52,34 +50,37 @@ namespace Server
                 switch (request.Operation)
                 {
                     case Operation.Login:
-                        response.Result = Controller.Instance.Login((Admin)request.Argument);
+                        response.Result = Controller.Instance.Login(_receiver.ReadType<Admin>(request.Argument!));
+                        break;
+                    case Operation.Logout:
+                        Logout(_receiver.ReadType<Admin>(request.Argument!));
                         break;
                     case Operation.KreirajKandidata:
-                        response.Result = Controller.Instance.KreirajKandidata((Kandidat)request.Argument);
+                        response.Result = Controller.Instance.KreirajKandidata(_receiver.ReadType<Kandidat>(request.Argument!));
                         break;
                     case Operation.GetAllKategorije:
                         response.Result = Controller.Instance.GetAllKategorije();
                         break;
                     case Operation.GetAllKandidati:
-                        response.Result = Controller.Instance.GetAllKandidati((bool)request.Argument);
+                        response.Result = Controller.Instance.GetAllKandidati(_receiver.ReadType<bool>(request.Argument!));
                         break;
                     case Operation.GetAllPaketiObuke:
                         response.Result = Controller.Instance.GetAllPaketiObuke();
                         break;
                     case Operation.UpisiKandidata:
-                        response.Result = Controller.Instance.UpisiKandidata((Upis)request.Argument);
+                        response.Result = Controller.Instance.UpisiKandidata(_receiver.ReadType<Upis>(request.Argument!));
                         break;
                     case Operation.ObrisiKandidata:
-                        Controller.Instance.ObrisiKandidata((Kandidat)request.Argument);
+                        Controller.Instance.ObrisiKandidata(_receiver.ReadType<Kandidat>(request.Argument!));
                         break;
                     case Operation.KreirajInstruktora:
-                        response.Result = Controller.Instance.KreirajInstruktora((Instruktor)request.Argument);
+                        response.Result = Controller.Instance.KreirajInstruktora(_receiver.ReadType<Instruktor>(request.Argument!));
                         break;
                     case Operation.GetAllInstruktori:
                         response.Result = Controller.Instance.GetAllInstruktori();
                         break;
                     case Operation.ObrisiInstruktora:
-                        Controller.Instance.ObrisiInstruktora((Instruktor)request.Argument);
+                        Controller.Instance.ObrisiInstruktora(_receiver.ReadType<Instruktor>(request.Argument!));
                         break;
                     case Operation.GetAllVozila:
                         response.Result = Controller.Instance.GetAllVozila();
@@ -88,33 +89,39 @@ namespace Server
                         response.Result = Controller.Instance.GetAllUpisi();
                         break;
                     case Operation.ZakaziCasVoznje:
-                        response.Result = Controller.Instance.ZakaziCasVoznje((CasVoznje)request.Argument);
+                        response.Result = Controller.Instance.ZakaziCasVoznje(_receiver.ReadType<CasVoznje>(request.Argument!));
                         break;
                     case Operation.GetAllCasVoznje:
                         response.Result = Controller.Instance.GetAllCasVoznje();
                         break;
                     case Operation.OtkaziCasVoznje:
-                        response.Result = Controller.Instance.OtkaziCasVoznje((CasVoznje)request.Argument);
+                        response.Result = Controller.Instance.OtkaziCasVoznje(_receiver.ReadType<CasVoznje>(request.Argument!));
                         break;
                     case Operation.PretraziKandidate:
-                        response.Result = Controller.Instance.PretraziKandidate((KandidatSearchFilter)request.Argument);
+                        response.Result = Controller.Instance.PretraziKandidate(_receiver.ReadType<KandidatSearchFilter>(request.Argument!));
                         break;
                     case Operation.EvidentirajIspit:
-                        response.Result = Controller.Instance.EvidentirajIspit((EvidentirajIspitRequest)request.Argument);
+                        response.Result = Controller.Instance.EvidentirajIspit(_receiver.ReadType<EvidentirajIspitRequest>(request.Argument!));
                         break;
                     case Operation.KreirajIzvestajProlaznosti:
-                        response.Result = Controller.Instance.KreirajIzvestajProlaznosti((IzvestajProlaznostiKriterijum)request.Argument);
+                        response.Result = Controller.Instance.KreirajIzvestajProlaznosti(_receiver.ReadType<IzvestajProlaznostiKriterijum>(request.Argument!));
                         break;
-               
                     default:
                         break;
                 }
             }
             catch (Exception ex)
             {
-                response.Exception = ex;
+                response.ErrorMessage = ex.Message;
             }
             return response;
+        }
+
+        private void Logout(Admin admin)
+        {
+            Server.loggedIn.RemoveAll(a => a.AdminId == admin.AdminId);
+            Server.clients.RemoveAll(c => c._clientSocket == _clientSocket);
+            Close();
         }
     }
 }
