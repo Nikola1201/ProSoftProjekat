@@ -68,14 +68,28 @@ namespace Client.GuiController
                 _ucZakaziCasVoznje.CmbVozilo.Enabled = vozila.Count > 0;
                 _ucZakaziCasVoznje.BtnZakazi.Enabled = imaPodataka;
 
-                if (!imaPodataka)
+                if (imaPodataka)
                 {
-                    ShowMessage.Info("Nema dovoljno podataka za zakazivanje casa voznje.");
+                    _ucZakaziCasVoznje.LblPredusloviInfo.Visible = false;
+                }
+                else
+                {
+                    List<string> nedostaju = new List<string>();
+                    if (kandidati.Count == 0) nedostaju.Add("kandidati");
+                    if (instruktori.Count == 0) nedostaju.Add("instruktori");
+                    if (vozila.Count == 0) nedostaju.Add("vozila");
+
+                    _ucZakaziCasVoznje.LblPredusloviInfo.Text = "Nedostaju: " + string.Join(", ", nedostaju) + ".";
+                    _ucZakaziCasVoznje.LblPredusloviInfo.Visible = true;
                 }
             }
-            catch (Exception)
+            catch (Exception ex) when (ex is System.Net.Sockets.SocketException || ex is System.IO.IOException)
             {
                 ShowMessage.ServerDown();
+            }
+            catch (Exception ex)
+            {
+                ShowMessage.Error(ex.Message);
             }
         }
 
@@ -320,9 +334,13 @@ namespace Client.GuiController
                 FormatDgvCasovi();
                 RefreshOtkaziDgv();
             }
-            catch (Exception)
+            catch (Exception ex) when (ex is System.Net.Sockets.SocketException || ex is System.IO.IOException)
             {
                 ShowMessage.ServerDown();
+            }
+            catch (Exception ex)
+            {
+                ShowMessage.Error(ex.Message);
             }
         }
 
@@ -406,10 +424,10 @@ namespace Client.GuiController
             _ucOtkaziCasVoznje.DgvCasovi.DataSource = prikazaniCasovi;
 
             _ucOtkaziCasVoznje.BtnOtkazi.Enabled = prikazaniCasovi.Count > 0;
-
+            _ucOtkaziCasVoznje.LblNemaCasova.Visible = prikazaniCasovi.Count == 0;
             if (prikazaniCasovi.Count == 0)
             {
-                ShowMessage.Info("Nema casova za izabrani datum.");
+                _ucOtkaziCasVoznje.LblNemaCasova.BringToFront();
             }
         }
 

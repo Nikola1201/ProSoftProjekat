@@ -1,4 +1,5 @@
 using Common.Domain;
+using Common.Validation;
 using System;
 using System.Linq;
 
@@ -19,7 +20,7 @@ namespace Server.SystemOperation
         {
             if (_argument == null || _argument.CasId <= 0)
             {
-                throw new Exception("Izabrani cas nije validan za otkazivanje.");
+                throw new ValidacijaException("Izabrani cas nije validan za otkazivanje.");
             }
 
             CasVoznje postojeci = _broker.GetAll(new CasVoznje())
@@ -28,12 +29,12 @@ namespace Server.SystemOperation
 
             if (postojeci == null)
             {
-                throw new Exception("Izabrani cas ne postoji u sistemu.");
+                throw new ValidacijaException("Izabrani cas ne postoji u sistemu.");
             }
 
             if (string.Equals(postojeci.Status, "otkazan", StringComparison.OrdinalIgnoreCase))
             {
-                throw new Exception("Izabrani cas je vec otkazan.");
+                throw new ValidacijaException("Izabrani cas je vec otkazan.");
             }
 
             postojeci.Status = "otkazan";

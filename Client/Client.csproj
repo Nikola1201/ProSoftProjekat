@@ -17,7 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\autoskola.jpg" />
+    <EmbeddedResource Include="Resources\autoskola.jpg">
+      <LogicalName>Client.Resources.autoskola.jpg</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

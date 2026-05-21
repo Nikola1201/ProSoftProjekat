@@ -34,6 +34,7 @@ namespace Client.UserControls.UCCasVoznje
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
             this.btnOtkazi = new System.Windows.Forms.Button();
+            this.lblNemaCasova = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCasovi)).BeginInit();
             this.SuspendLayout();
             // 
@@ -72,11 +73,24 @@ namespace Client.UserControls.UCCasVoznje
             this.btnOtkazi.TabIndex = 1;
             this.btnOtkazi.Text = "Otkaži čas";
             this.btnOtkazi.UseVisualStyleBackColor = true;
-            // 
+            //
+            // lblNemaCasova
+            //
+            this.lblNemaCasova.AutoSize = true;
+            this.lblNemaCasova.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNemaCasova.ForeColor = System.Drawing.Color.Gray;
+            this.lblNemaCasova.Location = new System.Drawing.Point(160, 180);
+            this.lblNemaCasova.Name = "lblNemaCasova";
+            this.lblNemaCasova.Size = new System.Drawing.Size(220, 18);
+            this.lblNemaCasova.TabIndex = 4;
+            this.lblNemaCasova.Text = "Nema časova za izabrani datum.";
+            this.lblNemaCasova.Visible = false;
+            //
             // UCOtkaziCasVoznje
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lblNemaCasova);
             this.Controls.Add(this.btnOtkazi);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dateTimePicker1);
@@ -95,10 +109,12 @@ namespace Client.UserControls.UCCasVoznje
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.Label label1;
         private Button btnOtkazi;
+        private System.Windows.Forms.Label lblNemaCasova;
 
         public DataGridView DgvCasovi { get => dgvCasovi; set => dgvCasovi = value; }
         public Button BtnOtkazi { get => btnOtkazi; set => btnOtkazi = value; }
         public DateTimePicker DateTimePicker1 { get => dateTimePicker1; set => dateTimePicker1 = value; }
         public Label Label1 { get => label1; set => label1 = value; }
+        public Label LblNemaCasova { get => lblNemaCasova; set => lblNemaCasova = value; }
     }
 }

@@ -32,23 +32,30 @@ namespace Client.UserControls.UCIspit
         {
             this.dtpDatumOd = new System.Windows.Forms.DateTimePicker();
             this.dtpDatumDo = new System.Windows.Forms.DateTimePicker();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.btnPresetMesec = new System.Windows.Forms.Button();
+            this.btnPresetTridesetDana = new System.Windows.Forms.Button();
+            this.btnPresetGodina = new System.Windows.Forms.Button();
+            this.lblOdDatuma = new System.Windows.Forms.Label();
+            this.lblDoDatuma = new System.Windows.Forms.Label();
+            this.lblTipIspitaText = new System.Windows.Forms.Label();
+            this.lblKategorijaText = new System.Windows.Forms.Label();
             this.cmbTipIspita = new System.Windows.Forms.ComboBox();
             this.cmbKategorija = new System.Windows.Forms.ComboBox();
-            this.cbUtoku = new System.Windows.Forms.CheckBox();
+            this.chbUkljuciBezRezultata = new System.Windows.Forms.CheckBox();
+            this.chbSamoAktivniUpisi = new System.Windows.Forms.CheckBox();
             this.dgvIzvestajIspita = new System.Windows.Forms.DataGridView();
+            this.lblNemaRezultata = new System.Windows.Forms.Label();
+            this.lblUkupnoKandidata = new System.Windows.Forms.Label();
             this.btnKreirajIzvestaj = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.txtUkupnoUToku = new System.Windows.Forms.TextBox();
-            this.txtUkupnoPolozilo = new System.Windows.Forms.TextBox();
-            this.txtUkupnoPalo = new System.Windows.Forms.TextBox();
-            this.txtProcenatProlaznosti = new System.Windows.Forms.TextBox();
+            this.btnIzveziCsv = new System.Windows.Forms.Button();
+            this.lblPoloziloText = new System.Windows.Forms.Label();
+            this.lblPaloText = new System.Windows.Forms.Label();
+            this.lblUTokuText = new System.Windows.Forms.Label();
+            this.lblProcenatText = new System.Windows.Forms.Label();
+            this.lblVrednostUToku = new System.Windows.Forms.Label();
+            this.lblVrednostPolozilo = new System.Windows.Forms.Label();
+            this.lblVrednostPalo = new System.Windows.Forms.Label();
+            this.lblVrednostProcenat = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvIzvestajIspita)).BeginInit();
             this.SuspendLayout();
             // 
@@ -67,46 +74,73 @@ namespace Client.UserControls.UCIspit
             this.dtpDatumDo.Name = "dtpDatumDo";
             this.dtpDatumDo.Size = new System.Drawing.Size(262, 22);
             this.dtpDatumDo.TabIndex = 1;
+            //
+            // btnPresetMesec
+            //
+            this.btnPresetMesec.Location = new System.Drawing.Point(581, 19);
+            this.btnPresetMesec.Name = "btnPresetMesec";
+            this.btnPresetMesec.Size = new System.Drawing.Size(130, 22);
+            this.btnPresetMesec.TabIndex = 24;
+            this.btnPresetMesec.Text = "Ovaj mesec";
+            this.btnPresetMesec.UseVisualStyleBackColor = true;
+            //
+            // btnPresetTridesetDana
+            //
+            this.btnPresetTridesetDana.Location = new System.Drawing.Point(581, 45);
+            this.btnPresetTridesetDana.Name = "btnPresetTridesetDana";
+            this.btnPresetTridesetDana.Size = new System.Drawing.Size(130, 22);
+            this.btnPresetTridesetDana.TabIndex = 25;
+            this.btnPresetTridesetDana.Text = "Poslednjih 30 dana";
+            this.btnPresetTridesetDana.UseVisualStyleBackColor = true;
+            //
+            // btnPresetGodina
+            //
+            this.btnPresetGodina.Location = new System.Drawing.Point(581, 71);
+            this.btnPresetGodina.Name = "btnPresetGodina";
+            this.btnPresetGodina.Size = new System.Drawing.Size(130, 22);
+            this.btnPresetGodina.TabIndex = 26;
+            this.btnPresetGodina.Text = "Ova godina";
+            this.btnPresetGodina.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // lblOdDatuma
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(18, 19);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 16);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Od datuma:";
+            this.lblOdDatuma.AutoSize = true;
+            this.lblOdDatuma.Location = new System.Drawing.Point(18, 19);
+            this.lblOdDatuma.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblOdDatuma.Name = "lblOdDatuma";
+            this.lblOdDatuma.Size = new System.Drawing.Size(76, 16);
+            this.lblOdDatuma.TabIndex = 2;
+            this.lblOdDatuma.Text = "Od datuma:";
             // 
-            // label2
+            // lblDoDatuma
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(308, 19);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(76, 16);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Do datuma:";
+            this.lblDoDatuma.AutoSize = true;
+            this.lblDoDatuma.Location = new System.Drawing.Point(308, 19);
+            this.lblDoDatuma.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblDoDatuma.Name = "lblDoDatuma";
+            this.lblDoDatuma.Size = new System.Drawing.Size(76, 16);
+            this.lblDoDatuma.TabIndex = 3;
+            this.lblDoDatuma.Text = "Do datuma:";
             // 
-            // label3
+            // lblTipIspitaText
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(18, 70);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(65, 16);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Tip ispita:";
+            this.lblTipIspitaText.AutoSize = true;
+            this.lblTipIspitaText.Location = new System.Drawing.Point(18, 70);
+            this.lblTipIspitaText.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTipIspitaText.Name = "lblTipIspitaText";
+            this.lblTipIspitaText.Size = new System.Drawing.Size(65, 16);
+            this.lblTipIspitaText.TabIndex = 4;
+            this.lblTipIspitaText.Text = "Tip ispita:";
             // 
-            // label4
+            // lblKategorijaText
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(159, 70);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(71, 16);
-            this.label4.TabIndex = 5;
-            this.label4.Text = "Kategorija:";
+            this.lblKategorijaText.AutoSize = true;
+            this.lblKategorijaText.Location = new System.Drawing.Point(159, 70);
+            this.lblKategorijaText.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblKategorijaText.Name = "lblKategorijaText";
+            this.lblKategorijaText.Size = new System.Drawing.Size(71, 16);
+            this.lblKategorijaText.TabIndex = 5;
+            this.lblKategorijaText.Text = "Kategorija:";
             // 
             // cmbTipIspita
             // 
@@ -123,27 +157,65 @@ namespace Client.UserControls.UCIspit
             this.cmbKategorija.Name = "cmbKategorija";
             this.cmbKategorija.Size = new System.Drawing.Size(121, 24);
             this.cmbKategorija.TabIndex = 8;
-            // 
-            // cbUtoku
-            // 
-            this.cbUtoku.AutoSize = true;
-            this.cbUtoku.Location = new System.Drawing.Point(311, 91);
-            this.cbUtoku.Name = "cbUtoku";
-            this.cbUtoku.Size = new System.Drawing.Size(64, 20);
-            this.cbUtoku.TabIndex = 9;
-            this.cbUtoku.Text = "U toku";
-            this.cbUtoku.UseVisualStyleBackColor = true;
-            // 
+            //
+            // chbUkljuciBezRezultata
+            //
+            this.chbUkljuciBezRezultata.AutoSize = true;
+            this.chbUkljuciBezRezultata.Location = new System.Drawing.Point(311, 91);
+            this.chbUkljuciBezRezultata.Name = "chbUkljuciBezRezultata";
+            this.chbUkljuciBezRezultata.Size = new System.Drawing.Size(257, 20);
+            this.chbUkljuciBezRezultata.TabIndex = 9;
+            this.chbUkljuciBezRezultata.Text = "Uključi i kandidate bez rezultata";
+            this.chbUkljuciBezRezultata.UseVisualStyleBackColor = true;
+            //
+            // chbSamoAktivniUpisi
+            //
+            this.chbSamoAktivniUpisi.AutoSize = true;
+            this.chbSamoAktivniUpisi.Location = new System.Drawing.Point(581, 91);
+            this.chbSamoAktivniUpisi.Name = "chbSamoAktivniUpisi";
+            this.chbSamoAktivniUpisi.Size = new System.Drawing.Size(160, 20);
+            this.chbSamoAktivniUpisi.TabIndex = 22;
+            this.chbSamoAktivniUpisi.Text = "Samo aktivni upisi";
+            this.chbSamoAktivniUpisi.UseVisualStyleBackColor = true;
+            //
             // dgvIzvestajIspita
-            // 
+            //
+            this.dgvIzvestajIspita.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvIzvestajIspita.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvIzvestajIspita.Location = new System.Drawing.Point(3, 138);
             this.dgvIzvestajIspita.Name = "dgvIzvestajIspita";
             this.dgvIzvestajIspita.Size = new System.Drawing.Size(843, 206);
             this.dgvIzvestajIspita.TabIndex = 10;
-            // 
+            //
+            // lblNemaRezultata
+            //
+            this.lblNemaRezultata.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lblNemaRezultata.AutoSize = true;
+            this.lblNemaRezultata.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNemaRezultata.ForeColor = System.Drawing.Color.Gray;
+            this.lblNemaRezultata.Location = new System.Drawing.Point(330, 230);
+            this.lblNemaRezultata.Name = "lblNemaRezultata";
+            this.lblNemaRezultata.Size = new System.Drawing.Size(200, 18);
+            this.lblNemaRezultata.TabIndex = 20;
+            this.lblNemaRezultata.Text = "Nema rezultata za zadate kriterijume.";
+            this.lblNemaRezultata.Visible = false;
+            //
+            // lblUkupnoKandidata
+            //
+            this.lblUkupnoKandidata.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblUkupnoKandidata.AutoSize = true;
+            this.lblUkupnoKandidata.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUkupnoKandidata.Location = new System.Drawing.Point(19, 346);
+            this.lblUkupnoKandidata.Name = "lblUkupnoKandidata";
+            this.lblUkupnoKandidata.Size = new System.Drawing.Size(150, 15);
+            this.lblUkupnoKandidata.TabIndex = 23;
+            this.lblUkupnoKandidata.Text = "Prikazano kandidata: 0";
+            //
             // btnKreirajIzvestaj
-            // 
+            //
+            this.btnKreirajIzvestaj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnKreirajIzvestaj.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnKreirajIzvestaj.Location = new System.Drawing.Point(673, 350);
             this.btnKreirajIzvestaj.Name = "btnKreirajIzvestaj";
@@ -151,92 +223,133 @@ namespace Client.UserControls.UCIspit
             this.btnKreirajIzvestaj.TabIndex = 11;
             this.btnKreirajIzvestaj.Text = "Kreiraj izveštaj";
             this.btnKreirajIzvestaj.UseVisualStyleBackColor = true;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(19, 364);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(107, 16);
-            this.label5.TabIndex = 12;
-            this.label5.Text = "Ukupno položilo:";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(39, 394);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(87, 16);
-            this.label6.TabIndex = 13;
-            this.label6.Text = "Ukupno palo:";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(270, 364);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(95, 16);
-            this.label7.TabIndex = 14;
-            this.label7.Text = "Ukupno u toku:";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(233, 394);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(132, 16);
-            this.label8.TabIndex = 15;
-            this.label8.Text = "Procenat prolaznosti:";
-            // 
-            // txtUkupnoUToku
-            // 
-            this.txtUkupnoUToku.Location = new System.Drawing.Point(371, 358);
-            this.txtUkupnoUToku.Name = "txtUkupnoUToku";
-            this.txtUkupnoUToku.Size = new System.Drawing.Size(70, 22);
-            this.txtUkupnoUToku.TabIndex = 16;
-            // 
-            // txtUkupnoPolozilo
-            // 
-            this.txtUkupnoPolozilo.Location = new System.Drawing.Point(131, 358);
-            this.txtUkupnoPolozilo.Name = "txtUkupnoPolozilo";
-            this.txtUkupnoPolozilo.Size = new System.Drawing.Size(70, 22);
-            this.txtUkupnoPolozilo.TabIndex = 17;
-            // 
-            // txtUkupnoPalo
-            // 
-            this.txtUkupnoPalo.Location = new System.Drawing.Point(131, 391);
-            this.txtUkupnoPalo.Name = "txtUkupnoPalo";
-            this.txtUkupnoPalo.Size = new System.Drawing.Size(70, 22);
-            this.txtUkupnoPalo.TabIndex = 18;
-            // 
-            // txtProcenatProlaznosti
-            // 
-            this.txtProcenatProlaznosti.Location = new System.Drawing.Point(371, 386);
-            this.txtProcenatProlaznosti.Name = "txtProcenatProlaznosti";
-            this.txtProcenatProlaznosti.Size = new System.Drawing.Size(70, 22);
-            this.txtProcenatProlaznosti.TabIndex = 19;
+            //
+            // btnIzveziCsv
+            //
+            this.btnIzveziCsv.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnIzveziCsv.Enabled = false;
+            this.btnIzveziCsv.Location = new System.Drawing.Point(534, 365);
+            this.btnIzveziCsv.Name = "btnIzveziCsv";
+            this.btnIzveziCsv.Size = new System.Drawing.Size(133, 33);
+            this.btnIzveziCsv.TabIndex = 21;
+            this.btnIzveziCsv.Text = "Izvezi u CSV";
+            this.btnIzveziCsv.UseVisualStyleBackColor = true;
+            //
+            // lblPoloziloText
+            //
+            this.lblPoloziloText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblPoloziloText.AutoSize = true;
+            this.lblPoloziloText.Location = new System.Drawing.Point(19, 364);
+            this.lblPoloziloText.Name = "lblPoloziloText";
+            this.lblPoloziloText.Size = new System.Drawing.Size(107, 16);
+            this.lblPoloziloText.TabIndex = 12;
+            this.lblPoloziloText.Text = "Ukupno položilo:";
+            //
+            // lblPaloText
+            //
+            this.lblPaloText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblPaloText.AutoSize = true;
+            this.lblPaloText.Location = new System.Drawing.Point(39, 394);
+            this.lblPaloText.Name = "lblPaloText";
+            this.lblPaloText.Size = new System.Drawing.Size(87, 16);
+            this.lblPaloText.TabIndex = 13;
+            this.lblPaloText.Text = "Ukupno palo:";
+            //
+            // lblUTokuText
+            //
+            this.lblUTokuText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblUTokuText.AutoSize = true;
+            this.lblUTokuText.Location = new System.Drawing.Point(270, 364);
+            this.lblUTokuText.Name = "lblUTokuText";
+            this.lblUTokuText.Size = new System.Drawing.Size(95, 16);
+            this.lblUTokuText.TabIndex = 14;
+            this.lblUTokuText.Text = "Ukupno u toku:";
+            //
+            // lblProcenatText
+            //
+            this.lblProcenatText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblProcenatText.AutoSize = true;
+            this.lblProcenatText.Location = new System.Drawing.Point(233, 394);
+            this.lblProcenatText.Name = "lblProcenatText";
+            this.lblProcenatText.Size = new System.Drawing.Size(132, 16);
+            this.lblProcenatText.TabIndex = 15;
+            this.lblProcenatText.Text = "Procenat prolaznosti:";
+            //
+            // lblVrednostUToku
+            //
+            this.lblVrednostUToku.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblVrednostUToku.AutoSize = true;
+            this.lblVrednostUToku.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVrednostUToku.Location = new System.Drawing.Point(371, 364);
+            this.lblVrednostUToku.MinimumSize = new System.Drawing.Size(40, 0);
+            this.lblVrednostUToku.Name = "lblVrednostUToku";
+            this.lblVrednostUToku.TabIndex = 16;
+            this.lblVrednostUToku.Text = "0";
+            //
+            // lblVrednostPolozilo
+            //
+            this.lblVrednostPolozilo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblVrednostPolozilo.AutoSize = true;
+            this.lblVrednostPolozilo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVrednostPolozilo.ForeColor = System.Drawing.Color.FromArgb(46, 125, 50);
+            this.lblVrednostPolozilo.Location = new System.Drawing.Point(131, 364);
+            this.lblVrednostPolozilo.MinimumSize = new System.Drawing.Size(40, 0);
+            this.lblVrednostPolozilo.Name = "lblVrednostPolozilo";
+            this.lblVrednostPolozilo.TabIndex = 17;
+            this.lblVrednostPolozilo.Text = "0";
+            //
+            // lblVrednostPalo
+            //
+            this.lblVrednostPalo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblVrednostPalo.AutoSize = true;
+            this.lblVrednostPalo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVrednostPalo.ForeColor = System.Drawing.Color.FromArgb(198, 40, 40);
+            this.lblVrednostPalo.Location = new System.Drawing.Point(131, 394);
+            this.lblVrednostPalo.MinimumSize = new System.Drawing.Size(40, 0);
+            this.lblVrednostPalo.Name = "lblVrednostPalo";
+            this.lblVrednostPalo.TabIndex = 18;
+            this.lblVrednostPalo.Text = "0";
+            //
+            // lblVrednostProcenat
+            //
+            this.lblVrednostProcenat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblVrednostProcenat.AutoSize = true;
+            this.lblVrednostProcenat.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVrednostProcenat.ForeColor = System.Drawing.Color.FromArgb(21, 101, 192);
+            this.lblVrednostProcenat.Location = new System.Drawing.Point(371, 380);
+            this.lblVrednostProcenat.MinimumSize = new System.Drawing.Size(110, 0);
+            this.lblVrednostProcenat.Name = "lblVrednostProcenat";
+            this.lblVrednostProcenat.TabIndex = 19;
+            this.lblVrednostProcenat.Text = "0,00%";
             // 
             // UCKreirajIzvestajOIspitima
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.txtProcenatProlaznosti);
-            this.Controls.Add(this.txtUkupnoPalo);
-            this.Controls.Add(this.txtUkupnoPolozilo);
-            this.Controls.Add(this.txtUkupnoUToku);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
+            this.Controls.Add(this.lblVrednostProcenat);
+            this.Controls.Add(this.lblVrednostPalo);
+            this.Controls.Add(this.lblVrednostPolozilo);
+            this.Controls.Add(this.lblVrednostUToku);
+            this.Controls.Add(this.lblProcenatText);
+            this.Controls.Add(this.lblUTokuText);
+            this.Controls.Add(this.lblPaloText);
+            this.Controls.Add(this.lblPoloziloText);
+            this.Controls.Add(this.btnIzveziCsv);
             this.Controls.Add(this.btnKreirajIzvestaj);
+            this.Controls.Add(this.lblUkupnoKandidata);
+            this.Controls.Add(this.lblNemaRezultata);
             this.Controls.Add(this.dgvIzvestajIspita);
-            this.Controls.Add(this.cbUtoku);
+            this.Controls.Add(this.chbSamoAktivniUpisi);
+            this.Controls.Add(this.chbUkljuciBezRezultata);
             this.Controls.Add(this.cmbKategorija);
             this.Controls.Add(this.cmbTipIspita);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblKategorijaText);
+            this.Controls.Add(this.lblTipIspitaText);
+            this.Controls.Add(this.lblDoDatuma);
+            this.Controls.Add(this.lblOdDatuma);
+            this.Controls.Add(this.btnPresetGodina);
+            this.Controls.Add(this.btnPresetTridesetDana);
+            this.Controls.Add(this.btnPresetMesec);
             this.Controls.Add(this.dtpDatumDo);
             this.Controls.Add(this.dtpDatumOd);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -253,42 +366,56 @@ namespace Client.UserControls.UCIspit
 
         private System.Windows.Forms.DateTimePicker dtpDatumOd;
         private System.Windows.Forms.DateTimePicker dtpDatumDo;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnPresetMesec;
+        private System.Windows.Forms.Button btnPresetTridesetDana;
+        private System.Windows.Forms.Button btnPresetGodina;
+        private System.Windows.Forms.Label lblOdDatuma;
+        private System.Windows.Forms.Label lblDoDatuma;
+        private System.Windows.Forms.Label lblTipIspitaText;
+        private System.Windows.Forms.Label lblKategorijaText;
         private System.Windows.Forms.ComboBox cmbTipIspita;
         private System.Windows.Forms.ComboBox cmbKategorija;
-        private System.Windows.Forms.CheckBox cbUtoku;
+        private System.Windows.Forms.CheckBox chbUkljuciBezRezultata;
+        private System.Windows.Forms.CheckBox chbSamoAktivniUpisi;
         private System.Windows.Forms.DataGridView dgvIzvestajIspita;
+        private System.Windows.Forms.Label lblNemaRezultata;
+        private System.Windows.Forms.Label lblUkupnoKandidata;
         private System.Windows.Forms.Button btnKreirajIzvestaj;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox txtUkupnoUToku;
-        private System.Windows.Forms.TextBox txtUkupnoPolozilo;
-        private System.Windows.Forms.TextBox txtUkupnoPalo;
-        private System.Windows.Forms.TextBox txtProcenatProlaznosti;
+        private System.Windows.Forms.Button btnIzveziCsv;
+        private System.Windows.Forms.Label lblPoloziloText;
+        private System.Windows.Forms.Label lblPaloText;
+        private System.Windows.Forms.Label lblUTokuText;
+        private System.Windows.Forms.Label lblProcenatText;
+        private System.Windows.Forms.Label lblVrednostUToku;
+        private System.Windows.Forms.Label lblVrednostPolozilo;
+        private System.Windows.Forms.Label lblVrednostPalo;
+        private System.Windows.Forms.Label lblVrednostProcenat;
 
         public DateTimePicker DtpDatumOd { get => dtpDatumOd; set => dtpDatumOd = value; }
         public DateTimePicker DtpDatumDo { get => dtpDatumDo; set => dtpDatumDo = value; }
-        public Label Label1 { get => label1; set => label1 = value; }
-        public Label Label2 { get => label2; set => label2 = value; }
-        public Label Label3 { get => label3; set => label3 = value; }
-        public Label Label4 { get => label4; set => label4 = value; }
+        public Button BtnPresetMesec { get => btnPresetMesec; set => btnPresetMesec = value; }
+        public Button BtnPresetTridesetDana { get => btnPresetTridesetDana; set => btnPresetTridesetDana = value; }
+        public Button BtnPresetGodina { get => btnPresetGodina; set => btnPresetGodina = value; }
+        public Label LblOdDatuma { get => lblOdDatuma; set => lblOdDatuma = value; }
+        public Label LblDoDatuma { get => lblDoDatuma; set => lblDoDatuma = value; }
+        public Label LblTipIspitaText { get => lblTipIspitaText; set => lblTipIspitaText = value; }
+        public Label LblKategorijaText { get => lblKategorijaText; set => lblKategorijaText = value; }
         public ComboBox CmbTipIspita { get => cmbTipIspita; set => cmbTipIspita = value; }
         public ComboBox CmbKategorija { get => cmbKategorija; set => cmbKategorija = value; }
-        public CheckBox CbUtoku { get => cbUtoku; set => cbUtoku = value; }
+        public CheckBox ChbUkljuciBezRezultata { get => chbUkljuciBezRezultata; set => chbUkljuciBezRezultata = value; }
+        public CheckBox ChbSamoAktivniUpisi { get => chbSamoAktivniUpisi; set => chbSamoAktivniUpisi = value; }
         public DataGridView DgvIzvestajIspita { get => dgvIzvestajIspita; set => dgvIzvestajIspita = value; }
+        public Label LblNemaRezultata { get => lblNemaRezultata; set => lblNemaRezultata = value; }
+        public Label LblUkupnoKandidata { get => lblUkupnoKandidata; set => lblUkupnoKandidata = value; }
         public Button BtnKreirajIzvestaj { get => btnKreirajIzvestaj; set => btnKreirajIzvestaj = value; }
-        public Label Label5 { get => label5; set => label5 = value; }
-        public Label Label6 { get => label6; set => label6 = value; }
-        public Label Label7 { get => label7; set => label7 = value; }
-        public Label Label8 { get => label8; set => label8 = value; }
-        public TextBox TxtUkupnoUToku { get => txtUkupnoUToku; set => txtUkupnoUToku = value; }
-        public TextBox TxtUkupnoPolozilo { get => txtUkupnoPolozilo; set => txtUkupnoPolozilo = value; }
-        public TextBox TxtUkupnoPalo { get => txtUkupnoPalo; set => txtUkupnoPalo = value; }
-        public TextBox TxtProcenatProlaznosti { get => txtProcenatProlaznosti; set => txtProcenatProlaznosti = value; }
+        public Button BtnIzveziCsv { get => btnIzveziCsv; set => btnIzveziCsv = value; }
+        public Label LblPoloziloText { get => lblPoloziloText; set => lblPoloziloText = value; }
+        public Label LblPaloText { get => lblPaloText; set => lblPaloText = value; }
+        public Label LblUTokuText { get => lblUTokuText; set => lblUTokuText = value; }
+        public Label LblProcenatText { get => lblProcenatText; set => lblProcenatText = value; }
+        public Label LblVrednostUToku { get => lblVrednostUToku; set => lblVrednostUToku = value; }
+        public Label LblVrednostPolozilo { get => lblVrednostPolozilo; set => lblVrednostPolozilo = value; }
+        public Label LblVrednostPalo { get => lblVrednostPalo; set => lblVrednostPalo = value; }
+        public Label LblVrednostProcenat { get => lblVrednostProcenat; set => lblVrednostProcenat = value; }
     }
 }

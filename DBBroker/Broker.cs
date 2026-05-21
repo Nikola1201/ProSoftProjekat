@@ -110,7 +110,7 @@ namespace DBBroker
             cmd.Dispose();
         }
 
-        public List<IzvestajProlaznostiStavkaDto> KreirajIzvestajProlaznosti(IzvestajProlaznostiKriterijum kriterijum)
+        public IzvestajProlaznostiResponseDto KreirajIzvestajProlaznosti(IzvestajProlaznostiKriterijum kriterijum)
         {
             SqlCommand command = _connection.CreateCommand();
             command.CommandText = @"
@@ -155,9 +155,9 @@ namespace DBBroker
                 BrojPokusajaPrakticni,
                 DatumPoslednjegIspita,
                 CASE
-                    WHEN @TipIspita = 2 AND ImaPolozenTeorijski = 1 AND ImaPolozenPrakticni = 1 THEN 'Polozio'
-                    WHEN @TipIspita = 0 AND ImaPolozenTeorijski = 1 THEN 'Polozio'
-                    WHEN @TipIspita = 1 AND ImaPolozenPrakticni = 1 THEN 'Polozio'
+                    WHEN @TipIspita = 2 AND ImaPolozenTeorijski = 1 AND ImaPolozenPrakticni = 1 THEN 0
+                    WHEN @TipIspita = 0 AND ImaPolozenTeorijski = 1 THEN 0
+                    WHEN @TipIspita = 1 AND ImaPolozenPrakticni = 1 THEN 0
                     WHEN
                         (
                             CASE
@@ -165,30 +165,34 @@ namespace DBBroker
                                 WHEN @TipIspita = 1 THEN BrojPokusajaPrakticni
                                 ELSE BrojPokusajaTeorijski + BrojPokusajaPrakticni
                             END
-                        ) > 0 THEN 'Pao'
-                    ELSE 'UToku'
-                END AS Status
-            FROM KandidatAgregat
-            WHERE
-                @IncludeNoData = 1
-                OR
-                (
-                    CASE
-                        WHEN @TipIspita = 2 AND ImaPolozenTeorijski = 1 AND ImaPolozenPrakticni = 1 THEN 'Polozio'
-                        WHEN @TipIspita = 0 AND ImaPolozenTeorijski = 1 THEN 'Polozio'
-                        WHEN @TipIspita = 1 AND ImaPolozenPrakticni = 1 THEN 'Polozio'
-                        WHEN
-                            (
-                                CASE
-                                    WHEN @TipIspita = 0 THEN BrojPokusajaTeorijski
-                                    WHEN @TipIspita = 1 THEN BrojPokusajaPrakticni
-                                    ELSE BrojPokusajaTeorijski + BrojPokusajaPrakticni
-                                END
-                            ) > 0 THEN 'Pao'
-                        ELSE 'UToku'
-                    END
-                ) <> 'UToku'
-            ORDER BY Prezime, Ime;";
+                        ) > 0 THEN 1
+                    ELSE 2
+                END AS StatusKod
+            INTO #StatusiKandidata
+            FROM KandidatAgregat;
+
+            SELECT
+                KandidatId,
+                Ime,
+                Prezime,
+                Jmbg,
+                Kategorija,
+                BrojPokusajaTeorijski,
+                BrojPokusajaPrakticni,
+                DatumPoslednjegIspita,
+                StatusKod
+            FROM #StatusiKandidata
+            WHERE @IncludeNoData = 1 OR StatusKod <> 2
+            ORDER BY Prezime, Ime;
+
+            SELECT
+                SUM(CASE WHEN StatusKod = 0 THEN 1 ELSE 0 END) AS UkupnoPolozilo,
+                SUM(CASE WHEN StatusKod = 1 THEN 1 ELSE 0 END) AS UkupnoPalo,
+                SUM(CASE WHEN StatusKod = 2 THEN 1 ELSE 0 END) AS UkupnoUToku
+            FROM #StatusiKandidata
+            WHERE @IncludeNoData = 1 OR StatusKod <> 2;
+
+            DROP TABLE #StatusiKandidata;";
 
             command.Parameters.AddWithValue("@DatumOd", kriterijum.DatumOd.Date);
             command.Parameters.AddWithValue("@DatumDoExclusive", kriterijum.DatumDo.Date.AddDays(1));
@@ -197,27 +201,46 @@ namespace DBBroker
             command.Parameters.AddWithValue("@IncludeNoData", kriterijum.IncludeNoData ? 1 : 0);
             command.Parameters.AddWithValue("@IncludeOnlyAktivanUpis", kriterijum.IncludeOnlyAktivanUpis ? 1 : 0);
 
-            List<IzvestajProlaznostiStavkaDto> rezultat = new List<IzvestajProlaznostiStavkaDto>();
+            List<IzvestajProlaznostiStavkaDto> stavke = new List<IzvestajProlaznostiStavkaDto>();
+            IzvestajProlaznostiSummaryDto summary = new IzvestajProlaznostiSummaryDto();
+
             SqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
-                rezultat.Add(new IzvestajProlaznostiStavkaDto
+                stavke.Add(new IzvestajProlaznostiStavkaDto
                 {
                     KandidatId = Convert.ToInt32(reader["KandidatId"]),
                     Ime = reader["Ime"].ToString(),
                     Prezime = reader["Prezime"].ToString(),
                     Jmbg = reader["Jmbg"].ToString(),
                     Kategorija = reader["Kategorija"].ToString(),
-                    Status = reader["Status"].ToString(),
+                    Status = (StatusProlaznosti)Convert.ToInt32(reader["StatusKod"]),
                     DatumPoslednjegIspita = reader["DatumPoslednjegIspita"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(reader["DatumPoslednjegIspita"]),
                     BrojPokusajaTeorijski = Convert.ToInt32(reader["BrojPokusajaTeorijski"]),
                     BrojPokusajaPrakticni = Convert.ToInt32(reader["BrojPokusajaPrakticni"])
                 });
             }
 
+            if (reader.NextResult() && reader.Read())
+            {
+                summary.UkupnoPolozilo = reader["UkupnoPolozilo"] == DBNull.Value ? 0 : Convert.ToInt32(reader["UkupnoPolozilo"]);
+                summary.UkupnoPalo = reader["UkupnoPalo"] == DBNull.Value ? 0 : Convert.ToInt32(reader["UkupnoPalo"]);
+                summary.UkupnoUToku = reader["UkupnoUToku"] == DBNull.Value ? 0 : Convert.ToInt32(reader["UkupnoUToku"]);
+            }
+
+            int denominator = summary.UkupnoPolozilo + summary.UkupnoPalo;
+            summary.ProcenatProlaznosti = denominator == 0
+                ? 0m
+                : Math.Round((decimal)summary.UkupnoPolozilo * 100m / denominator, 2);
+
             reader.Close();
             command.Dispose();
-            return rezultat;
+
+            return new IzvestajProlaznostiResponseDto
+            {
+                Stavke = stavke,
+                Summary = summary
+            };
         }
 
         public List<IzvestajDugovanjaStavkaDto> KreirajIzvestajDugovanja(IzvestajDugovanjaKriterijum kriterijum)
@@ -397,6 +420,104 @@ WHERE UpisId = @UpisId
             command.Parameters.AddWithValue("@UpisId", upisId);
             command.ExecuteNonQuery();
             command.Dispose();
+        }
+
+        public List<KandidatDugovanjeDto> VratiKandidatiSaDugovanjem()
+        {
+            SqlCommand command = _connection.CreateCommand();
+            command.CommandText = @"
+WITH AgregatPoKandidatu AS
+(
+    SELECT
+        k.KandidatId,
+        LTRIM(RTRIM(k.Ime + ' ' + k.Prezime)) AS PunoIme,
+        k.JMBG,
+        SUM(p.Cena) AS UkupnaCena,
+        SUM(ISNULL(pl.Placeno, 0)) AS UkupnoPlaceno
+    FROM Kandidat k
+    INNER JOIN Upis u ON u.KandidatId = k.KandidatId
+    INNER JOIN PaketObuke p ON p.PaketId = u.PaketId
+    OUTER APPLY
+    (
+        SELECT SUM(pla.Iznos) AS Placeno
+        FROM Placanje pla
+        WHERE pla.UpisId = u.UpisId
+    ) pl
+    GROUP BY k.KandidatId, k.Ime, k.Prezime, k.JMBG
+)
+SELECT
+    KandidatId,
+    PunoIme,
+    JMBG,
+    UkupnaCena,
+    UkupnoPlaceno,
+    CASE WHEN UkupnaCena - UkupnoPlaceno < 0 THEN 0 ELSE UkupnaCena - UkupnoPlaceno END AS Dugovanje
+FROM AgregatPoKandidatu
+WHERE (UkupnaCena - UkupnoPlaceno) > 0
+ORDER BY Dugovanje DESC, PunoIme;";
+
+            List<KandidatDugovanjeDto> rezultat = new List<KandidatDugovanjeDto>();
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                rezultat.Add(new KandidatDugovanjeDto
+                {
+                    KandidatId = Convert.ToInt32(reader["KandidatId"]),
+                    PunoIme = reader["PunoIme"].ToString(),
+                    JMBG = reader["JMBG"].ToString(),
+                    UkupnaCena = Convert.ToDecimal(reader["UkupnaCena"]),
+                    UkupnoPlaceno = Convert.ToDecimal(reader["UkupnoPlaceno"]),
+                    Dugovanje = Convert.ToDecimal(reader["Dugovanje"])
+                });
+            }
+            reader.Close();
+            command.Dispose();
+            return rezultat;
+        }
+
+        public Upis GetUpisById(int upisId)
+        {
+            SqlCommand command = _connection.CreateCommand();
+            command.CommandText = "SELECT TOP 1 UpisId, KandidatId, PaketId, DatumUpisa, Status FROM Upis WHERE UpisId = @UpisId";
+            command.Parameters.AddWithValue("@UpisId", upisId);
+
+            SqlDataReader reader = command.ExecuteReader();
+            Upis upis = null;
+            if (reader.Read())
+            {
+                upis = new Upis
+                {
+                    UpisId = (int)reader["UpisId"],
+                    KandidatId = (int)reader["KandidatId"],
+                    PaketId = (int)reader["PaketId"],
+                    DatumUpisa = (DateTime)reader["DatumUpisa"],
+                    Status = reader["Status"].ToString()
+                };
+            }
+            reader.Close();
+            command.Dispose();
+            return upis;
+        }
+
+        public decimal GetPreostaloDugovanjeZaUpis(int upisId)
+        {
+            SqlCommand command = _connection.CreateCommand();
+            command.CommandText = @"
+SELECT
+    p.Cena - ISNULL(SUM(pl.Iznos), 0) AS Preostalo
+FROM Upis u
+INNER JOIN PaketObuke p ON p.PaketId = u.PaketId
+LEFT JOIN Placanje pl ON pl.UpisId = u.UpisId
+WHERE u.UpisId = @UpisId
+GROUP BY p.Cena";
+            command.Parameters.AddWithValue("@UpisId", upisId);
+
+            object result = command.ExecuteScalar();
+            command.Dispose();
+
+            if (result == null || result == DBNull.Value) return 0m;
+            decimal preostalo = Convert.ToDecimal(result);
+            return preostalo < 0m ? 0m : preostalo;
         }
 
     }

@@ -1,4 +1,5 @@
 using Common.Domain;
+using Common.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,27 +27,27 @@ namespace Server.SystemOperation
         {
             if (upis == null)
             {
-                throw new Exception("Podaci o upisu nisu prosledjeni.");
+                throw new ValidacijaException("Podaci o upisu nisu prosledjeni.");
             }
 
             if (upis.KandidatId <= 0)
             {
-                throw new Exception("Kandidat za upis nije izabran.");
+                throw new ValidacijaException("Kandidat za upis nije izabran.");
             }
 
             if (upis.PaketId <= 0)
             {
-                throw new Exception("Paket obuke nije izabran.");
+                throw new ValidacijaException("Paket obuke nije izabran.");
             }
 
             if (upis.DatumUpisa.Date > DateTime.Now.Date)
             {
-                throw new Exception("Datum upisa ne moze biti u buducnosti.");
+                throw new ValidacijaException("Datum upisa ne moze biti u buducnosti.");
             }
 
             if (string.IsNullOrWhiteSpace(upis.Status))
             {
-                throw new Exception("Status upisa je obavezan.");
+                throw new ValidacijaException("Status upisa je obavezan.");
             }
 
             List<Upis> postojeciUpisi = _broker.GetAll(new Upis()).Cast<Upis>().ToList();
@@ -55,15 +56,15 @@ namespace Server.SystemOperation
 
             if (kandidatZaUpis == null)
             {
-                throw new Exception("Izabrani kandidat ne postoji u sistemu.");
+                throw new ValidacijaException("Izabrani kandidat ne postoji u sistemu.");
             }
             if (!kandidatZaUpis.Aktivan)
             {
-                throw new Exception("Izabrani kandidat nije aktivan.");
+                throw new ValidacijaException("Izabrani kandidat nije aktivan.");
             }
             if (paketObuke == null)
             {
-                throw new Exception("Izabrani paket obuke ne postoji u sistemu.");
+                throw new ValidacijaException("Izabrani paket obuke ne postoji u sistemu.");
             }
 
             bool imaAktivanUpis = postojeciUpisi.Any(u =>
@@ -72,7 +73,7 @@ namespace Server.SystemOperation
 
             if (imaAktivanUpis)
             {
-                throw new Exception("Kandidat je vec aktivno upisan na obuku.");
+                throw new ValidacijaException("Kandidat je vec aktivno upisan na obuku.");
             }
 
             upis.Status = upis.Status.Trim().ToLower();

@@ -1,4 +1,5 @@
 using Common.Domain;
+using Common.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,50 +27,50 @@ namespace Server.SystemOperation
         {
             if (cas == null)
             {
-                throw new Exception("Podaci o casu voznje nisu prosledjeni.");
+                throw new ValidacijaException("Podaci o casu voznje nisu prosledjeni.");
             }
 
             if (cas.UpisId <= 0)
             {
-                throw new Exception("Kandidat nema validan aktivan upis za zakazivanje casa.");
+                throw new ValidacijaException("Kandidat nema validan aktivan upis za zakazivanje casa.");
             }
 
             if (cas.InstruktorId <= 0)
             {
-                throw new Exception("Instruktor nije izabran.");
+                throw new ValidacijaException("Instruktor nije izabran.");
             }
 
             if (cas.VoziloId <= 0)
             {
-                throw new Exception("Vozilo nije izabrano.");
+                throw new ValidacijaException("Vozilo nije izabrano.");
             }
 
             if (cas.TrajanjMin <= 0)
             {
-                throw new Exception("Trajanje casa mora biti vece od 0 minuta.");
+                throw new ValidacijaException("Trajanje casa mora biti vece od 0 minuta.");
             }
 
             if (cas.DatumCas < DateTime.Now)
             {
-                throw new Exception("Datum i vreme casa ne mogu biti u proslosti.");
+                throw new ValidacijaException("Datum i vreme casa ne mogu biti u proslosti.");
             }
 
             Upis upis = (Upis)_broker.GetEntityByID(new Upis { UpisId = cas.UpisId });
             if (upis == null || !string.Equals(upis.Status, "aktivan", StringComparison.OrdinalIgnoreCase))
             {
-                throw new Exception("Izabrani kandidat nema aktivan upis.");
+                throw new ValidacijaException("Izabrani kandidat nema aktivan upis.");
             }
 
             Instruktor instruktor = (Instruktor)_broker.GetEntityByID(new Instruktor { InstruktorId = cas.InstruktorId });
             if (instruktor == null || !instruktor.Aktivan)
             {
-                throw new Exception("Izabrani instruktor nije aktivan.");
+                throw new ValidacijaException("Izabrani instruktor nije aktivan.");
             }
 
             Vozilo vozilo = (Vozilo)_broker.GetEntityByID(new Vozilo { VoziloId = cas.VoziloId });
             if (vozilo == null || !vozilo.Aktivno)
             {
-                throw new Exception("Izabrano vozilo nije aktivno.");
+                throw new ValidacijaException("Izabrano vozilo nije aktivno.");
             }
 
             ValidateTerminKonflikt(cas);
@@ -101,7 +102,7 @@ namespace Server.SystemOperation
 
             if (konfliktInstruktor)
             {
-                throw new Exception("Instruktor vec ima zakazan cas u izabranom terminu.");
+                throw new ValidacijaException("Instruktor vec ima zakazan cas u izabranom terminu.");
             }
 
             bool konfliktVozilo = postojeciCasovi.Any(c =>
@@ -110,7 +111,7 @@ namespace Server.SystemOperation
 
             if (konfliktVozilo)
             {
-                throw new Exception("Vozilo je vec zauzeto u izabranom terminu.");
+                throw new ValidacijaException("Vozilo je vec zauzeto u izabranom terminu.");
             }
         }
 

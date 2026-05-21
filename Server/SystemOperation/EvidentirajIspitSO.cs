@@ -1,4 +1,5 @@
 using Common.Domain;
+using Common.Validation;
 using System;
 using System.Collections.Generic;
 
@@ -34,24 +35,24 @@ namespace Server.SystemOperation
 
             if (!_broker.KandidatPostoji(_request.KandidatId))
             {
-                throw new Exception("Kandidat ne postoji.");
+                throw new ValidacijaException("Kandidat ne postoji.");
             }
 
             Upis najnovijiUpis = _broker.GetNajnovijiUpisZaKandidata(_request.KandidatId);
             if (najnovijiUpis == null)
             {
-                throw new Exception("Kandidat nema upis. Prvo upisite kandidata na paket.");
+                throw new ValidacijaException("Kandidat nema upis. Prvo upisite kandidata na paket.");
             }
 
             if (_broker.PostojiIspitIstogTipaIstogDana(najnovijiUpis.UpisId, _request.Tip, _request.DatumIspita))
             {
-                throw new Exception("Za izabrani datum vec postoji evidentiran isti tip ispita za aktivni upis kandidata.");
+                throw new ValidacijaException("Za izabrani datum vec postoji evidentiran isti tip ispita za aktivni upis kandidata.");
             }
 
             if (string.Equals(_request.Rezultat, "polozio", StringComparison.OrdinalIgnoreCase)
                 && _broker.ImaPolozenIspitZaTip(najnovijiUpis.UpisId, _request.Tip))
             {
-                throw new Exception("Kandidat je vec polozio izabrani tip ispita i ne moze ponovo biti evidentiran kao polozio.");
+                throw new ValidacijaException("Kandidat je vec polozio izabrani tip ispita i ne moze ponovo biti evidentiran kao polozio.");
             }
 
             Ispit noviIspit = new Ispit
@@ -93,22 +94,22 @@ namespace Server.SystemOperation
         {
             if (request == null)
             {
-                throw new Exception("Podaci o ispitu nisu prosledjeni.");
+                throw new ValidacijaException("Podaci o ispitu nisu prosledjeni.");
             }
 
             if (request.KandidatId <= 0)
             {
-                throw new Exception("Kandidat je obavezan.");
+                throw new ValidacijaException("Kandidat je obavezan.");
             }
 
             if (request.DatumIspita == DateTime.MinValue)
             {
-                throw new Exception("Datum ispita je obavezan.");
+                throw new ValidacijaException("Datum ispita je obavezan.");
             }
 
             if (request.DatumIspita.Date > DateTime.Now.Date)
             {
-                throw new Exception("Datum ispita ne moze biti u buducnosti.");
+                throw new ValidacijaException("Datum ispita ne moze biti u buducnosti.");
             }
 
             request.Tip = (request.Tip ?? string.Empty).Trim().ToLower();
@@ -117,17 +118,17 @@ namespace Server.SystemOperation
 
             if (!DozvoljeniTipovi.Contains(request.Tip))
             {
-                throw new Exception("Tip ispita mora biti teorijski ili prakticni.");
+                throw new ValidacijaException("Tip ispita mora biti teorijski ili prakticni.");
             }
 
             if (!DozvoljeniRezultati.Contains(request.Rezultat))
             {
-                throw new Exception("Rezultat ispita nije validan.");
+                throw new ValidacijaException("Rezultat ispita nije validan.");
             }
 
             if (request.Napomena.Length > 500)
             {
-                throw new Exception("Napomena moze imati najvise 500 karaktera.");
+                throw new ValidacijaException("Napomena moze imati najvise 500 karaktera.");
             }
         }
     }

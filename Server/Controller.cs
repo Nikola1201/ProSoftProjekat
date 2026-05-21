@@ -146,6 +146,20 @@ namespace Server
             return so.Result;
         }
 
+        internal List<KandidatDugovanjeDto> VratiKandidatiSaDugovanjem()
+        {
+            VratiKandidatiSaDugovanjemSO so = new VratiKandidatiSaDugovanjemSO();
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal EvidentirajUplatuResponse EvidentirajUplatu(EvidentirajUplatuRequest request)
+        {
+            EvidentirajUplatuSO so = new EvidentirajUplatuSO(request);
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
 
     }
 }

@@ -12,6 +12,14 @@ namespace Common.Domain.Izvestaji
     }
 
     [Serializable]
+    public enum StatusProlaznosti
+    {
+        Polozio = 0,
+        Pao = 1,
+        UToku = 2
+    }
+
+    [Serializable]
     public class IzvestajProlaznostiKriterijum
     {
         public DateTime DatumOd { get; set; }
@@ -30,7 +38,7 @@ namespace Common.Domain.Izvestaji
         public string Prezime { get; set; }
         public string Jmbg { get; set; }
         public string Kategorija { get; set; }
-        public string Status { get; set; }
+        public StatusProlaznosti Status { get; set; }
         public DateTime? DatumPoslednjegIspita { get; set; }
         public int BrojPokusajaTeorijski { get; set; }
         public int BrojPokusajaPrakticni { get; set; }

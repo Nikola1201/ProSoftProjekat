@@ -1,6 +1,7 @@
 using Common.Communication;
 using Common.Domain;
 using Common.Domain.Izvestaji;
+using Common.Validation;
 using System;
 using System.Diagnostics;
 using System.Net.Sockets;
@@ -106,13 +107,24 @@ namespace Server
                     case Operation.KreirajIzvestajProlaznosti:
                         response.Result = Controller.Instance.KreirajIzvestajProlaznosti(_receiver.ReadType<IzvestajProlaznostiKriterijum>(request.Argument!));
                         break;
+                    case Operation.VratiKandidatiSaDugovanjem:
+                        response.Result = Controller.Instance.VratiKandidatiSaDugovanjem();
+                        break;
+                    case Operation.EvidentirajUplatu:
+                        response.Result = Controller.Instance.EvidentirajUplatu(_receiver.ReadType<EvidentirajUplatuRequest>(request.Argument!));
+                        break;
                     default:
                         break;
                 }
             }
-            catch (Exception ex)
+            catch (ValidacijaException ex)
             {
                 response.ErrorMessage = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(string.Format("[ProcessRequest] {0}: {1}", request.Operation, ex));
+                response.ErrorMessage = "Sistemska greska. Pokusajte ponovo ili kontaktirajte administratora.";
             }
             return response;
         }

@@ -29,6 +29,23 @@ namespace Client.GuiController
             Application.Run(_frmLogin);
         }
 
+        internal void ReopenFrmLogin()
+        {
+            Communication.Instance.Connect();
+
+            if (_frmLogin == null || _frmLogin.IsDisposed)
+            {
+                _frmLogin = new FrmLogin();
+                _frmLogin.BtnLogin.Click += (s, e) => Login();
+                _frmLogin.AutoSize = true;
+            }
+
+            _frmLogin.TxtPassword.Clear();
+            _frmLogin.Show();
+            _frmLogin.BringToFront();
+            _frmLogin.TxtUsername.Focus();
+        }
+
         private void Login()
         {
             string username = _frmLogin.TxtUsername.Text;

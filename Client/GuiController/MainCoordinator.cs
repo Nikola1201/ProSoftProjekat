@@ -17,6 +17,7 @@ namespace Client.GuiController
             _instruktorGuiController = new InstruktorGuiController();
             _casGuiController = new CasGuiController();
             _ispitGuiController = new IspitGuiController();
+            _dugovanjaGuiController = new DugovanjaGuiController();
         }
 
         private FrmMain _frmMain;
@@ -24,10 +25,12 @@ namespace Client.GuiController
         private InstruktorGuiController _instruktorGuiController;
         private CasGuiController _casGuiController;
         private IspitGuiController _ispitGuiController;
+        private DugovanjaGuiController _dugovanjaGuiController;
         internal void ShowFrmMain(Admin admin)
         {
             _frmMain = new FrmMain(admin);
             _frmMain.AutoSize = true;
+            ShowDefault();
             _frmMain.ShowDialog();
         }
         internal void Logout(Admin admin)
@@ -93,13 +96,23 @@ namespace Client.GuiController
             _frmMain.ChangePanel(_ispitGuiController.CreateEvidentirajIspit());
         }
 
+        internal void ShowPregledDugovanjaPanel()
+        {
+            _frmMain.ChangePanel(_dugovanjaGuiController.CreatePregledDugovanja());
+        }
+
+        internal void ShowEvidentirajUplatuPanel(KandidatDugovanjeDto stavka)
+        {
+            _frmMain.ChangePanel(_dugovanjaGuiController.CreateEvidentirajUplata(stavka));
+        }
+
         internal void LogoutDialog(Admin admin)
         {
             if (ShowMessage.Dialog("Da li ste sigurni da želite da se odjavite?") == DialogResult.OK)
             {
                 Logout(admin);
-                new FrmLogin().Show();
                 _frmMain.Hide();
+                LoginGuiController.Instance.ReopenFrmLogin();
             }
         }
     }

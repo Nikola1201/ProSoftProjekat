@@ -27,5 +27,7 @@ namespace Common.Communication
         EvidentirajIspit,
         KreirajIzvestajProlaznosti,
         KreirajIzvestajDugovanja,
+        VratiKandidatiSaDugovanjem,
+        EvidentirajUplatu,
     }
 }

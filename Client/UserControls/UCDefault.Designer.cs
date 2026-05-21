@@ -28,15 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UCDefault));
             this.SuspendLayout();
-            // 
-            // UCDeafult
-            // 
+            //
+            // UCDefault
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.Name = "UCDeafult";
+            this.Name = "UCDefault";
             this.Size = new System.Drawing.Size(665, 365);
             this.ResumeLayout(false);
 

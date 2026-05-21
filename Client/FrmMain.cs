@@ -58,6 +58,9 @@ namespace Client
             evidentiranjePolaganjaToolStripMenuItem.Click += (s, a)
                 => MainCoordinator.Instance.ShowEvidentirajIspitPanel();
 
+            pregledDugovanjaToolStripMenuItem.Click += (s, a)
+                => MainCoordinator.Instance.ShowPregledDugovanjaPanel();
+
             this.FormClosed += (s, a) => MainCoordinator.Instance.Logout(admin);
 
         }

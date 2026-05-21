@@ -47,6 +47,8 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.pnlMain = new System.Windows.Forms.Panel();
             this.odjaviSeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dugovanjaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pregledDugovanjaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,7 +60,8 @@
             this.kandidatToolStripMenuItem,
             this.instruktorToolStripMenuItem,
             this.casToolStripMenuItem,
-            this.ispitToolStripMenuItem});
+            this.ispitToolStripMenuItem,
+            this.dugovanjaToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(884, 29);
@@ -156,15 +159,29 @@
             this.evidentiranjePolaganjaToolStripMenuItem.Name = "evidentiranjePolaganjaToolStripMenuItem";
             this.evidentiranjePolaganjaToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
             this.evidentiranjePolaganjaToolStripMenuItem.Text = "Evidentiranje polaganja";
-            // 
+            //
             // izvestajProlaznostiToolStripMenuItem
-            // 
+            //
             this.izvestajProlaznostiToolStripMenuItem.Name = "izvestajProlaznostiToolStripMenuItem";
             this.izvestajProlaznostiToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
             this.izvestajProlaznostiToolStripMenuItem.Text = "Izveštaj prolaznosti";
-            // 
+            //
+            // dugovanjaToolStripMenuItem
+            //
+            this.dugovanjaToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.pregledDugovanjaToolStripMenuItem});
+            this.dugovanjaToolStripMenuItem.Name = "dugovanjaToolStripMenuItem";
+            this.dugovanjaToolStripMenuItem.Size = new System.Drawing.Size(100, 25);
+            this.dugovanjaToolStripMenuItem.Text = "Dugovanja";
+            //
+            // pregledDugovanjaToolStripMenuItem
+            //
+            this.pregledDugovanjaToolStripMenuItem.Name = "pregledDugovanjaToolStripMenuItem";
+            this.pregledDugovanjaToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
+            this.pregledDugovanjaToolStripMenuItem.Text = "Pregled dugovanja";
+            //
             // contextMenuStrip1
-            // 
+            //
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
@@ -180,11 +197,13 @@
             this.odjaviSeToolStripMenuItem.Name = "odjaviSeToolStripMenuItem";
             this.odjaviSeToolStripMenuItem.Size = new System.Drawing.Size(86, 25);
             this.odjaviSeToolStripMenuItem.Text = "Odjavi se";
-            // 
+            //
             // FrmMain
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackgroundImage = Client.AppResources.AutoskolaBackground;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(884, 482);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.pnlMain);
@@ -218,5 +237,7 @@
         private System.Windows.Forms.ToolStripMenuItem izvestajProlaznostiToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem evidentiranjePolaganjaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem odjaviSeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dugovanjaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pregledDugovanjaToolStripMenuItem;
     }
 }

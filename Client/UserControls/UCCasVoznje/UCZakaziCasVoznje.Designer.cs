@@ -45,6 +45,7 @@ namespace Client.UserControls.UCCasVoznje
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.btnZakazi = new System.Windows.Forms.Button();
+            this.lblPredusloviInfo = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -176,11 +177,24 @@ namespace Client.UserControls.UCCasVoznje
             this.btnZakazi.TabIndex = 15;
             this.btnZakazi.Text = "Zakaži";
             this.btnZakazi.UseVisualStyleBackColor = true;
-            // 
+            //
+            // lblPredusloviInfo
+            //
+            this.lblPredusloviInfo.AutoSize = true;
+            this.lblPredusloviInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPredusloviInfo.ForeColor = System.Drawing.Color.FromArgb(198, 40, 40);
+            this.lblPredusloviInfo.Location = new System.Drawing.Point(36, 15);
+            this.lblPredusloviInfo.Name = "lblPredusloviInfo";
+            this.lblPredusloviInfo.Size = new System.Drawing.Size(300, 18);
+            this.lblPredusloviInfo.TabIndex = 16;
+            this.lblPredusloviInfo.Text = "";
+            this.lblPredusloviInfo.Visible = false;
+            //
             // UCZakaziCasVoznje
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lblPredusloviInfo);
             this.Controls.Add(this.btnZakazi);
             this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.textBox2);
@@ -217,6 +231,7 @@ namespace Client.UserControls.UCCasVoznje
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.Button btnZakazi;
+        private System.Windows.Forms.Label lblPredusloviInfo;
 
         public Label Label1 { get => label1; set => label1 = value; }
         public Label Label2 { get => label2; set => label2 = value; }
@@ -232,5 +247,6 @@ namespace Client.UserControls.UCCasVoznje
         public TextBox TextBox2 { get => textBox2; set => textBox2 = value; }
         public DateTimePicker DateTimePicker1 { get => dateTimePicker1; set => dateTimePicker1 = value; }
         public Button BtnZakazi { get => btnZakazi; set => btnZakazi = value; }
+        public Label LblPredusloviInfo { get => lblPredusloviInfo; set => lblPredusloviInfo = value; }
     }
 }

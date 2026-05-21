@@ -13,7 +13,6 @@ namespace Client
         public static Communication Instance => _instance ?? (_instance = new Communication());
         private Communication()
         {
-            _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
 
         private Socket _socket;
@@ -22,6 +21,13 @@ namespace Client
 
         public void Connect()
         {
+            if (_socket != null)
+            {
+                try { _socket.Shutdown(SocketShutdown.Both); } catch { }
+                try { _socket.Close(); } catch { }
+            }
+
+            _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             _socket.Connect("127.0.0.1", 9999);
             _sender = new Sender(_socket);
             _receiver = new Receiver(_socket);
@@ -244,6 +250,37 @@ namespace Client
 
             _sender.Send(request);
             return _receiver.Receive<Response>();
+        }
+
+        internal List<KandidatDugovanjeDto> VratiKandidatiSaDugovanjem()
+        {
+            Request request = new Request()
+            {
+                Operation = Operation.VratiKandidatiSaDugovanjem
+            };
+            _sender.Send(request);
+            Response response = _receiver.Receive<Response>();
+            if (!string.IsNullOrEmpty(response.ErrorMessage))
+            {
+                throw new Exception(response.ErrorMessage);
+            }
+            return _receiver.ReadType<List<KandidatDugovanjeDto>>(response.Result!);
+        }
+
+        internal EvidentirajUplatuResponse EvidentirajUplatu(EvidentirajUplatuRequest req)
+        {
+            Request request = new Request()
+            {
+                Argument = req,
+                Operation = Operation.EvidentirajUplatu
+            };
+            _sender.Send(request);
+            Response response = _receiver.Receive<Response>();
+            if (!string.IsNullOrEmpty(response.ErrorMessage))
+            {
+                throw new Exception(response.ErrorMessage);
+            }
+            return _receiver.ReadType<EvidentirajUplatuResponse>(response.Result!);
         }
 
         internal Response KreirajIzvestajDugovanja(IzvestajDugovanjaKriterijum kriterijum)
