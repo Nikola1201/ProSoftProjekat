@@ -15,7 +15,7 @@ namespace Common.Domain
         public string Email { get; set; }
         public string Adresa { get; set; }
         public DateTime DatumUpisa { get; set; }
-        public bool Aktivan { get; set; }
+        public bool Aktivan = false;
         public string PunoIme => $"{Ime} {Prezime}".Trim();
 
         public string TableName => "Kandidat";

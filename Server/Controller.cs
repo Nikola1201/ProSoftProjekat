@@ -1,7 +1,7 @@
 ﻿using Common.Domain;
 using Common.Domain.Izvestaji;
 using DBBroker;
-using Server.SystemOperation;
+using SystemOperations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +23,18 @@ namespace Server
         {
             AdminLoginSO so = new AdminLoginSO(argument);
             so.ExecuteTemplate();
+            Admin found = (Admin)so.Result;
+            if (found == null) return null;
 
-            return (Admin)so.Result;
+            lock (Server.loggedIn)
+            {
+                if (Server.loggedIn.Any(a => a.AdminId == found.AdminId))
+                {
+                    return new Admin { Ime = "Vec ulogovan" };
+                }
+                Server.loggedIn.Add(found);
+            }
+            return found;
         }
 
         internal Kandidat KreirajKandidata(Kandidat argument)

@@ -13,6 +13,7 @@ namespace Server
         private Socket _clientSocket;
         private Receiver _receiver;
         private Sender _sender;
+        private Admin? _currentAdmin;
 
         public ClientHandler(Socket clientSocket)
         {
@@ -43,7 +44,15 @@ namespace Server
             }
             finally
             {
-                Server.clients.Remove(this);
+                if (_currentAdmin != null)
+                {
+                    lock (Server.loggedIn)
+                    {
+                        Server.loggedIn.RemoveAll(a => a.AdminId == _currentAdmin.AdminId);
+                    }
+                    _currentAdmin = null;
+                }
+                lock (Server.clients) { Server.clients.Remove(this); }
                 _clientSocket?.Close();
             }
         }
@@ -56,7 +65,12 @@ namespace Server
                 switch (request.Operation)
                 {
                     case Operation.Login:
-                        response.Result = Controller.Instance.Login(_receiver.ReadType<Admin>(request.Argument!));
+                        var loginResult = Controller.Instance.Login(_receiver.ReadType<Admin>(request.Argument!));
+                        response.Result = loginResult;
+                        if (loginResult is Admin loginAdmin && loginAdmin.Ime != "Vec ulogovan")
+                        {
+                            _currentAdmin = loginAdmin;
+                        }
                         break;
                     case Operation.Logout:
                         Logout(_receiver.ReadType<Admin>(request.Argument!));
@@ -136,9 +150,11 @@ namespace Server
 
         private void Logout(Admin admin)
         {
-            Server.loggedIn.RemoveAll(a => a.AdminId == admin.AdminId);
-            Server.clients.RemoveAll(c => c._clientSocket == _clientSocket);
-            Close();
+            lock (Server.loggedIn)
+            {
+                Server.loggedIn.RemoveAll(a => a.AdminId == admin.AdminId);
+            }
+            _currentAdmin = null;
         }
     }
 }

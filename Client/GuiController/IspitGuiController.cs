@@ -335,11 +335,6 @@ namespace Client.GuiController
             return true;
         }
 
-        private void ToggleButton(bool enabled)
-        {
-            _ucKreirajIzvestaj.BtnKreirajIzvestaj.Enabled = enabled;
-        }
-
         private void ConfigureProlaznostGrid()
         {
             DataGridView dgv = _ucKreirajIzvestaj.DgvIzvestajIspita;
@@ -419,35 +414,6 @@ namespace Client.GuiController
                 case StatusProlaznosti.UToku: return "U toku";
                 default: return status.ToString();
             }
-        }
-
-        private void ConfigureDugovanjaGrid()
-        {
-            DataGridView dgv = _ucKreirajIzvestaj.DgvIzvestajIspita;
-            dgv.AutoGenerateColumns = false;
-            dgv.ReadOnly = true;
-            dgv.AllowUserToAddRows = false;
-            dgv.AllowUserToDeleteRows = false;
-            dgv.MultiSelect = false;
-            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv.Columns.Clear();
-
-            AddColumn(nameof(IzvestajDugovanjaStavkaDto.Ime), "Ime");
-            AddColumn(nameof(IzvestajDugovanjaStavkaDto.Prezime), "Prezime");
-            AddColumn(nameof(IzvestajDugovanjaStavkaDto.Jmbg), "JMBG");
-            AddColumn(nameof(IzvestajDugovanjaStavkaDto.Kategorija), "Kategorija", 90);
-            AddColumn(nameof(IzvestajDugovanjaStavkaDto.BrojUpisa), "Broj upisa", 90);
-
-            DataGridViewTextBoxColumn cena = AddColumn(nameof(IzvestajDugovanjaStavkaDto.UkupnaCenaObuke), "Ukupno zaduzenje", 120);
-            cena.DefaultCellStyle.Format = "N2";
-
-            DataGridViewTextBoxColumn placeno = AddColumn(nameof(IzvestajDugovanjaStavkaDto.UkupnoPlaceno), "Ukupno placeno", 120);
-            placeno.DefaultCellStyle.Format = "N2";
-
-            DataGridViewTextBoxColumn dug = AddColumn(nameof(IzvestajDugovanjaStavkaDto.Dugovanje), "Dugovanje", 110);
-            dug.DefaultCellStyle.Format = "N2";
-
-            AddColumn(nameof(IzvestajDugovanjaStavkaDto.StatusDuga), "Status", 90);
         }
 
         private DataGridViewTextBoxColumn AddColumn(string dataProperty, string headerText, int fillWeight = 100, int minWidth = 80)

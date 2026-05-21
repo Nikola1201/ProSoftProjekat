@@ -31,7 +31,19 @@ namespace Client
 
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             _socket.Connect("127.0.0.1", 9999);
-            _socket.ReceiveTimeout = 15000;
+
+            // Detect truly-dead connections via TCP keep-alive instead of a blanket read timeout —
+            // a 15s ReceiveTimeout used to fire ConnectionLost on any slow legitimate response
+            // (large reports, slow joins), and after it fires the socket is tainted and unrecoverable.
+            _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+            try
+            {
+                _socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveTime, 30);
+                _socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveInterval, 5);
+                _socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveRetryCount, 3);
+            }
+            catch (SocketException) { }
+
             _sender = new Sender(_socket);
             _receiver = new Receiver(_socket);
             IsConnected = true;
@@ -63,6 +75,7 @@ namespace Client
         {
             Request request = new Request() { Argument = admin, Operation = Operation.Logout };
             _sender.Send(request);
+            _receiver.Receive<Response>();
         });
 
         internal List<Kategorija> GetAllKategorije() => SafeCall(() =>
