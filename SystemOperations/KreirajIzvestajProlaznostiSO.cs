@@ -1,4 +1,4 @@
-using Common.Domain.Izvestaji;
+using Common.DTO.Izvestaji;
 using Common.Validation;
 using DBBroker.Reports;
 using System;

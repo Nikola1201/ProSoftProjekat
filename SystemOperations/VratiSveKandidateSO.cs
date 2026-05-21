@@ -7,7 +7,7 @@ namespace SystemOperations
     public class VratiSveKandidateSO : SystemOperationBase
     {
         public List<Kandidat> Result { get; private set; }
-        private bool _upisani;
+        private readonly bool _upisani;
         public VratiSveKandidateSO(bool upisani)
         {
             _upisani = upisani;
@@ -18,13 +18,16 @@ namespace SystemOperations
             List<Upis> sviUpisi = _broker.GetAll(new Upis()).Cast<Upis>().ToList();
 
             HashSet<int> upisaniIds = new HashSet<int>(
-                sviUpisi.Select(u => u.KandidatId)
+                sviUpisi
+                    .Where(u => string.Equals(u.Status, "aktivan", StringComparison.OrdinalIgnoreCase))
+                    .Select(u => u.KandidatId)
             );
-            if (_upisani == false)
+            if (!_upisani)
             {
-                Result = svi.Where(k => !upisaniIds.Contains(k.KandidatId) && k.Aktivan == false).ToList();
+                Result = svi.Where(k => !upisaniIds.Contains(k.KandidatId) && k.Aktivan).ToList();
             }
-            else { 
+            else
+            {
                 Result = svi.Where(k => upisaniIds.Contains(k.KandidatId)).ToList();
             }
         }

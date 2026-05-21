@@ -1,4 +1,5 @@
 using Common.Domain;
+using Common.DTO.Izvestaji;
 using Common.Validation;
 using System;
 using System.Collections.Generic;

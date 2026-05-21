@@ -1,5 +1,4 @@
 ﻿using Common.Domain;
-using Common.Domain.Izvestaji;
 using DBBroker;
 using SystemOperations;
 using System;
@@ -7,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.DTO.Izvestaji;
 
 namespace Server
 {

@@ -1,4 +1,4 @@
-using Common.Domain;
+using Common.DTO.Izvestaji;
 using DBBroker.Reports;
 using System.Collections.Generic;
 
