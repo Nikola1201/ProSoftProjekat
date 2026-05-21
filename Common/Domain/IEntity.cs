@@ -1,21 +1,16 @@
-﻿using System;
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Common.Domain
 {
     public interface IEntity
     {
         string TableName { get; }
+        string TableKeyColumn { get; }
+        string TableKeyQuery { get; }
+        string Query { get; }
         string Values { get; }
-        object Query { get; }
-        object TableKeyColumn { get; }
-        object SearchQuery { get; }
-        object TableKeyQuery { get; }
-        object Update { get; }
+        string Update { get; }
         List<IEntity> GetReaderList(SqlDataReader reader);
         IEntity GetReaderResult(SqlDataReader reader);
     }

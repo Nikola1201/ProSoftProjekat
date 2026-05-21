@@ -15,6 +15,7 @@ namespace Client
     public partial class FrmMain : Form
     {
         private Admin admin;
+        private bool _disconnectShown;
 
         public FrmMain()
         {
@@ -61,7 +62,13 @@ namespace Client
             pregledDugovanjaToolStripMenuItem.Click += (s, a)
                 => MainCoordinator.Instance.ShowPregledDugovanjaPanel();
 
-            this.FormClosed += (s, a) => MainCoordinator.Instance.Logout(admin);
+            Communication.Instance.ConnectionLost += OnConnectionLost;
+
+            this.FormClosed += (s, a) =>
+            {
+                try { MainCoordinator.Instance.Logout(admin); }
+                catch (Common.Communication.ConnectionLostException) { /* already disconnected */ }
+            };
 
         }
 
@@ -80,6 +87,40 @@ namespace Client
             control.Dock = DockStyle.Fill;
             pnlMain.Controls.Add(control);
             pnlMain.ResumeLayout(true);
+        }
+
+        private void OnConnectionLost(object sender, EventArgs e)
+        {
+            if (InvokeRequired) { BeginInvoke(new Action(() => OnConnectionLost(sender, e))); return; }
+            if (_disconnectShown) return;
+            _disconnectShown = true;
+
+            MessageBox.Show(this,
+                "Veza sa serverom je izgubljena. Pritisnite 'Poveži se' da pokušate ponovo.",
+                "Greška", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            SetDisconnectedUi();
+        }
+
+        private void SetDisconnectedUi()
+        {
+            pnlMain.Controls.Clear();
+            menuStrip1.Enabled = false;
+            lblStatus.Text = "Nije povezano";
+            btnPoveziSe.Visible = true;
+        }
+
+        internal void SetConnectedUi()
+        {
+            menuStrip1.Enabled = true;
+            lblStatus.Text = "Povezano";
+            btnPoveziSe.Visible = false;
+            _disconnectShown = false;
+        }
+
+        private void btnPoveziSe_Click(object sender, EventArgs e)
+        {
+            MainCoordinator.Instance.ReconnectAndReLogin(this);
         }
     }
 }

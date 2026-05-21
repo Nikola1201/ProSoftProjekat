@@ -19,18 +19,15 @@ namespace Common.Domain
         public string Values =>
             $"{KandidatId}, {PaketId}, '{DatumUpisa:yyyy-MM-dd}', '{Status}'";
 
-        public object Query =>
-            $"KandidatID = {KandidatId}";
+        public string Query =>
+            $"KandidatId = {KandidatId}";
 
-        public object TableKeyColumn => "UpisId";
+        public string TableKeyColumn => "UpisId";
 
-        public object SearchQuery =>
-            $"SELECT * FROM Upis WHERE KandidatId = {KandidatId}";
-
-        public object TableKeyQuery =>
+        public string TableKeyQuery =>
             $"{TableKeyColumn} = {UpisId}";
 
-        public object Update =>
+        public string Update =>
             $"UPDATE Upis SET " +
             $"KandidatId = {KandidatId}, " +
             $"PaketId = {PaketId}, " +

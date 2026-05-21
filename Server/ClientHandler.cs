@@ -41,6 +41,11 @@ namespace Server
             {
                 Debug.WriteLine(ex.Message);
             }
+            finally
+            {
+                Server.clients.Remove(this);
+                _clientSocket?.Close();
+            }
         }
 
         private Response ProcessRequest(Request request)

@@ -22,17 +22,14 @@ namespace Common.Domain
         public string Values =>
             $"'{Ime}', '{Prezime}', '{JMBG}', '{Telefon}', '{Email}', '{DatumZaposlenja:yyyy-MM-dd}',{(Aktivan ? 1 : 0)}";
 
-        public object Query => $"JMBG = '{JMBG}'";
+        public string Query => $"JMBG = '{JMBG}'";
 
-        public object TableKeyColumn => "InstruktorId";
+        public string TableKeyColumn => "InstruktorId";
 
-        public object SearchQuery =>
-            $"SELECT * FROM Instruktor WHERE Ime LIKE '%{Ime}%' OR Prezime LIKE '%{Prezime}%'";
-
-        public object TableKeyQuery =>
+        public string TableKeyQuery =>
             $"{TableKeyColumn} = {InstruktorId}";
 
-        public object Update =>
+        public string Update =>
             $"UPDATE Instruktor SET " +
             $"Ime = '{Ime}', " +
             $"Prezime = '{Prezime}', " +

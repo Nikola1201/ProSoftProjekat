@@ -24,16 +24,14 @@ namespace Common.Domain
             $"'{Ime}', '{Prezime}', '{JMBG}', '{Telefon}', '{Email}', " +
             $"'{Adresa}', '{DatumUpisa:yyyy-MM-dd}', {(Aktivan ? 1 : 0)}";
 
-        public object Query => $"JMBG = '{JMBG}'";
-        public object TableKeyColumn => "KandidatId";
+        public string Query => $"JMBG = '{JMBG}'";
 
-        public object SearchQuery =>
-            $"SELECT * FROM Kandidat WHERE Ime LIKE '%{Ime}%' OR Prezime LIKE '%{Prezime}%'";
+        public string TableKeyColumn => "KandidatId";
 
-        public object TableKeyQuery =>
-            $" {TableKeyColumn} = {KandidatId}";
+        public string TableKeyQuery =>
+            $"{TableKeyColumn} = {KandidatId}";
 
-        public object Update =>
+        public string Update =>
             $"UPDATE Kandidat SET " +
             $"Ime = '{Ime}', " +
             $"Prezime = '{Prezime}', " +

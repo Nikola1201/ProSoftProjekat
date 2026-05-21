@@ -19,19 +19,14 @@ namespace Common.Domain
         public string Values =>
             $"{UpisId}, {Iznos.ToString(System.Globalization.CultureInfo.InvariantCulture)}, '{DatumPlacanja:yyyy-MM-dd}', '{NacinPlacanja}', '{Napomena}'";
 
-        public object Query =>
-            $"INSERT INTO Placanje (UpisId, Iznos, DatumPlacanja, NacinPlacanja, Napomena) " +
-            $"VALUES ({Values})";
+        public string Query => $"UpisId = {UpisId}";
 
-        public object TableKeyColumn => "PlacanjeId";
+        public string TableKeyColumn => "PlacanjeId";
 
-        public object SearchQuery =>
-            $"SELECT * FROM Placanje WHERE UpisId = {UpisId}";
+        public string TableKeyQuery =>
+            $"{TableKeyColumn} = {PlacanjeId}";
 
-        public object TableKeyQuery =>
-            $"SELECT * FROM Placanje WHERE PlacanjeId = {PlacanjeId}";
-
-        public object Update =>
+        public string Update =>
             $"UPDATE Placanje SET " +
             $"UpisId = {UpisId}, " +
             $"Iznos = {Iznos.ToString(System.Globalization.CultureInfo.InvariantCulture)}, " +

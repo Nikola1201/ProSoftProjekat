@@ -27,18 +27,15 @@ namespace Common.Domain
 
         public string TableName => "Kategorija";
 
-        public string Values => $"('{NazivKategorije}')";
+        public string Values => $"'{NazivKategorije}'";
 
-        public object Query => $"NazivKategorije = '{NazivKategorije}'";
+        public string Query => $"NazivKategorije = '{NazivKategorije}'";
 
-        public object TableKeyColumn => "KategorijaID";
+        public string TableKeyColumn => "KategorijaID";
 
-        public object SearchQuery =>
-            $"SELECT * FROM Kategorija WHERE NazivKategorije LIKE '%{NazivKategorije ?? string.Empty}%'";
+        public string TableKeyQuery => $"{TableKeyColumn} = {KategorijaID}";
 
-        public object TableKeyQuery => $"SELECT * FROM Kategorija WHERE KategorijaID = {KategorijaID}";
-
-        public object Update =>
+        public string Update =>
             $"UPDATE Kategorija SET NazivKategorije = '{NazivKategorije}' WHERE KategorijaID = {KategorijaID}";
 
         public List<IEntity> GetReaderList(SqlDataReader reader)

@@ -1,7 +1,10 @@
-﻿using Common.Domain.Izvestaji;
+using Common.Domain.Izvestaji;
 using Common.Validation;
+using DBBroker.Reports;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Server.SystemOperation
 {
@@ -19,24 +22,31 @@ namespace Server.SystemOperation
         {
             Validate(_kriterijum);
 
-            Debug.WriteLine(string.Format(
-                "[KreirajIzvestajProlaznosti] kategorija={0} tip={1} od={2:yyyy-MM-dd} do={3:yyyy-MM-dd} includeNoData={4} samoAktivni={5}",
-                _kriterijum.Kategorija,
-                _kriterijum.TipIspita,
-                _kriterijum.DatumOd,
-                _kriterijum.DatumDo,
-                _kriterijum.IncludeNoData,
-                _kriterijum.IncludeOnlyAktivanUpis));
+            List<IzvestajProlaznostiStavkaDto> stavke =
+                _broker.ExecuteReport(new IzvestajProlaznostiReport(_kriterijum));
 
-            Result = _broker.KreirajIzvestajProlaznosti(_kriterijum);
+            IzvestajProlaznostiSummaryDto summary = new IzvestajProlaznostiSummaryDto
+            {
+                UkupnoPolozilo = stavke.Count(s => s.Status == StatusProlaznosti.Polozio),
+                UkupnoPalo = stavke.Count(s => s.Status == StatusProlaznosti.Pao),
+                UkupnoUToku = stavke.Count(s => s.Status == StatusProlaznosti.UToku)
+            };
+
+            int denominator = summary.UkupnoPolozilo + summary.UkupnoPalo;
+            summary.ProcenatProlaznosti = denominator == 0
+                ? 0m
+                : Math.Round((decimal)summary.UkupnoPolozilo * 100m / denominator, 2);
+
+            Result = new IzvestajProlaznostiResponseDto
+            {
+                Stavke = stavke,
+                Summary = summary
+            };
 
             Debug.WriteLine(string.Format(
-                "[KreirajIzvestajProlaznosti] vraceno stavki={0} (Polozilo={1} Palo={2} UToku={3} %={4})",
-                Result?.Stavke?.Count ?? 0,
-                Result?.Summary?.UkupnoPolozilo ?? 0,
-                Result?.Summary?.UkupnoPalo ?? 0,
-                Result?.Summary?.UkupnoUToku ?? 0,
-                Result?.Summary?.ProcenatProlaznosti ?? 0m));
+                "[KreirajIzvestajProlaznosti] stavki={0} Polozilo={1} Palo={2} UToku={3} %={4}",
+                stavke.Count, summary.UkupnoPolozilo, summary.UkupnoPalo,
+                summary.UkupnoUToku, summary.ProcenatProlaznosti));
         }
 
         private void Validate(IzvestajProlaznostiKriterijum kriterijum)

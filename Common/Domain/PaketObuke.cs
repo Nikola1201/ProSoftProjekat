@@ -19,19 +19,14 @@ namespace Common.Domain
         public string Values =>
             $"'{Naziv}', '{Kategorija.KategorijaID}', {BrojCasova}, {Cena.ToString(System.Globalization.CultureInfo.InvariantCulture)}, '{Opis}'";
 
-        public object Query =>
-            $"INSERT INTO PaketObuke (Naziv, KategorijaID, BrojCasova, Cena, Opis) " +
-            $"VALUES ({Values})";
+        public string Query => $"Naziv = '{Naziv}'";
 
-        public object TableKeyColumn => "PaketId";
+        public string TableKeyColumn => "PaketId";
 
-        public object SearchQuery =>
-            $"SELECT * FROM PaketObuke WHERE Naziv LIKE '%{Naziv}%'";
+        public string TableKeyQuery =>
+            $"{TableKeyColumn} = {PaketId}";
 
-        public object TableKeyQuery =>
-            $" {TableKeyColumn} = {PaketId}";
-
-        public object Update =>
+        public string Update =>
             $"UPDATE PaketObuke SET " +
             $"Naziv = '{Naziv}', " +
             $"KategorijaID = '{Kategorija.KategorijaID}', " +

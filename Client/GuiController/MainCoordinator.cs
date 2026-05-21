@@ -115,5 +115,23 @@ namespace Client.GuiController
                 LoginGuiController.Instance.ReopenFrmLogin();
             }
         }
+
+        public void ReconnectAndReLogin(FrmMain frm)
+        {
+            try
+            {
+                Communication.Instance.Connect();
+            }
+            catch (System.Net.Sockets.SocketException)
+            {
+                MessageBox.Show(frm,
+                    "Nije moguće povezati se sa serverom. Pokušajte ponovo.",
+                    "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            frm.Hide();
+            LoginGuiController.Instance.ReopenFrmLogin();
+        }
     }
 }

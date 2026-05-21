@@ -49,6 +49,9 @@
             this.odjaviSeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dugovanjaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pregledDugovanjaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.btnPoveziSe = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -186,12 +189,31 @@
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
             // pnlMain
-            // 
-            this.pnlMain.Location = new System.Drawing.Point(12, 27);
+            //
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(860, 443);
+            this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlMain.TabIndex = 2;
-            // 
+            //
+            // statusStrip1
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                this.lblStatus,
+                this.btnPoveziSe});
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.SizingGrip = false;
+            this.statusStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            // lblStatus
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Text = "Povezano";
+            this.lblStatus.Spring = true;
+            this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // btnPoveziSe
+            this.btnPoveziSe.Name = "btnPoveziSe";
+            this.btnPoveziSe.Text = "Poveži se";
+            this.btnPoveziSe.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnPoveziSe.Visible = false;
+            this.btnPoveziSe.Click += new System.EventHandler(this.btnPoveziSe_Click);
+            this.Controls.Add(this.statusStrip1);
+            //
             // odjaviSeToolStripMenuItem
             // 
             this.odjaviSeToolStripMenuItem.Name = "odjaviSeToolStripMenuItem";
@@ -239,5 +261,8 @@
         private System.Windows.Forms.ToolStripMenuItem odjaviSeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dugovanjaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pregledDugovanjaToolStripMenuItem;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel lblStatus;
+        private System.Windows.Forms.ToolStripButton btnPoveziSe;
     }
 }

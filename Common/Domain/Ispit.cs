@@ -19,19 +19,14 @@ namespace Common.Domain
         public string Values =>
             $"{UpisId}, '{DatumIspita:yyyy-MM-dd}', '{Tip}', '{Rezultat}', '{Napomena}'";
 
-        public object Query =>
-            $"INSERT INTO Ispit (UpisId, DatumIspita, Tip, Rezultat, Napomena) " +
-            $"VALUES ({Values})";
+        public string Query => $"UpisId = {UpisId}";
 
-        public object TableKeyColumn => "IspitId";
+        public string TableKeyColumn => "IspitId";
 
-        public object SearchQuery =>
-            $"SELECT * FROM Ispit WHERE UpisId = {UpisId} AND Rezultat = '{Rezultat}'";
+        public string TableKeyQuery =>
+            $"{TableKeyColumn} = {IspitId}";
 
-        public object TableKeyQuery =>
-            $"SELECT * FROM Ispit WHERE IspitId = {IspitId}";
-
-        public object Update =>
+        public string Update =>
             $"UPDATE Ispit SET " +
             $"UpisId = {UpisId}, " +
             $"DatumIspita = '{DatumIspita:yyyy-MM-dd}', " +

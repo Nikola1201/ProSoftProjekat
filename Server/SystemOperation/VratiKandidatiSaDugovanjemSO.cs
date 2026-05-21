@@ -1,4 +1,5 @@
 using Common.Domain;
+using DBBroker.Reports;
 using System.Collections.Generic;
 
 namespace Server.SystemOperation
@@ -9,7 +10,7 @@ namespace Server.SystemOperation
 
         protected override void ExecuteConcreteOperation()
         {
-            Result = _broker.VratiKandidatiSaDugovanjem();
+            Result = _broker.ExecuteReport(new KandidatiSaDugovanjemReport());
         }
     }
 }

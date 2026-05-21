@@ -21,19 +21,14 @@ namespace Common.Domain
         public string Values =>
             $"{UpisId}, {InstruktorId}, {VoziloId}, '{DatumCas:yyyy-MM-dd HH:mm}', {TrajanjMin}, '{Status}', '{Napomena}'";
 
-        public object Query =>
-            $"INSERT INTO CasVoznje (UpisId, InstruktorId, VoziloId, DatumCas, TrajanjMin, Status, Napomena) " +
-            $"VALUES ({Values})";
+        public string Query => $"UpisId = {UpisId}";
 
-        public object TableKeyColumn => "CasId";
+        public string TableKeyColumn => "CasId";
 
-        public object SearchQuery =>
-            $"SELECT * FROM CasVoznje WHERE InstruktorId = {InstruktorId} AND Status = '{Status}'";
+        public string TableKeyQuery =>
+            $"{TableKeyColumn} = {CasId}";
 
-        public object TableKeyQuery =>
-            $"SELECT * FROM CasVoznje WHERE CasId = {CasId}";
-
-        public object Update =>
+        public string Update =>
             $"UPDATE CasVoznje SET " +
             $"UpisId = {UpisId}, " +
             $"InstruktorId = {InstruktorId}, " +

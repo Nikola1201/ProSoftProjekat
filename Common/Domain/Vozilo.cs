@@ -20,19 +20,14 @@ namespace Common.Domain
         public string Values =>
             $"'{Marka}', '{Model}', {Godiste}, '{Tablica}', {KategorijaID}";
 
-        public object Query =>
-            $"INSERT INTO Vozilo (Marka, Model, Godiste, Tablica, KategorijaID) " +
-            $"VALUES ({Values})";
+        public string Query => $"Tablica = '{Tablica}'";
 
-        public object TableKeyColumn => "VoziloId";
+        public string TableKeyColumn => "VoziloId";
 
-        public object SearchQuery =>
-            $"SELECT * FROM Vozilo WHERE Marka LIKE '%{Marka}%' OR Model LIKE '%{Model}%'";
-
-        public object TableKeyQuery =>
+        public string TableKeyQuery =>
             $"{TableKeyColumn} = {VoziloId}";
 
-        public object Update =>
+        public string Update =>
             $"UPDATE Vozilo SET " +
             $"Marka = '{Marka}', " +
             $"Model = '{Model}', " +

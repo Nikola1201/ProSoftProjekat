@@ -3,6 +3,7 @@ using Common.Validation;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Server.SystemOperation
 {
@@ -31,7 +32,7 @@ namespace Server.SystemOperation
             Upis ciljniUpis;
             if (_request.UpisId.HasValue && _request.UpisId.Value > 0)
             {
-                ciljniUpis = _broker.GetUpisById(_request.UpisId.Value);
+                ciljniUpis = (Upis)_broker.GetEntityByID(new Upis { UpisId = _request.UpisId.Value });
                 if (ciljniUpis == null || ciljniUpis.KandidatId != _request.KandidatId)
                 {
                     throw new ValidacijaException("Izabrani upis ne postoji za zadatog kandidata.");
@@ -39,18 +40,23 @@ namespace Server.SystemOperation
             }
             else
             {
-                if (!_broker.KandidatPostoji(_request.KandidatId))
+                Kandidat kandidat = (Kandidat)_broker.GetEntityByID(new Kandidat { KandidatId = _request.KandidatId });
+                if (kandidat == null)
                 {
                     throw new ValidacijaException("Kandidat ne postoji.");
                 }
-                ciljniUpis = _broker.GetNajnovijiUpisZaKandidata(_request.KandidatId);
+                ciljniUpis = _broker.GetEntitiesByQuery(new Upis { KandidatId = _request.KandidatId })
+                    .Cast<Upis>()
+                    .OrderByDescending(u => u.DatumUpisa)
+                    .ThenByDescending(u => u.UpisId)
+                    .FirstOrDefault();
                 if (ciljniUpis == null)
                 {
                     throw new ValidacijaException("Kandidat nema upis. Prvo upisite kandidata na paket.");
                 }
             }
 
-            decimal preostaloPre = _broker.GetPreostaloDugovanjeZaUpis(ciljniUpis.UpisId);
+            decimal preostaloPre = IzracunajPreostaloDugovanje(ciljniUpis);
 
             if (_request.Iznos > preostaloPre)
             {
@@ -80,6 +86,22 @@ namespace Server.SystemOperation
                 PreostaloDugovanje = preostaloPosle,
                 Poruka = "Uplata je uspesno evidentirana."
             };
+        }
+
+        private decimal IzracunajPreostaloDugovanje(Upis upis)
+        {
+            PaketObuke paket = (PaketObuke)_broker.GetEntityByID(new PaketObuke { PaketId = upis.PaketId });
+            if (paket == null)
+            {
+                return 0m;
+            }
+
+            decimal placeno = _broker.GetEntitiesByQuery(new Placanje { UpisId = upis.UpisId })
+                .Cast<Placanje>()
+                .Sum(p => p.Iznos);
+
+            decimal preostalo = paket.Cena - placeno;
+            return preostalo < 0m ? 0m : preostalo;
         }
 
         private void ValidateRequest(EvidentirajUplatuRequest request)

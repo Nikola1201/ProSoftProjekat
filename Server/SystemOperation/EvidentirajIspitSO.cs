@@ -2,6 +2,7 @@ using Common.Domain;
 using Common.Validation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Server.SystemOperation
 {
@@ -33,24 +34,39 @@ namespace Server.SystemOperation
         {
             ValidateRequest(_request);
 
-            if (!_broker.KandidatPostoji(_request.KandidatId))
+            Kandidat kandidat = (Kandidat)_broker.GetEntityByID(new Kandidat { KandidatId = _request.KandidatId });
+            if (kandidat == null)
             {
                 throw new ValidacijaException("Kandidat ne postoji.");
             }
 
-            Upis najnovijiUpis = _broker.GetNajnovijiUpisZaKandidata(_request.KandidatId);
+            Upis najnovijiUpis = _broker.GetEntitiesByQuery(new Upis { KandidatId = _request.KandidatId })
+                .Cast<Upis>()
+                .OrderByDescending(u => u.DatumUpisa)
+                .ThenByDescending(u => u.UpisId)
+                .FirstOrDefault();
+
             if (najnovijiUpis == null)
             {
                 throw new ValidacijaException("Kandidat nema upis. Prvo upisite kandidata na paket.");
             }
 
-            if (_broker.PostojiIspitIstogTipaIstogDana(najnovijiUpis.UpisId, _request.Tip, _request.DatumIspita))
+            List<Ispit> ispitiZaUpis = _broker.GetEntitiesByQuery(new Ispit { UpisId = najnovijiUpis.UpisId })
+                .Cast<Ispit>()
+                .ToList();
+
+            bool postojiIstiTipIstiDan = ispitiZaUpis.Any(i =>
+                string.Equals(i.Tip, _request.Tip, StringComparison.OrdinalIgnoreCase)
+                && i.DatumIspita.Date == _request.DatumIspita.Date);
+            if (postojiIstiTipIstiDan)
             {
                 throw new ValidacijaException("Za izabrani datum vec postoji evidentiran isti tip ispita za aktivni upis kandidata.");
             }
 
-            if (string.Equals(_request.Rezultat, "polozio", StringComparison.OrdinalIgnoreCase)
-                && _broker.ImaPolozenIspitZaTip(najnovijiUpis.UpisId, _request.Tip))
+            bool vecPolozenIstiTip = ispitiZaUpis.Any(i =>
+                string.Equals(i.Tip, _request.Tip, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(i.Rezultat, "polozio", StringComparison.OrdinalIgnoreCase));
+            if (string.Equals(_request.Rezultat, "polozio", StringComparison.OrdinalIgnoreCase) && vecPolozenIstiTip)
             {
                 throw new ValidacijaException("Kandidat je vec polozio izabrani tip ispita i ne moze ponovo biti evidentiran kao polozio.");
             }
@@ -65,9 +81,14 @@ namespace Server.SystemOperation
             };
 
             _broker.Add(noviIspit);
+            ispitiZaUpis.Add(noviIspit);
 
-            bool imaPolozenTeorijski = _broker.ImaPolozenIspitZaTip(najnovijiUpis.UpisId, "teorijski");
-            bool imaPolozenPrakticni = _broker.ImaPolozenIspitZaTip(najnovijiUpis.UpisId, "prakticni");
+            bool imaPolozenTeorijski = ispitiZaUpis.Any(i =>
+                string.Equals(i.Tip, "teorijski", StringComparison.OrdinalIgnoreCase)
+                && string.Equals(i.Rezultat, "polozio", StringComparison.OrdinalIgnoreCase));
+            bool imaPolozenPrakticni = ispitiZaUpis.Any(i =>
+                string.Equals(i.Tip, "prakticni", StringComparison.OrdinalIgnoreCase)
+                && string.Equals(i.Rezultat, "polozio", StringComparison.OrdinalIgnoreCase));
 
             bool statusPromenjen = false;
             string noviStatus = najnovijiUpis.Status;
@@ -75,7 +96,8 @@ namespace Server.SystemOperation
             if (imaPolozenTeorijski && imaPolozenPrakticni &&
                 !string.Equals(najnovijiUpis.Status, "polozio", StringComparison.OrdinalIgnoreCase))
             {
-                _broker.AzurirajStatusUpisa(najnovijiUpis.UpisId, "polozio");
+                najnovijiUpis.Status = "polozio";
+                _broker.Update(najnovijiUpis);
                 statusPromenjen = true;
                 noviStatus = "polozio";
             }

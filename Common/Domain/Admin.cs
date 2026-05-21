@@ -21,17 +21,14 @@ namespace Common.Domain
         public string Values =>
             $"'{Ime}', '{Prezime}', '{Username}', '{Lozinka}', '{Email}'";
 
-        public object Query =>
+        public string Query =>
             $"[Username] = '{Username}' and [Lozinka] = '{Lozinka}'";
 
-        public object TableKeyColumn => "AdminId";
+        public string TableKeyColumn => "AdminId";
 
-        public object SearchQuery =>
-            $"SELECT * FROM Admin WHERE Ime LIKE '%{Ime}%' OR Prezime LIKE '%{Prezime}%'";
+        public string TableKeyQuery => $"{TableKeyColumn} = {AdminId}";
 
-        public object TableKeyQuery => $"{TableKeyColumn} = {AdminId}";
-
-        public object Update =>
+        public string Update =>
             $"UPDATE Admin SET " +
             $"Ime = '{Ime}', " +
             $"Prezime = '{Prezime}', " +
