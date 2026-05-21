@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 
-namespace Common.Domain.Izvestaji
+namespace Common.DTO.Izvestaji
 {
     public interface IReport<T>
     {

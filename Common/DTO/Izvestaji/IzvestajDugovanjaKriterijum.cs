@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Common.Domain.Izvestaji
+namespace Common.DTO.Izvestaji
 {
     [Serializable]
     public class IzvestajDugovanjaKriterijum

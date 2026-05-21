@@ -1,6 +1,6 @@
 using System;
 
-namespace Common.Domain
+namespace Common.DTO.Izvestaji
 {
     [Serializable]
     public class KandidatDugovanjeDto
