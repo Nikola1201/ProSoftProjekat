@@ -1,7 +1,7 @@
 using Common.Domain;
-using Common.Domain.Izvestaji;
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
+using Common.DTO.Izvestaji;
 
 namespace DBBroker
 {

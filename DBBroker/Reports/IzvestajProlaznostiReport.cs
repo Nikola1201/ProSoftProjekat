@@ -1,4 +1,4 @@
-using Common.Domain.Izvestaji;
+using Common.DTO.Izvestaji;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
