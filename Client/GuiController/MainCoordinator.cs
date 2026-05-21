@@ -2,6 +2,7 @@
 using Client.UserControls.UCCasVoznje;
 using Client.Utils;
 using Common.Domain;
+using Common.DTO.Izvestaji;
 using System;
 using System.Windows.Forms;
 

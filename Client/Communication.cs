@@ -1,6 +1,6 @@
 using Common.Communication;
 using Common.Domain;
-using Common.Domain.Izvestaji;
+using Common.DTO.Izvestaji;
 using System;
 using System.Collections.Generic;
 using System.IO;

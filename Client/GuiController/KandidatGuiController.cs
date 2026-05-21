@@ -279,7 +279,7 @@ namespace Client.GuiController
 
             if (paketObuke == null)
             {
-                ShowMessage.Warning("Izabrani kandidat nema dostupan paket obuke za svoju kategoriju.", "Greska");
+                ShowMessage.Warning("Nema dostupnih paketa obuke.", "Greska");
                 _ucUpisiKandidata.CmbPaketObuke.Focus();
                 return;
             }

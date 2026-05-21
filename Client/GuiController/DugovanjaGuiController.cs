@@ -1,6 +1,6 @@
 using Client.UserControls.UCDugovanja;
 using Client.Utils;
-using Common.Domain;
+using Common.DTO.Izvestaji;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
