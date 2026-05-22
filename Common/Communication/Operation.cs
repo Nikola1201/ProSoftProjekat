@@ -29,5 +29,6 @@ namespace Common.Communication
         KreirajIzvestajDugovanja,
         VratiKandidatiSaDugovanjem,
         EvidentirajUplatu,
+        GetAllInstrKat,
     }
 }

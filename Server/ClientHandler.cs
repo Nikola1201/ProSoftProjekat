@@ -1,5 +1,6 @@
 using Common.Communication;
 using Common.Domain;
+using Common.DTO;
 using Common.DTO.Izvestaji;
 using Common.Validation;
 using System;
@@ -94,7 +95,7 @@ namespace Server
                         Controller.Instance.ObrisiKandidata(_receiver.ReadType<Kandidat>(request.Argument!));
                         break;
                     case Operation.KreirajInstruktora:
-                        response.Result = Controller.Instance.KreirajInstruktora(_receiver.ReadType<Instruktor>(request.Argument!));
+                        response.Result = Controller.Instance.KreirajInstruktora(_receiver.ReadType<KreirajInstruktoraRequest>(request.Argument!));
                         break;
                     case Operation.GetAllInstruktori:
                         response.Result = Controller.Instance.GetAllInstruktori();
@@ -131,6 +132,9 @@ namespace Server
                         break;
                     case Operation.EvidentirajUplatu:
                         response.Result = Controller.Instance.EvidentirajUplatu(_receiver.ReadType<EvidentirajUplatuRequest>(request.Argument!));
+                        break;
+                    case Operation.GetAllInstrKat:
+                        response.Result = Controller.Instance.GetAllInstrKat();
                         break;
                     default:
                         break;

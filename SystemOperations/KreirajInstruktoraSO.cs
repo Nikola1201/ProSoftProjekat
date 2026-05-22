@@ -1,28 +1,66 @@
-﻿using Common.Domain;
+using Common.Domain;
+using Common.DTO;
 using Common.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SystemOperations
 {
     public class KreirajInstruktoraSO : SystemOperationBase
     {
-        private Instruktor argument;
+        private readonly KreirajInstruktoraRequest _request;
 
-        public KreirajInstruktoraSO(Instruktor argument)
+        public KreirajInstruktoraSO(KreirajInstruktoraRequest request)
         {
-            this.argument = argument;
+            _request = request;
         }
 
         public IEntity Result { get; internal set; }
 
         protected override void ExecuteConcreteOperation()
         {
-            Validate(argument);
-            Result = _broker.Add(argument);
+            if (_request == null)
+            {
+                throw new ValidacijaException("Podaci za kreiranje instruktora nisu prosledjeni.");
+            }
+
+            Validate(_request.Instruktor);
+            ValidateKategorija(_request.KategorijaID);
+
+            _broker.Add(_request.Instruktor);
+
+            Instruktor saved = (Instruktor)_broker.GetEntityByQuery(
+                new Instruktor { JMBG = _request.Instruktor.JMBG });
+
+            if (saved == null)
+            {
+                throw new InvalidOperationException("Instruktor nije sacuvan u bazi.");
+            }
+
+            _broker.Add(new InstrKat
+            {
+                InstruktorId = saved.InstruktorId,
+                KategorijaID = _request.KategorijaID,
+                DatumDodele = DateTime.Now,
+                Aktivno = true
+            });
+
+            Result = saved;
+        }
+
+        private void ValidateKategorija(int kategorijaId)
+        {
+            if (kategorijaId <= 0)
+            {
+                throw new ValidacijaException("Kategorija je obavezna.");
+            }
+
+            Kategorija k = (Kategorija)_broker.GetEntityByID(new Kategorija { KategorijaID = kategorijaId });
+            if (k == null)
+            {
+                throw new ValidacijaException("Izabrana kategorija ne postoji.");
+            }
         }
 
         private void Validate(Instruktor argument)

@@ -43,6 +43,8 @@ namespace Client.UserControls.UCInstruktor
             this.txtIme = new System.Windows.Forms.TextBox();
             this.dateTP = new System.Windows.Forms.DateTimePicker();
             this.btnKreiraj = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.cmbKategorija = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // label1
@@ -140,14 +142,31 @@ namespace Client.UserControls.UCInstruktor
             this.dateTP.Name = "dateTP";
             this.dateTP.Size = new System.Drawing.Size(200, 20);
             this.dateTP.TabIndex = 12;
-            // 
+            //
+            // label7
+            //
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(91, 221);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(62, 13);
+            this.label7.TabIndex = 13;
+            this.label7.Text = "Kategorija";
+            //
+            // cmbKategorija
+            //
+            this.cmbKategorija.FormattingEnabled = true;
+            this.cmbKategorija.Location = new System.Drawing.Point(159, 218);
+            this.cmbKategorija.Name = "cmbKategorija";
+            this.cmbKategorija.Size = new System.Drawing.Size(200, 21);
+            this.cmbKategorija.TabIndex = 14;
+            //
             // btnKreiraj
-            // 
+            //
             this.btnKreiraj.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnKreiraj.Location = new System.Drawing.Point(98, 241);
+            this.btnKreiraj.Location = new System.Drawing.Point(98, 267);
             this.btnKreiraj.Name = "btnKreiraj";
             this.btnKreiraj.Size = new System.Drawing.Size(203, 75);
-            this.btnKreiraj.TabIndex = 13;
+            this.btnKreiraj.TabIndex = 15;
             this.btnKreiraj.Text = "Kreiraj Instruktora";
             this.btnKreiraj.UseVisualStyleBackColor = true;
             // 
@@ -156,6 +175,8 @@ namespace Client.UserControls.UCInstruktor
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.btnKreiraj);
+            this.Controls.Add(this.cmbKategorija);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.dateTP);
             this.Controls.Add(this.txtIme);
             this.Controls.Add(this.txtEmail);
@@ -190,6 +211,8 @@ namespace Client.UserControls.UCInstruktor
         private System.Windows.Forms.TextBox txtIme;
         private System.Windows.Forms.DateTimePicker dateTP;
         private System.Windows.Forms.Button btnKreiraj;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ComboBox cmbKategorija;
 
         public Label Label1 { get => label1; set => label1 = value; }
         public Label Label2 { get => label2; set => label2 = value; }
@@ -204,5 +227,7 @@ namespace Client.UserControls.UCInstruktor
         public TextBox TxtIme { get => txtIme; set => txtIme = value; }
         public DateTimePicker DateTP { get => dateTP; set => dateTP = value; }
         public Button BtnKreiraj { get => btnKreiraj; set => btnKreiraj = value; }
+        public Label Label7 { get => label7; set => label7 = value; }
+        public ComboBox CmbKategorija { get => cmbKategorija; set => cmbKategorija = value; }
     }
 }

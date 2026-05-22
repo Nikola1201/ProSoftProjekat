@@ -27,6 +27,7 @@ namespace Client.GuiController
         private List<PaketObuke> sviPaketi;
         private List<CasVoznje> sviCasovi;
         private List<Kategorija> sviKategorije;
+        private List<InstrKat> sviInstrKat;
 
         private BindingList<OtkaziCasGridRow> prikazaniCasovi;
 
@@ -61,6 +62,9 @@ namespace Client.GuiController
                     .ToList();
                 sviPaketi = Communication.Instance.GetAllPaketiObuke() ?? new List<PaketObuke>();
                 sviKategorije = Communication.Instance.GetAllKategorije() ?? new List<Kategorija>();
+                sviInstrKat = (Communication.Instance.GetAllInstrKat() ?? new List<InstrKat>())
+                    .Where(ik => ik.Aktivno)
+                    .ToList();
 
                 BindFilteredCombos(null, null, null);
 
@@ -113,9 +117,24 @@ namespace Client.GuiController
         {
             isRefreshing = true;
 
-            List<Kandidat> filtriraniKandidati = FiltrirajKandidate(voziloFilter);
-            List<Instruktor> filtriraniInstruktori = sviInstruktori.ToList();
-            List<VoziloRow> filtriranaVozila = FiltrirajVozila(kandidatFilter);
+            HashSet<int> dozvoljene = IzracunajDozvoljeneKategorije(kandidatFilter, instruktorFilter, voziloFilter);
+
+            Dictionary<int, string> kategorijaNaziv = sviKategorije
+                .GroupBy(k => k.KategorijaID)
+                .ToDictionary(g => g.Key, g => g.First().NazivKategorije ?? string.Empty);
+
+            List<Kandidat> filtriraniKandidati = KandidatiSaAktivnimUpisom()
+                .Where(k => AktivneKategorijeKandidata(k.KandidatId).Overlaps(dozvoljene))
+                .ToList();
+
+            List<Instruktor> filtriraniInstruktori = sviInstruktori
+                .Where(i => KategorijeInstruktora(i.InstruktorId).Overlaps(dozvoljene))
+                .ToList();
+
+            List<VoziloRow> filtriranaVozila = svaVozila
+                .Where(v => dozvoljene.Contains(v.KategorijaID))
+                .Select(v => new VoziloRow { Vozilo = v, Display = BuildVoziloDisplay(v, kategorijaNaziv) })
+                .ToList();
 
             Kandidat prethodniKandidat = kandidatFilter;
             Instruktor prethodniInstruktor = instruktorFilter;
@@ -176,38 +195,33 @@ namespace Client.GuiController
             isRefreshing = false;
         }
 
-        private List<Kandidat> FiltrirajKandidate(Vozilo voziloFilter)
+        private HashSet<int> IzracunajDozvoljeneKategorije(Kandidat kandidatFilter, Instruktor instruktorFilter, Vozilo voziloFilter)
         {
-            if (voziloFilter == null)
+            HashSet<int> rezultat = new HashSet<int>(sviKategorije.Select(k => k.KategorijaID));
+
+            if (kandidatFilter != null)
             {
-                return KandidatiSaAktivnimUpisom().ToList();
+                rezultat.IntersectWith(AktivneKategorijeKandidata(kandidatFilter.KandidatId));
             }
 
-            return KandidatiSaAktivnimUpisom()
-                .Where(k => KandidatImaAktivanUpisZaKategoriju(k.KandidatId, voziloFilter.KategorijaID))
-                .ToList();
+            if (instruktorFilter != null)
+            {
+                rezultat.IntersectWith(KategorijeInstruktora(instruktorFilter.InstruktorId));
+            }
+
+            if (voziloFilter != null)
+            {
+                rezultat.IntersectWith(new[] { voziloFilter.KategorijaID });
+            }
+
+            return rezultat;
         }
 
-        private List<VoziloRow> FiltrirajVozila(Kandidat kandidatFilter)
+        private HashSet<int> KategorijeInstruktora(int instruktorId)
         {
-            Dictionary<int, string> kategorijaNaziv = sviKategorije
-                .GroupBy(k => k.KategorijaID)
-                .ToDictionary(g => g.Key, g => g.First().NazivKategorije ?? string.Empty);
-
-            IEnumerable<Vozilo> filtered;
-            if (kandidatFilter == null)
-            {
-                filtered = svaVozila;
-            }
-            else
-            {
-                HashSet<int> dozvoljeneKategorije = AktivneKategorijeKandidata(kandidatFilter.KandidatId);
-                filtered = svaVozila.Where(v => dozvoljeneKategorije.Contains(v.KategorijaID));
-            }
-
-            return filtered
-                .Select(v => new VoziloRow { Vozilo = v, Display = BuildVoziloDisplay(v, kategorijaNaziv) })
-                .ToList();
+            return new HashSet<int>(sviInstrKat
+                .Where(ik => ik.InstruktorId == instruktorId)
+                .Select(ik => ik.KategorijaID));
         }
 
         private IEnumerable<Kandidat> KandidatiSaAktivnimUpisom()
@@ -234,16 +248,6 @@ namespace Client.GuiController
             }
 
             return kategorije;
-        }
-
-        private bool KandidatImaAktivanUpisZaKategoriju(int kandidatId, int kategorijaIdVozila)
-        {
-            if (kategorijaIdVozila <= 0)
-            {
-                return false;
-            }
-
-            return AktivneKategorijeKandidata(kandidatId).Contains(kategorijaIdVozila);
         }
 
         private void ZakaziVoznju(object sender, EventArgs e)

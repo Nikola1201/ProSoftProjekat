@@ -1,4 +1,5 @@
 ﻿using Common.Domain;
+using Common.DTO;
 using DBBroker;
 using SystemOperations;
 using System;
@@ -80,7 +81,7 @@ namespace Server
             
         }
 
-        internal Instruktor KreirajInstruktora(Instruktor argument)
+        internal Instruktor KreirajInstruktora(KreirajInstruktoraRequest argument)
         {
             KreirajInstruktoraSO so = new KreirajInstruktoraSO(argument);
             so.ExecuteTemplate();
@@ -90,6 +91,13 @@ namespace Server
         internal List<Instruktor> GetAllInstruktori()
         {
             VratiSveInstruktoreSO so = new VratiSveInstruktoreSO();
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal List<InstrKat> GetAllInstrKat()
+        {
+            VratiSveInstrKatSO so = new VratiSveInstrKatSO();
             so.ExecuteTemplate();
             return so.Result;
         }

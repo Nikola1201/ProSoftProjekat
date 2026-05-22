@@ -73,6 +73,8 @@ namespace SystemOperations
                 throw new ValidacijaException("Izabrano vozilo nije aktivno.");
             }
 
+            ValidateInstruktorOvlascen(cas.InstruktorId, vozilo.KategorijaID);
+
             ValidateTerminKonflikt(cas);
 
             if (string.IsNullOrWhiteSpace(cas.Napomena))
@@ -84,6 +86,20 @@ namespace SystemOperations
                 cas.Napomena = cas.Napomena.Trim();
             }
             cas.Status = "zakazan";
+        }
+
+        private void ValidateInstruktorOvlascen(int instruktorId, int kategorijaId)
+        {
+            InstrKat veza = (InstrKat)_broker.GetEntityByID(new InstrKat
+            {
+                InstruktorId = instruktorId,
+                KategorijaID = kategorijaId
+            });
+
+            if (veza == null || !veza.Aktivno)
+            {
+                throw new ValidacijaException("Izabrani instruktor nije ovlascen za kategoriju izabranog vozila.");
+            }
         }
 
         private void ValidateTerminKonflikt(CasVoznje noviCas)

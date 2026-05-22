@@ -1,5 +1,6 @@
 using Common.Communication;
 using Common.Domain;
+using Common.DTO;
 using Common.DTO.Izvestaji;
 using System;
 using System.Collections.Generic;
@@ -123,9 +124,9 @@ namespace Client
             return _receiver.Receive<Response>();
         });
 
-        internal Response CreateInstruktor(Instruktor instruktor) => SafeCall(() =>
+        internal Response CreateInstruktor(KreirajInstruktoraRequest req) => SafeCall(() =>
         {
-            Request request = new Request() { Argument = instruktor, Operation = Operation.KreirajInstruktora };
+            Request request = new Request() { Argument = req, Operation = Operation.KreirajInstruktora };
             _sender.Send(request);
             return _receiver.Receive<Response>();
         });
@@ -136,6 +137,14 @@ namespace Client
             _sender.Send(request);
             Response response = _receiver.Receive<Response>();
             return _receiver.ReadType<List<Instruktor>>(response.Result!);
+        });
+
+        internal List<InstrKat> GetAllInstrKat() => SafeCall(() =>
+        {
+            Request request = new Request() { Operation = Operation.GetAllInstrKat };
+            _sender.Send(request);
+            Response response = _receiver.Receive<Response>();
+            return _receiver.ReadType<List<InstrKat>>(response.Result!);
         });
 
         internal Response ObrisiInstruktora(Instruktor instruktor) => SafeCall(() =>

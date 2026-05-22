@@ -3,6 +3,7 @@ using Client.UserControls.UCKandidat;
 using Client.Utils;
 using Common.Communication;
 using Common.Domain;
+using Common.DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,25 +17,54 @@ namespace Client.GuiController
         UCKreirajInstruktora _ucKreirajInstruktora;
         UCObrisiInstruktora _ucObrisiInstruktora;
         BindingList<Instruktor> instruktori;
+        BindingList<Kategorija> kategorije;
 
         internal Control CreateInstruktor()
         {
             _ucKreirajInstruktora = new UCKreirajInstruktora();
+            PopulateKategorijaCombo();
             _ucKreirajInstruktora.BtnKreiraj.Click += KreirajInstruktora;
-
             return _ucKreirajInstruktora;
+        }
+
+        private void PopulateKategorijaCombo()
+        {
+            try
+            {
+                List<Kategorija> sve = Communication.Instance.GetAllKategorije() ?? new List<Kategorija>();
+                kategorije = new BindingList<Kategorija>(sve);
+                _ucKreirajInstruktora.CmbKategorija.DataSource = kategorije;
+                _ucKreirajInstruktora.CmbKategorija.SelectedIndex = -1;
+                _ucKreirajInstruktora.BtnKreiraj.Enabled = kategorije.Count > 0;
+            }
+            catch (Exception ex) when (ex is System.Net.Sockets.SocketException || ex is System.IO.IOException)
+            {
+                ShowMessage.ServerDown();
+                _ucKreirajInstruktora.BtnKreiraj.Enabled = false;
+            }
+            catch (Exception ex)
+            {
+                ShowMessage.Error(ex.Message);
+                _ucKreirajInstruktora.BtnKreiraj.Enabled = false;
+            }
         }
 
         private void KreirajInstruktora(object sender, EventArgs e)
         {
-            if (!TryKrerirajInstruktoraFromInput(out Instruktor instruktor))
+            if (!TryKrerirajInstruktoraFromInput(out Instruktor instruktor, out int kategorijaId))
             {
                 return;
             }
 
+            KreirajInstruktoraRequest req = new KreirajInstruktoraRequest
+            {
+                Instruktor = instruktor,
+                KategorijaID = kategorijaId
+            };
+
             try
             {
-                Response response = Communication.Instance.CreateInstruktor(instruktor);
+                Response response = Communication.Instance.CreateInstruktor(req);
                 if (!string.IsNullOrEmpty(response.ErrorMessage))
                 {
                     ShowMessage.Error(GetCreateInstruktorErrorMessage(response.ErrorMessage));
@@ -65,6 +95,7 @@ namespace Client.GuiController
             _ucKreirajInstruktora.TxtTelefon.Clear();
             _ucKreirajInstruktora.TxtEmail.Clear();
             _ucKreirajInstruktora.DateTP.Value = DateTime.Now;
+            _ucKreirajInstruktora.CmbKategorija.SelectedIndex = -1;
             _ucKreirajInstruktora.TxtIme.Focus();
         }
 
@@ -96,9 +127,10 @@ namespace Client.GuiController
             return originalMessage;
         }
 
-        private bool TryKrerirajInstruktoraFromInput(out Instruktor instruktor)
+        private bool TryKrerirajInstruktoraFromInput(out Instruktor instruktor, out int kategorijaId)
         {
             instruktor = null;
+            kategorijaId = 0;
 
             string ime = _ucKreirajInstruktora.TxtIme.Text.Trim();
             string prezime = _ucKreirajInstruktora.TxtPrezime.Text.Trim();
@@ -162,6 +194,13 @@ namespace Client.GuiController
                 return false;
             }
 
+            Kategorija kategorija = _ucKreirajInstruktora.CmbKategorija.SelectedItem as Kategorija;
+            if (kategorija == null || kategorija.KategorijaID <= 0)
+            {
+                ShowMessage.Error("Izaberite kategoriju.", _ucKreirajInstruktora.CmbKategorija);
+                return false;
+            }
+
             instruktor = new Instruktor()
             {
                 Ime = ime,
@@ -173,6 +212,7 @@ namespace Client.GuiController
                 Aktivan = true
             };
 
+            kategorijaId = kategorija.KategorijaID;
             return true;
         }
 
