@@ -5,7 +5,7 @@ using Common.DTO.Izvestaji;
 
 namespace DBBroker
 {
-    public class Broker
+    public class Broker : IBroker
     {
         private DBConnection _connection;
 
