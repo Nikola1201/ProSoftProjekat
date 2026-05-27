@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Microsoft.Data.SqlClient;
+using System.Data.Common;
 
 namespace Common.Domain
 {
@@ -11,7 +11,7 @@ namespace Common.Domain
         string Query { get; }
         string Values { get; }
         string Update { get; }
-        List<IEntity> GetReaderList(SqlDataReader reader);
-        IEntity GetReaderResult(SqlDataReader reader);
+        List<IEntity> GetReaderList(DbDataReader reader);
+        IEntity GetReaderResult(DbDataReader reader);
     }
 }

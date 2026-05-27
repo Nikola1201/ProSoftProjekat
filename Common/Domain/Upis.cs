@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Data.SqlClient;
+using System.Data.Common;
 
 namespace Common.Domain
 {
@@ -35,7 +35,7 @@ namespace Common.Domain
             $"Status = '{Status}' " +
             $"WHERE UpisId = {UpisId}";
 
-        public List<IEntity> GetReaderList(SqlDataReader reader)
+        public List<IEntity> GetReaderList(DbDataReader reader)
         {
             var list = new List<IEntity>();
             while (reader.Read())
@@ -54,7 +54,7 @@ namespace Common.Domain
             return list;
         }
 
-        public IEntity GetReaderResult(SqlDataReader reader)
+        public IEntity GetReaderResult(DbDataReader reader)
         {
             if (reader.Read())
             {

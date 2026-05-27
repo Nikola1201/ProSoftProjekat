@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using Microsoft.Data.SqlClient;
+using System.Data.Common;
 
 namespace Common.Domain
 {
@@ -37,7 +37,7 @@ namespace Common.Domain
             $"Email = '{Email}' " +
             $"WHERE AdminId = {AdminId}";
 
-        public List<IEntity> GetReaderList(SqlDataReader reader)
+        public List<IEntity> GetReaderList(DbDataReader reader)
         {
             var list = new List<IEntity>();
             Admin a = new Admin();
@@ -59,7 +59,7 @@ namespace Common.Domain
             return list;
         }
 
-        public IEntity GetReaderResult(SqlDataReader reader)
+        public IEntity GetReaderResult(DbDataReader reader)
         {
             if (reader.Read())
             {
