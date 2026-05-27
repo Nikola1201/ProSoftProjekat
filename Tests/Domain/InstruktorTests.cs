@@ -81,6 +81,7 @@ namespace Tests.Domain
             Assert.True(list[0].Aktivan);
             Assert.Equal(2, list[1].InstruktorId);
             Assert.Equal("Laza", list[1].Ime);
+            Assert.Equal("1111111111112", list[1].JMBG);
             Assert.False(list[1].Aktivan);
         }
 

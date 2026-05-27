@@ -84,6 +84,7 @@ namespace Tests.Domain
             Assert.True(list[0].Aktivan);
             Assert.Equal(2, list[1].KandidatId);
             Assert.Equal("Pera", list[1].Ime);
+            Assert.Equal("1111111111111", list[1].JMBG);
             Assert.False(list[1].Aktivan);
         }
 
@@ -111,6 +112,7 @@ namespace Tests.Domain
             Assert.Equal("0699999999", result.Telefon);
             Assert.Equal("ana@example.com", result.Email);
             Assert.Equal("Beogradska 10", result.Adresa);
+            Assert.Equal(new DateTime(2026, 3, 1), result.DatumUpisa);
             Assert.True(result.Aktivan);
         }
     }
