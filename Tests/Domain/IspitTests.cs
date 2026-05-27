@@ -79,12 +79,13 @@ namespace Tests.Domain
             Assert.Equal(new DateTime(2026, 4, 15), list[1].DatumIspita);
         }
 
+        // Ispit.GetReaderResult does not call reader.Read() internally — it delegates
+        // from GetReaderList's while(reader.Read()) loop, so it reads the already-positioned row.
+        // Pre-advance the reader before calling GetReaderResult directly.
         [Fact]
-        public void GetReaderResult_returns_empty_list_when_reader_empty()
+        public void GetReaderList_returns_empty_list_when_reader_empty()
         {
             using var reader = DataReaderBuilder.From(IspitTable());
-            // Ispit.GetReaderResult does not call reader.Read() — it hydrates the
-            // already-positioned row. Confirm via GetReaderList on an empty reader.
             var list = new Ispit().GetReaderList(reader);
             Assert.Empty(list);
         }

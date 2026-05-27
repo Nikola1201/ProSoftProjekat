@@ -85,13 +85,13 @@ namespace Tests.Domain
             Assert.Equal("odrzan", list[1].Status);
         }
 
+        // CasVoznje.GetReaderResult does not call reader.Read() internally — it delegates
+        // from GetReaderList's while(reader.Read()) loop, so it reads the already-positioned row.
+        // Pre-advance the reader before calling GetReaderResult directly.
         [Fact]
-        public void GetReaderResult_returns_null_when_reader_empty()
+        public void GetReaderList_returns_empty_list_when_reader_empty()
         {
             using var reader = DataReaderBuilder.From(CasVoznjeTable());
-            // CasVoznje.GetReaderResult does not call reader.Read() — it hydrates
-            // the already-positioned row. No rows means Read() was never called,
-            // so we confirm GetReaderList on an empty reader gives an empty list.
             var list = new CasVoznje().GetReaderList(reader);
             Assert.Empty(list);
         }
