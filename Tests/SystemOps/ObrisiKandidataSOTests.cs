@@ -8,6 +8,13 @@ using Xunit;
 
 namespace Tests.SystemOps
 {
+    // KNOWN BUG (out of scope for this PR): ObrisiKandidataSO.ExecuteConcreteOperation
+    // calls _broker.GetEntitiesByQuery(new Upis()) with a default-constructed Upis
+    // whose KandidatId = 0, so at runtime the WHERE clause filters on the wrong key.
+    // The tests below use It.IsAny<Upis>() and therefore do not expose this — they
+    // verify the SO's intended cascade flow, not the buggy filter argument. Fix the
+    // SO to pass new Upis { KandidatId = argument.KandidatId } before tightening
+    // these tests to It.Is<Upis>(u => u.KandidatId == kandidat.KandidatId).
     public class ObrisiKandidataSOTests
     {
         // ─── Happy path: kandidat with no upisi ────────────────────────────────────
