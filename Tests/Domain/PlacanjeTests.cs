@@ -56,7 +56,7 @@ namespace Tests.Domain
         }
 
         [Fact]
-        public void GetReaderList_hydrates_placanjees_from_reader()
+        public void GetReaderList_hydrates_placanja_from_reader()
         {
             var table = PlacanjeTable();
             table.Rows.Add(1, 1, 30000m, new DateTime(2026, 1, 5), "gotovina", "prva rata");
@@ -85,8 +85,9 @@ namespace Tests.Domain
             Assert.Empty(list);
         }
 
-        // Placanje.GetReaderResult reads from the current cursor position (no internal Read() call).
-        // Advance the reader first, then call GetReaderResult to hydrate the positioned row.
+        // Placanje.GetReaderResult does not call reader.Read() internally — it delegates
+        // from GetReaderList's while(reader.Read()) loop, so it reads the already-positioned row.
+        // Pre-advance the reader before calling GetReaderResult directly.
         [Fact]
         public void GetReaderResult_hydrates_current_row_after_read()
         {
