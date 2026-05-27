@@ -1,3 +1,4 @@
+using System;
 using Common.Domain;
 using DBBroker;
 using Moq;
@@ -19,7 +20,9 @@ namespace Tests.SystemOps
             var so = new AdminLoginSO(admin, broker.Object);
             so.ExecuteTemplate();
 
-            Assert.Same(admin, so.Result);
+            var returned = Assert.IsType<Admin>(so.Result);
+            Assert.Same(admin, returned);
+            Assert.Equal(admin.Username, returned.Username);
             broker.Verify(b => b.GetEntityByQuery(admin), Times.Once);
             broker.Verify(b => b.Commit(), Times.Once);
             broker.Verify(b => b.CloseConnection(), Times.Once);
@@ -30,21 +33,23 @@ namespace Tests.SystemOps
         {
             var admin = SampleData.ValidAdmin();
             var broker = new Mock<IBroker>();
-            broker.Setup(b => b.GetEntityByQuery(admin)).Throws(new System.Exception("boom"));
+            broker.Setup(b => b.GetEntityByQuery(admin))
+                  .Throws(new InvalidOperationException("korisnicki podaci netacni"));
 
             var so = new AdminLoginSO(admin, broker.Object);
 
-            Assert.Throws<System.Exception>(() => so.ExecuteTemplate());
+            Assert.Throws<InvalidOperationException>(() => so.ExecuteTemplate());
             broker.Verify(b => b.Rollback(), Times.Once);
             broker.Verify(b => b.Commit(), Times.Never);
+            // CloseConnection is in finally, so it must fire even after the throw.
             broker.Verify(b => b.CloseConnection(), Times.Once);
         }
 
         [Fact]
-        public void Opens_connection_and_begins_transaction_first()
+        public void Opens_connection_and_begins_transaction()
         {
             var admin = SampleData.ValidAdmin();
-            var broker = new Mock<IBroker>(MockBehavior.Loose);
+            var broker = new Mock<IBroker>();
             broker.Setup(b => b.GetEntityByQuery(admin)).Returns(admin);
 
             new AdminLoginSO(admin, broker.Object).ExecuteTemplate();
