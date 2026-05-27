@@ -1,19 +1,16 @@
 ﻿using DBBroker;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SystemOperations
 {
     public abstract class SystemOperationBase
     {
-        protected Broker _broker;
+        protected readonly IBroker _broker;
 
-        public SystemOperationBase()
+        protected SystemOperationBase() : this(null) { }
+
+        protected SystemOperationBase(IBroker? broker)
         {
-            _broker = new Broker();
+            _broker = broker ?? new Broker();
         }
 
         public void ExecuteTemplate()
@@ -22,21 +19,20 @@ namespace SystemOperations
             {
                 _broker.OpenConnection();
                 _broker.BeginTransaction();
-
                 ExecuteConcreteOperation();
-
                 _broker.Commit();
             }
-            catch (Exception ex)
+            catch
             {
                 _broker.Rollback();
-                throw ex;
+                throw;
             }
             finally
             {
                 _broker.CloseConnection();
             }
         }
+
         protected abstract void ExecuteConcreteOperation();
     }
 }
