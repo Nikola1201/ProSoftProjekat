@@ -1,5 +1,6 @@
 using Common.Domain;
 using Common.Validation;
+using DBBroker;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,8 @@ namespace SystemOperations
     {
         private readonly Upis _upis;
 
-        public UpisiKandidataSO(Upis upis)
+        public UpisiKandidataSO(Upis upis) : this(upis, null) { }
+        public UpisiKandidataSO(Upis upis, IBroker? broker) : base(broker)
         {
             _upis = upis;
         }

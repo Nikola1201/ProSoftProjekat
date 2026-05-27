@@ -1,4 +1,5 @@
 ﻿using Common.Domain;
+using DBBroker;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace SystemOperations
     {
         private Kandidat argument;
 
-        public ObrisiKandidataSO(Kandidat argument)
+        public ObrisiKandidataSO(Kandidat argument) : this(argument, null) { }
+        public ObrisiKandidataSO(Kandidat argument, IBroker? broker) : base(broker)
         {
             this.argument = argument;
         }

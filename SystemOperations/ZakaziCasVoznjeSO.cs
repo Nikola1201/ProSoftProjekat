@@ -1,5 +1,6 @@
 using Common.Domain;
 using Common.Validation;
+using DBBroker;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,8 @@ namespace SystemOperations
     {
         private readonly CasVoznje _casVoznje;
 
-        public ZakaziCasVoznjeSO(CasVoznje casVoznje)
+        public ZakaziCasVoznjeSO(CasVoznje casVoznje) : this(casVoznje, null) { }
+        public ZakaziCasVoznjeSO(CasVoznje casVoznje, IBroker? broker) : base(broker)
         {
             _casVoznje = casVoznje;
         }

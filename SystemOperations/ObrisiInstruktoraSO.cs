@@ -1,4 +1,5 @@
 ﻿using Common.Domain;
+using DBBroker;
 
 namespace SystemOperations
 {
@@ -6,7 +7,8 @@ namespace SystemOperations
     {
         private Instruktor argument;
 
-        public ObrisiInstruktoraSO(Instruktor argument)
+        public ObrisiInstruktoraSO(Instruktor argument) : this(argument, null) { }
+        public ObrisiInstruktoraSO(Instruktor argument, IBroker? broker) : base(broker)
         {
             this.argument = argument;
         }

@@ -1,5 +1,6 @@
 ﻿using Common.Domain;
 using Common.Validation;
+using DBBroker;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,8 @@ namespace SystemOperations
         private readonly Kandidat _kandidat;
         public IEntity Result { get; set; }
 
-        public KreirajKandidataSO(Kandidat kandidat)
+        public KreirajKandidataSO(Kandidat kandidat) : this(kandidat, null) { }
+        public KreirajKandidataSO(Kandidat kandidat, IBroker? broker) : base(broker)
         {
             _kandidat = kandidat;
         }

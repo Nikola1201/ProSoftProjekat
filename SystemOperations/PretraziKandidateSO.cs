@@ -1,4 +1,5 @@
 using Common.Domain;
+using DBBroker;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +10,8 @@ namespace SystemOperations
         private readonly KandidatSearchFilter _filter;
         public List<Kandidat> Result { get; private set; }
 
-        public PretraziKandidateSO(KandidatSearchFilter filter)
+        public PretraziKandidateSO(KandidatSearchFilter filter) : this(filter, null) { }
+        public PretraziKandidateSO(KandidatSearchFilter filter, IBroker? broker) : base(broker)
         {
             _filter = NormalizeFilter(filter);
         }

@@ -1,4 +1,5 @@
 using Common.Domain;
+using DBBroker;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +9,8 @@ namespace SystemOperations
     {
         public List<Kandidat> Result { get; private set; }
         private readonly bool _upisani;
-        public VratiSveKandidateSO(bool upisani)
+        public VratiSveKandidateSO(bool upisani) : this(upisani, null) { }
+        public VratiSveKandidateSO(bool upisani, IBroker? broker) : base(broker)
         {
             _upisani = upisani;
         }

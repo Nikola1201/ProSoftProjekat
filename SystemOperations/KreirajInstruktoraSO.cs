@@ -1,6 +1,7 @@
 using Common.Domain;
 using Common.DTO;
 using Common.Validation;
+using DBBroker;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace SystemOperations
     {
         private readonly KreirajInstruktoraRequest _request;
 
-        public KreirajInstruktoraSO(KreirajInstruktoraRequest request)
+        public KreirajInstruktoraSO(KreirajInstruktoraRequest request) : this(request, null) { }
+        public KreirajInstruktoraSO(KreirajInstruktoraRequest request, IBroker? broker) : base(broker)
         {
             _request = request;
         }

@@ -1,6 +1,7 @@
 using Common.Domain;
 using Common.DTO.Izvestaji;
 using Common.Validation;
+using DBBroker;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -19,7 +20,8 @@ namespace SystemOperations
 
         private readonly EvidentirajUplatuRequest _request;
 
-        public EvidentirajUplatuSO(EvidentirajUplatuRequest request)
+        public EvidentirajUplatuSO(EvidentirajUplatuRequest request) : this(request, null) { }
+        public EvidentirajUplatuSO(EvidentirajUplatuRequest request, IBroker? broker) : base(broker)
         {
             _request = request;
         }

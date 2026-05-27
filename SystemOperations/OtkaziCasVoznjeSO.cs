@@ -1,5 +1,6 @@
 using Common.Domain;
 using Common.Validation;
+using DBBroker;
 using System;
 using System.Linq;
 
@@ -9,7 +10,8 @@ namespace SystemOperations
     {
         private readonly CasVoznje _argument;
 
-        public OtkaziCasVoznjeSO(CasVoznje argument)
+        public OtkaziCasVoznjeSO(CasVoznje argument) : this(argument, null) { }
+        public OtkaziCasVoznjeSO(CasVoznje argument, IBroker? broker) : base(broker)
         {
             _argument = argument;
         }

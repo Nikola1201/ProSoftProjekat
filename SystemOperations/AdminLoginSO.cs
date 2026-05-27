@@ -1,4 +1,5 @@
 ﻿using Common.Domain;
+using DBBroker;
 
 namespace SystemOperations
 {
@@ -7,7 +8,8 @@ namespace SystemOperations
         private readonly Admin _admin;
         public IEntity Result { get; set; }
 
-        public AdminLoginSO(Admin argument)
+        public AdminLoginSO(Admin argument) : this(argument, null) { }
+        public AdminLoginSO(Admin argument, IBroker? broker) : base(broker)
         {
             _admin = argument;
         }

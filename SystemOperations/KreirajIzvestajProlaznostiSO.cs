@@ -1,5 +1,6 @@
 using Common.DTO.Izvestaji;
 using Common.Validation;
+using DBBroker;
 using DBBroker.Reports;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,8 @@ namespace SystemOperations
         private readonly IzvestajProlaznostiKriterijum _kriterijum;
         public IzvestajProlaznostiResponseDto Result { get; private set; }
 
-        public KreirajIzvestajProlaznostiSO(IzvestajProlaznostiKriterijum kriterijum)
+        public KreirajIzvestajProlaznostiSO(IzvestajProlaznostiKriterijum kriterijum) : this(kriterijum, null) { }
+        public KreirajIzvestajProlaznostiSO(IzvestajProlaznostiKriterijum kriterijum, IBroker? broker) : base(broker)
         {
             _kriterijum = kriterijum;
         }

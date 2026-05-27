@@ -1,6 +1,7 @@
 using Common.Domain;
 using Common.DTO.Izvestaji;
 using Common.Validation;
+using DBBroker;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,8 @@ namespace SystemOperations
 
         private readonly EvidentirajIspitRequest _request;
 
-        public EvidentirajIspitSO(EvidentirajIspitRequest request)
+        public EvidentirajIspitSO(EvidentirajIspitRequest request) : this(request, null) { }
+        public EvidentirajIspitSO(EvidentirajIspitRequest request, IBroker? broker) : base(broker)
         {
             _request = request;
         }
