@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBBroker", "DBBroker\DBBrok
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemOperations", "SystemOperations\SystemOperations.csproj", "{054D719D-7E44-4505-8294-2A52F8CDEC62}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{11E730BF-5E73-4F10-99C7-8B047C424D58}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{054D719D-7E44-4505-8294-2A52F8CDEC62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{054D719D-7E44-4505-8294-2A52F8CDEC62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{054D719D-7E44-4505-8294-2A52F8CDEC62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11E730BF-5E73-4F10-99C7-8B047C424D58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11E730BF-5E73-4F10-99C7-8B047C424D58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11E730BF-5E73-4F10-99C7-8B047C424D58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11E730BF-5E73-4F10-99C7-8B047C424D58}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
