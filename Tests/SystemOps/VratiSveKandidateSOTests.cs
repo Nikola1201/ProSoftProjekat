@@ -70,6 +70,8 @@ namespace Tests.SystemOps
             Assert.Equal(enrolled.KandidatId, so.Result[0].KandidatId);
             broker.Verify(b => b.GetAll(It.IsAny<Kandidat>()), Times.Once);
             broker.Verify(b => b.GetAll(It.IsAny<Upis>()), Times.Once);
+            broker.Verify(b => b.OpenConnection(), Times.Once);
+            broker.Verify(b => b.BeginTransaction(), Times.Once);
             broker.Verify(b => b.Commit(), Times.Once);
             broker.Verify(b => b.CloseConnection(), Times.Once);
         }
