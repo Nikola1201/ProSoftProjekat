@@ -36,6 +36,24 @@ namespace Tests.SystemOps
 
             broker.Verify(b => b.Add(kandidat), Times.Once);
             broker.Verify(b => b.Commit(), Times.Once);
+            broker.Verify(b => b.Rollback(), Times.Never);
+            broker.Verify(b => b.CloseConnection(), Times.Once);
+        }
+
+        [Fact]
+        public void Persists_kandidat_when_DatumUpisa_is_today()
+        {
+            // Boundary: today is allowed (strict > check on future).
+            var broker = NoExistingKandidati();
+            var k = SampleData.ValidKandidat();
+            k.DatumUpisa = DateTime.Now.Date;
+            broker.Setup(b => b.Add(k)).Returns(k);
+
+            var so = new KreirajKandidataSO(k, broker.Object);
+            so.ExecuteTemplate();
+
+            broker.Verify(b => b.Add(k), Times.Once);
+            broker.Verify(b => b.Commit(), Times.Once);
         }
 
         // ─── Null kandidat ─────────────────────────────────────────────────────────
@@ -50,6 +68,8 @@ namespace Tests.SystemOps
             Assert.Throws<ValidacijaException>(() => so.ExecuteTemplate());
             broker.Verify(b => b.Add(It.IsAny<IEntity>()), Times.Never);
             broker.Verify(b => b.Rollback(), Times.Once);
+            // CloseConnection runs in finally even on exception.
+            broker.Verify(b => b.CloseConnection(), Times.Once);
         }
 
         // ─── Blank Ime ─────────────────────────────────────────────────────────────
