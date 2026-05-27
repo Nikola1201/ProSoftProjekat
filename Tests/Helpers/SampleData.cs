@@ -54,7 +54,7 @@ namespace Tests.Helpers
             Model = "Fabia",
             Godiste = 2020,
             Tablica = "BG123AB",
-            KategorijaID = 1,
+            KategorijaID = ValidKategorija().KategorijaID,
             Aktivno = true
         };
 
@@ -71,9 +71,11 @@ namespace Tests.Helpers
         public static Upis ValidUpis() => new Upis
         {
             UpisId = 1,
-            KandidatId = 1,
-            PaketId = 1,
-            DatumUpisa = new DateTime(2026, 1, 1),
+            KandidatId = ValidKandidat().KandidatId,
+            PaketId = ValidPaketObuke().PaketId,
+            Kandidat = ValidKandidat(),
+            Paket = ValidPaketObuke(),
+            DatumUpisa = new DateTime(2026, 1, 2),
             Status = "aktivan"
         };
 
@@ -111,8 +113,8 @@ namespace Tests.Helpers
 
         public static InstrKat ValidInstrKat() => new InstrKat
         {
-            InstruktorId = 1,
-            KategorijaID = 1,
+            InstruktorId = ValidInstruktor().InstruktorId,
+            KategorijaID = ValidKategorija().KategorijaID,
             DatumDodele = new DateTime(2025, 1, 1),
             Aktivno = true
         };
