@@ -1,64 +1,107 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data.Common;
 
 namespace Common.Domain
 {
+    /// <summary>Predstavlja paket obuke koji auto-škola nudi kandidatima (kombinacija kategorije, broja časova i cene).</summary>
     [Serializable]
     public class PaketObuke : IEntity
     {
+        /// <summary>Jedinstveni identifikator paketa obuke (PK).</summary>
         public int PaketId { get; set; }
+
+        /// <summary>Naziv paketa obuke (npr. "Osnovna B kategorija").</summary>
         public string Naziv { get; set; }
-        public string Kategorija { get; set; }  // 'A', 'B', 'C'
+
+        /// <summary>Kategorija vozačke dozvole na koju se paket odnosi.</summary>
+        public Kategorija Kategorija { get; set; }
+
+        /// <summary>Ukupan broj časova vožnje predviđen paketom.</summary>
         public int BrojCasova { get; set; }
+
+        /// <summary>Cena paketa obuke u dinarima.</summary>
         public decimal Cena { get; set; }
+
+        /// <summary>Opis sadržaja i posebnosti paketa obuke.</summary>
         public string Opis { get; set; }
 
+        /// <inheritdoc/>
         public string TableName => "PaketObuke";
 
+        /// <inheritdoc/>
         public string Values =>
-            $"'{Naziv}', '{Kategorija}', {BrojCasova}, {Cena.ToString(System.Globalization.CultureInfo.InvariantCulture)}, '{Opis}'";
+            $"'{Naziv}', '{Kategorija.KategorijaID}', {BrojCasova}, {Cena.ToString(System.Globalization.CultureInfo.InvariantCulture)}, '{Opis}'";
 
-        public object Query =>
-            $"INSERT INTO PaketObuke (Naziv, Kategorija, BrojCasova, Cena, Opis) " +
-            $"VALUES ({Values})";
+        /// <inheritdoc/>
+        public string Query => $"Naziv = '{Naziv}'";
 
-        public object TableKeyColumn => "PaketId";
+        /// <inheritdoc/>
+        public string TableKeyColumn => "PaketId";
 
-        public object SearchQuery =>
-            $"SELECT * FROM PaketObuke WHERE Naziv LIKE '%{Naziv}%'";
+        /// <inheritdoc/>
+        public string TableKeyQuery =>
+            $"{TableKeyColumn} = {PaketId}";
 
-        public object TableKeyQuery =>
-            $"SELECT * FROM PaketObuke WHERE PaketId = {PaketId}";
-
-        public object Update =>
+        /// <inheritdoc/>
+        public string Update =>
             $"UPDATE PaketObuke SET " +
             $"Naziv = '{Naziv}', " +
-            $"Kategorija = '{Kategorija}', " +
+            $"KategorijaID = '{Kategorija.KategorijaID}', " +
             $"BrojCasova = {BrojCasova}, " +
             $"Cena = {Cena.ToString(System.Globalization.CultureInfo.InvariantCulture)}, " +
             $"Opis = '{Opis}' " +
             $"WHERE PaketId = {PaketId}";
 
-        public List<IEntity> GetReaderList(SqlDataReader reader)
+        /// <inheritdoc/>
+        public List<IEntity> GetReaderList(DbDataReader reader)
         {
             var list = new List<IEntity>();
             while (reader.Read())
-                list.Add(GetReaderResult(reader));
+            {
+                list.Add(new PaketObuke
+                    {
+                        PaketId = (int)reader["PaketId"],
+                        Naziv = reader["Naziv"].ToString(),
+                        Kategorija = new Kategorija()
+                        {
+                            KategorijaID = (int)reader["KategorijaID"],
+                        },
+                        BrojCasova = (int)reader["BrojCasova"],
+                        Cena = (decimal)reader["Cena"],
+                        Opis = reader["Opis"].ToString()
+                    }
+                );
+            }
+
             return list;
         }
 
-        public IEntity GetReaderResult(SqlDataReader reader)
+        /// <inheritdoc/>
+        public IEntity GetReaderResult(DbDataReader reader)
         {
-            return new PaketObuke
+            if (reader.Read())
             {
-                PaketId = (int)reader["PaketId"],
-                Naziv = reader["Naziv"].ToString(),
-                Kategorija = reader["Kategorija"].ToString(),
-                BrojCasova = (int)reader["BrojCasova"],
-                Cena = (decimal)reader["Cena"],
-                Opis = reader["Opis"].ToString()
-            };
+                return new PaketObuke
+                {
+                    PaketId = (int)reader["PaketId"],
+                    Naziv = reader["Naziv"].ToString(),
+                    Kategorija = new Kategorija()
+                    {
+                        KategorijaID = (int)reader["KategorijaID"],
+                    },
+                    BrojCasova = (int)reader["BrojCasova"],
+                    Cena = (decimal)reader["Cena"],
+                    Opis = reader["Opis"].ToString()
+                };
+            }
+            return null;
+        }
+
+        /// <summary>Tekstualna reprezentacija paketa: "Naziv (Kategorija)".</summary>
+        public override string ToString()
+        {
+            return $"{Naziv} ({Kategorija})";
         }
     }
 }

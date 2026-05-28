@@ -1,39 +1,56 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data.Common;
 
 namespace Common.Domain
 {
+    /// <summary>Predstavlja zakazani ili održani čas vožnje u okviru određenog upisa.</summary>
     [Serializable]
     public class CasVoznje : IEntity
     {
+        /// <summary>Jedinstveni identifikator časa vožnje (PK).</summary>
         public int CasId { get; set; }
+
+        /// <summary>Identifikator upisa u okviru kojeg se odvija čas (FK na Upis).</summary>
         public int UpisId { get; set; }
+
+        /// <summary>Identifikator instruktora koji vodi čas (FK na Instruktor).</summary>
         public int InstruktorId { get; set; }
+
+        /// <summary>Identifikator vozila koje se koristi na času (FK na Vozilo).</summary>
         public int VoziloId { get; set; }
+
+        /// <summary>Datum i vreme početka časa vožnje.</summary>
         public DateTime DatumCas { get; set; }
+
+        /// <summary>Trajanje časa vožnje u minutima.</summary>
         public int TrajanjMin { get; set; }
+
+        /// <summary>Trenutni status časa: "zakazan", "odrzan" ili "otkazan".</summary>
         public string Status { get; set; }  // 'zakazan', 'odrzan', 'otkazan'
+
+        /// <summary>Opcionalna napomena uz čas vožnje.</summary>
         public string Napomena { get; set; }
 
+        /// <inheritdoc/>
         public string TableName => "CasVoznje";
 
+        /// <inheritdoc/>
         public string Values =>
             $"{UpisId}, {InstruktorId}, {VoziloId}, '{DatumCas:yyyy-MM-dd HH:mm}', {TrajanjMin}, '{Status}', '{Napomena}'";
 
-        public object Query =>
-            $"INSERT INTO CasVoznje (UpisId, InstruktorId, VoziloId, DatumCas, TrajanjMin, Status, Napomena) " +
-            $"VALUES ({Values})";
+        /// <inheritdoc/>
+        public string Query => $"UpisId = {UpisId}";
 
-        public object TableKeyColumn => "CasId";
+        /// <inheritdoc/>
+        public string TableKeyColumn => "CasId";
 
-        public object SearchQuery =>
-            $"SELECT * FROM CasVoznje WHERE InstruktorId = {InstruktorId} AND Status = '{Status}'";
+        /// <inheritdoc/>
+        public string TableKeyQuery =>
+            $"{TableKeyColumn} = {CasId}";
 
-        public object TableKeyQuery =>
-            $"SELECT * FROM CasVoznje WHERE CasId = {CasId}";
-
-        public object Update =>
+        /// <inheritdoc/>
+        public string Update =>
             $"UPDATE CasVoznje SET " +
             $"UpisId = {UpisId}, " +
             $"InstruktorId = {InstruktorId}, " +
@@ -44,7 +61,8 @@ namespace Common.Domain
             $"Napomena = '{Napomena}' " +
             $"WHERE CasId = {CasId}";
 
-        public List<IEntity> GetReaderList(SqlDataReader reader)
+        /// <inheritdoc/>
+        public List<IEntity> GetReaderList(DbDataReader reader)
         {
             var list = new List<IEntity>();
             while (reader.Read())
@@ -52,7 +70,8 @@ namespace Common.Domain
             return list;
         }
 
-        public IEntity GetReaderResult(SqlDataReader reader)
+        /// <inheritdoc/>
+        public IEntity GetReaderResult(DbDataReader reader)
         {
             return new CasVoznje
             {

@@ -1,11 +1,13 @@
 ﻿using Common.Domain;
+using Common.DTO;
 using DBBroker;
-using Server.SystemOperation;
+using SystemOperations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.DTO.Izvestaji;
 
 namespace Server
 {
@@ -22,8 +24,18 @@ namespace Server
         {
             AdminLoginSO so = new AdminLoginSO(argument);
             so.ExecuteTemplate();
+            Admin found = (Admin)so.Result;
+            if (found == null) return null;
 
-            return (Admin)so.Result;
+            lock (Server.loggedIn)
+            {
+                if (Server.loggedIn.Any(a => a.AdminId == found.AdminId))
+                {
+                    return new Admin { Ime = "Vec ulogovan" };
+                }
+                Server.loggedIn.Add(found);
+            }
+            return found;
         }
 
         internal Kandidat KreirajKandidata(Kandidat argument)
@@ -31,7 +43,7 @@ namespace Server
             KreirajKandidataSO so = new KreirajKandidataSO(argument);
             so.ExecuteTemplate();
             return (Kandidat)so.Result;
-         
+
         }
 
         internal List<Kategorija> GetAllKategorije()
@@ -40,5 +52,132 @@ namespace Server
             so.ExecuteTemplate();
             return so.Result;
         }
+
+        internal List<Kandidat> GetAllKandidati(bool upisani)
+        {
+            VratiSveKandidateSO so = new VratiSveKandidateSO(upisani);
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal List<PaketObuke> GetAllPaketiObuke()
+        {
+            VratiSvePaketeObukeSO so = new VratiSvePaketeObukeSO();
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal Upis UpisiKandidata(Upis argument)
+        {
+            UpisiKandidataSO so = new UpisiKandidataSO(argument);
+            so.ExecuteTemplate();
+            return (Upis)so.Result;
+        }
+
+        internal void ObrisiKandidata(Kandidat argument)
+        {
+            ObrisiKandidataSO so = new ObrisiKandidataSO(argument);
+            so.ExecuteTemplate();
+            
+        }
+
+        internal Instruktor KreirajInstruktora(KreirajInstruktoraRequest argument)
+        {
+            KreirajInstruktoraSO so = new KreirajInstruktoraSO(argument);
+            so.ExecuteTemplate();
+            return (Instruktor)so.Result;
+        }
+
+        internal List<Instruktor> GetAllInstruktori()
+        {
+            VratiSveInstruktoreSO so = new VratiSveInstruktoreSO();
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal List<InstrKat> GetAllInstrKat()
+        {
+            VratiSveInstrKatSO so = new VratiSveInstrKatSO();
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal void ObrisiInstruktora(Instruktor argument)
+        {
+            ObrisiInstruktoraSO so = new ObrisiInstruktoraSO(argument);
+            so.ExecuteTemplate();
+        }
+
+        internal List<Vozilo> GetAllVozila()
+        {
+            VratiSveVozilaSO so = new VratiSveVozilaSO();
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal List<Upis> GetAllUpisi()
+        {
+            VratiSveUpiseSO so = new VratiSveUpiseSO();
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal CasVoznje ZakaziCasVoznje(CasVoznje argument)
+        {
+            ZakaziCasVoznjeSO so = new ZakaziCasVoznjeSO(argument);
+            so.ExecuteTemplate();
+            return (CasVoznje)so.Result;
+        }
+
+        internal List<CasVoznje> GetAllCasVoznje()
+        {
+            VratiSveCasoveVoznjeSO so = new VratiSveCasoveVoznjeSO();
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal CasVoznje OtkaziCasVoznje(CasVoznje argument)
+        {
+            OtkaziCasVoznjeSO so = new OtkaziCasVoznjeSO(argument);
+            so.ExecuteTemplate();
+            return (CasVoznje)so.Result;
+        }
+
+        internal List<Kandidat> PretraziKandidate(KandidatSearchFilter filter)
+        {
+            PretraziKandidateSO so = new PretraziKandidateSO(filter);
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal IzvestajProlaznostiResponseDto KreirajIzvestajProlaznosti(IzvestajProlaznostiKriterijum kriterijum)
+        {
+            KreirajIzvestajProlaznostiSO so = new KreirajIzvestajProlaznostiSO(kriterijum);
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal EvidentirajIspitResponse EvidentirajIspit(EvidentirajIspitRequest request)
+        {
+            EvidentirajIspitSO so = new EvidentirajIspitSO(request);
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal List<KandidatDugovanjeDto> VratiKandidatiSaDugovanjem()
+        {
+            VratiKandidatiSaDugovanjemSO so = new VratiKandidatiSaDugovanjemSO();
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+        internal EvidentirajUplatuResponse EvidentirajUplatu(EvidentirajUplatuRequest request)
+        {
+            EvidentirajUplatuSO so = new EvidentirajUplatuSO(request);
+            so.ExecuteTemplate();
+            return so.Result;
+        }
+
+
     }
 }

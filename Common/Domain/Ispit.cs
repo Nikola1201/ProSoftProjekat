@@ -1,37 +1,50 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data.Common;
 
 namespace Common.Domain
 {
+    /// <summary>Predstavlja ispit (teorijski ili praktični) koji kandidat polaže u okviru upisa.</summary>
     [Serializable]
     public class Ispit : IEntity
     {
+        /// <summary>Jedinstveni identifikator ispita (PK).</summary>
         public int IspitId { get; set; }
+
+        /// <summary>Identifikator upisa u okviru kojeg se polaže ispit (FK na Upis).</summary>
         public int UpisId { get; set; }
+
+        /// <summary>Datum kada je ispit održan.</summary>
         public DateTime DatumIspita { get; set; }
+
+        /// <summary>Tip ispita (npr. "teorijski" ili "prakticni").</summary>
         public string Tip { get; set; }
+
+        /// <summary>Rezultat ispita (npr. "polozio" ili "pao").</summary>
         public string Rezultat { get; set; }
+
+        /// <summary>Opcionalna napomena uz ispit.</summary>
         public string Napomena { get; set; }
 
+        /// <inheritdoc/>
         public string TableName => "Ispit";
 
+        /// <inheritdoc/>
         public string Values =>
             $"{UpisId}, '{DatumIspita:yyyy-MM-dd}', '{Tip}', '{Rezultat}', '{Napomena}'";
 
-        public object Query =>
-            $"INSERT INTO Ispit (UpisId, DatumIspita, Tip, Rezultat, Napomena) " +
-            $"VALUES ({Values})";
+        /// <inheritdoc/>
+        public string Query => $"UpisId = {UpisId}";
 
-        public object TableKeyColumn => "IspitId";
+        /// <inheritdoc/>
+        public string TableKeyColumn => "IspitId";
 
-        public object SearchQuery =>
-            $"SELECT * FROM Ispit WHERE UpisId = {UpisId} AND Rezultat = '{Rezultat}'";
+        /// <inheritdoc/>
+        public string TableKeyQuery =>
+            $"{TableKeyColumn} = {IspitId}";
 
-        public object TableKeyQuery =>
-            $"SELECT * FROM Ispit WHERE IspitId = {IspitId}";
-
-        public object Update =>
+        /// <inheritdoc/>
+        public string Update =>
             $"UPDATE Ispit SET " +
             $"UpisId = {UpisId}, " +
             $"DatumIspita = '{DatumIspita:yyyy-MM-dd}', " +
@@ -40,7 +53,8 @@ namespace Common.Domain
             $"Napomena = '{Napomena}' " +
             $"WHERE IspitId = {IspitId}";
 
-        public List<IEntity> GetReaderList(SqlDataReader reader)
+        /// <inheritdoc/>
+        public List<IEntity> GetReaderList(DbDataReader reader)
         {
             var list = new List<IEntity>();
             while (reader.Read())
@@ -48,7 +62,8 @@ namespace Common.Domain
             return list;
         }
 
-        public IEntity GetReaderResult(SqlDataReader reader)
+        /// <inheritdoc/>
+        public IEntity GetReaderResult(DbDataReader reader)
         {
             return new Ispit
             {

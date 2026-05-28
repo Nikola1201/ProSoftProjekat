@@ -1,16 +1,22 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data.Common;
 
 namespace Common.Domain
 {
+    /// <summary>Predstavlja kategoriju vozačke dozvole (npr. "B", "C", "A").</summary>
     [Serializable]
     public class Kategorija : IEntity
     {
         private string _nazivKategorije;
 
+        /// <summary>Jedinstveni identifikator kategorije (PK).</summary>
         public int KategorijaID { get; set; }
 
+        /// <summary>
+        /// Naziv kategorije vozačke dozvole. Maksimalna dužina su 2 karaktera.
+        /// Baca <see cref="ArgumentException"/> ako vrednost prelazi 2 karaktera.
+        /// </summary>
         public string NazivKategorije
         {
             get => _nazivKategorije;
@@ -25,23 +31,27 @@ namespace Common.Domain
             }
         }
 
+        /// <inheritdoc/>
         public string TableName => "Kategorija";
 
-        public string Values => $"('{NazivKategorije}')";
+        /// <inheritdoc/>
+        public string Values => $"'{NazivKategorije}'";
 
-        public object Query => $"NazivKategorije = '{NazivKategorije}'";
+        /// <inheritdoc/>
+        public string Query => $"NazivKategorije = '{NazivKategorije}'";
 
-        public object TableKeyColumn => "KategorijaID";
+        /// <inheritdoc/>
+        public string TableKeyColumn => "KategorijaID";
 
-        public object SearchQuery =>
-            $"SELECT * FROM Kategorija WHERE NazivKategorije LIKE '%{NazivKategorije ?? string.Empty}%'";
+        /// <inheritdoc/>
+        public string TableKeyQuery => $"{TableKeyColumn} = {KategorijaID}";
 
-        public object TableKeyQuery => $"SELECT * FROM Kategorija WHERE KategorijaID = {KategorijaID}";
-
-        public object Update =>
+        /// <inheritdoc/>
+        public string Update =>
             $"UPDATE Kategorija SET NazivKategorije = '{NazivKategorije}' WHERE KategorijaID = {KategorijaID}";
 
-        public List<IEntity> GetReaderList(SqlDataReader reader)
+        /// <inheritdoc/>
+        public List<IEntity> GetReaderList(DbDataReader reader)
         {
             var list = new List<IEntity>();
             while (reader.Read())
@@ -56,7 +66,8 @@ namespace Common.Domain
             return list;
         }
 
-        public IEntity GetReaderResult(SqlDataReader reader)
+        /// <inheritdoc/>
+        public IEntity GetReaderResult(DbDataReader reader)
         {
             if (reader.Read())
             {
@@ -70,6 +81,7 @@ namespace Common.Domain
             return null;
         }
 
+        /// <summary>Tekstualna reprezentacija kategorije: naziv kategorije.</summary>
         public override string ToString()
         {
             return NazivKategorije;

@@ -1,37 +1,50 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data.Common;
 
 namespace Common.Domain
 {
+    /// <summary>Predstavlja plaćanje vezano za određeni upis kandidata.</summary>
     [Serializable]
     public class Placanje : IEntity
     {
+        /// <summary>Jedinstveni identifikator plaćanja (PK).</summary>
         public int PlacanjeId { get; set; }
+
+        /// <summary>Identifikator upisa na koji se odnosi ovo plaćanje (FK na Upis).</summary>
         public int UpisId { get; set; }
+
+        /// <summary>Iznos plaćanja u dinarima.</summary>
         public decimal Iznos { get; set; }
+
+        /// <summary>Datum kada je plaćanje izvršeno.</summary>
         public DateTime DatumPlacanja { get; set; }
+
+        /// <summary>Način plaćanja: "gotovina", "kartica" ili "transfer".</summary>
         public string NacinPlacanja { get; set; }  // 'gotovina', 'kartica', 'transfer'
+
+        /// <summary>Opcionalna napomena uz plaćanje.</summary>
         public string Napomena { get; set; }
 
+        /// <inheritdoc/>
         public string TableName => "Placanje";
 
+        /// <inheritdoc/>
         public string Values =>
             $"{UpisId}, {Iznos.ToString(System.Globalization.CultureInfo.InvariantCulture)}, '{DatumPlacanja:yyyy-MM-dd}', '{NacinPlacanja}', '{Napomena}'";
 
-        public object Query =>
-            $"INSERT INTO Placanje (UpisId, Iznos, DatumPlacanja, NacinPlacanja, Napomena) " +
-            $"VALUES ({Values})";
+        /// <inheritdoc/>
+        public string Query => $"UpisId = {UpisId}";
 
-        public object TableKeyColumn => "PlacanjeId";
+        /// <inheritdoc/>
+        public string TableKeyColumn => "PlacanjeId";
 
-        public object SearchQuery =>
-            $"SELECT * FROM Placanje WHERE UpisId = {UpisId}";
+        /// <inheritdoc/>
+        public string TableKeyQuery =>
+            $"{TableKeyColumn} = {PlacanjeId}";
 
-        public object TableKeyQuery =>
-            $"SELECT * FROM Placanje WHERE PlacanjeId = {PlacanjeId}";
-
-        public object Update =>
+        /// <inheritdoc/>
+        public string Update =>
             $"UPDATE Placanje SET " +
             $"UpisId = {UpisId}, " +
             $"Iznos = {Iznos.ToString(System.Globalization.CultureInfo.InvariantCulture)}, " +
@@ -40,7 +53,8 @@ namespace Common.Domain
             $"Napomena = '{Napomena}' " +
             $"WHERE PlacanjeId = {PlacanjeId}";
 
-        public List<IEntity> GetReaderList(SqlDataReader reader)
+        /// <inheritdoc/>
+        public List<IEntity> GetReaderList(DbDataReader reader)
         {
             var list = new List<IEntity>();
             while (reader.Read())
@@ -48,7 +62,8 @@ namespace Common.Domain
             return list;
         }
 
-        public IEntity GetReaderResult(SqlDataReader reader)
+        /// <inheritdoc/>
+        public IEntity GetReaderResult(DbDataReader reader)
         {
             return new Placanje
             {

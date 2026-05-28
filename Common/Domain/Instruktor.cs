@@ -1,39 +1,59 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data.Common;
 
 namespace Common.Domain
 {
+    /// <summary>Predstavlja instruktora vožnje zaposlenog u auto-školi.</summary>
     [Serializable]
     public class Instruktor : IEntity
     {
+        /// <summary>Jedinstveni identifikator instruktora (PK).</summary>
         public int InstruktorId { get; set; }
+
+        /// <summary>Ime instruktora. Obavezno.</summary>
         public string Ime { get; set; }
+
+        /// <summary>Prezime instruktora. Obavezno.</summary>
         public string Prezime { get; set; }
+
+        /// <summary>Jedinstveni matični broj građana instruktora.</summary>
         public string JMBG { get; set; }
+
+        /// <summary>Kontakt telefon instruktora.</summary>
         public string Telefon { get; set; }
+
+        /// <summary>Email adresa instruktora.</summary>
         public string Email { get; set; }
+
+        /// <summary>Datum kada je instruktor zaposlen u auto-školi.</summary>
         public DateTime DatumZaposlenja { get; set; }
+
+        /// <summary>Označava da li je instruktor trenutno aktivan (zaposlen).</summary>
         public bool Aktivan { get; set; }
 
+        /// <summary>Spojeno ime i prezime za prikaz u korisničkom interfejsu.</summary>
+        public string PunoIme => $"{Ime} {Prezime}".Trim();
+
+        /// <inheritdoc/>
         public string TableName => "Instruktor";
 
+        /// <inheritdoc/>
         public string Values =>
-            $"'{Ime}', '{Prezime}', '{JMBG}', '{Telefon}', '{Email}', '{DatumZaposlenja:yyyy-MM-dd}'";
+            $"'{Ime}', '{Prezime}', '{JMBG}', '{Telefon}', '{Email}', '{DatumZaposlenja:yyyy-MM-dd}',{(Aktivan ? 1 : 0)}";
 
-        public object Query =>
-            $"INSERT INTO Instruktor (Ime, Prezime, JMBG, Telefon, Email, DatumZaposlenja) " +
-            $"VALUES ({Values})";
+        /// <inheritdoc/>
+        public string Query => $"JMBG = '{JMBG}'";
 
-        public object TableKeyColumn => "InstruktorId";
+        /// <inheritdoc/>
+        public string TableKeyColumn => "InstruktorId";
 
-        public object SearchQuery =>
-            $"SELECT * FROM Instruktor WHERE Ime LIKE '%{Ime}%' OR Prezime LIKE '%{Prezime}%'";
+        /// <inheritdoc/>
+        public string TableKeyQuery =>
+            $"{TableKeyColumn} = {InstruktorId}";
 
-        public object TableKeyQuery =>
-            $"SELECT * FROM Instruktor WHERE InstruktorId = {InstruktorId}";
-
-        public object Update =>
+        /// <inheritdoc/>
+        public string Update =>
             $"UPDATE Instruktor SET " +
             $"Ime = '{Ime}', " +
             $"Prezime = '{Prezime}', " +
@@ -44,27 +64,52 @@ namespace Common.Domain
             $"Aktivan = {(Aktivan ? 1 : 0)} " +
             $"WHERE InstruktorId = {InstruktorId}";
 
-        public List<IEntity> GetReaderList(SqlDataReader reader)
+
+        /// <inheritdoc/>
+        public List<IEntity> GetReaderList(DbDataReader reader)
         {
             var list = new List<IEntity>();
             while (reader.Read())
-                list.Add(GetReaderResult(reader));
+            {
+                list.Add(new Instruktor
+                {
+                    InstruktorId = (int)reader["InstruktorId"],
+                    Ime = reader["Ime"].ToString(),
+                    Prezime = reader["Prezime"].ToString(),
+                    JMBG = reader["JMBG"].ToString(),
+                    Telefon = reader["Telefon"].ToString(),
+                    Email = reader["Email"].ToString(),
+                    DatumZaposlenja = (DateTime)reader["DatumZaposlenja"],
+                    Aktivan = (bool)reader["Aktivan"]
+                });
+            }
             return list;
         }
 
-        public IEntity GetReaderResult(SqlDataReader reader)
+        /// <inheritdoc/>
+        public IEntity GetReaderResult(DbDataReader reader)
         {
-            return new Instruktor
+            if (reader.Read())
             {
-                InstruktorId = (int)reader["InstruktorId"],
-                Ime = reader["Ime"].ToString(),
-                Prezime = reader["Prezime"].ToString(),
-                JMBG = reader["JMBG"].ToString(),
-                Telefon = reader["Telefon"].ToString(),
-                Email = reader["Email"].ToString(),
-                DatumZaposlenja = (DateTime)reader["DatumZaposlenja"],
-                Aktivan = (bool)reader["Aktivan"]
-            };
+                return new Instruktor
+                {
+                    InstruktorId = (int)reader["InstruktorId"],
+                    Ime = reader["Ime"].ToString(),
+                    Prezime = reader["Prezime"].ToString(),
+                    JMBG = reader["JMBG"].ToString(),
+                    Telefon = reader["Telefon"].ToString(),
+                    Email = reader["Email"].ToString(),
+                    DatumZaposlenja = (DateTime)reader["DatumZaposlenja"],
+                    Aktivan = (bool)reader["Aktivan"]
+                };
+            }
+            return null;
+        }
+
+        /// <summary>Tekstualna reprezentacija instruktora: "Ime Prezime (JMBG)" ili samo puno ime ako JMBG nije postavljen.</summary>
+        public override string ToString()
+        {
+            return string.IsNullOrWhiteSpace(JMBG) ? PunoIme : $"{PunoIme} ({JMBG})";
         }
     }
 }

@@ -2,6 +2,7 @@
 using Common.Domain;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,23 @@ namespace Client.GuiController
             Application.Run(_frmLogin);
         }
 
+        internal void ReopenFrmLogin()
+        {
+            Communication.Instance.Connect();
+
+            if (_frmLogin == null || _frmLogin.IsDisposed)
+            {
+                _frmLogin = new FrmLogin();
+                _frmLogin.BtnLogin.Click += (s, e) => Login();
+                _frmLogin.AutoSize = true;
+            }
+
+            _frmLogin.TxtPassword.Clear();
+            _frmLogin.Show();
+            _frmLogin.BringToFront();
+            _frmLogin.TxtUsername.Focus();
+        }
+
         private void Login()
         {
             string username = _frmLogin.TxtUsername.Text;
@@ -46,7 +64,7 @@ namespace Client.GuiController
                     Lozinka = password
                 };
                 Response response = Communication.Instance.Login(admin);
-                if (response.Exception == null)
+                if (string.IsNullOrEmpty(response.ErrorMessage))
                 {
                     if (response.Result == null)
                     {
@@ -54,7 +72,8 @@ namespace Client.GuiController
                     }
                     else
                     {
-                        if (((Admin)response.Result).Ime == "Vec ulogovan")
+                        Admin loggedAdmin = Communication.Instance.ResultAs<Admin>(response);
+                        if (loggedAdmin.Ime == "Vec ulogovan")
                         {
                             MessageBox.Show("Vec ste prijavljeni");
                             return;
@@ -64,7 +83,7 @@ namespace Client.GuiController
 
                             MessageBox.Show("Uspesno ste se prijavili na sistem");
                             _frmLogin.Visible = false;
-                            MainCoordinator.Instance.ShowFrmMain((Admin)response.Result);
+                            MainCoordinator.Instance.ShowFrmMain(loggedAdmin);
                         }
                     }
                 }
@@ -73,9 +92,10 @@ namespace Client.GuiController
                     MessageBox.Show("Neuspesna prijava, molimo Vas pokusajte kasnije");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Server je ugasen!");
+                Debug.WriteLine(ex.Message);
+                MessageBox.Show($"Server je ugasen! {ex.Message}");
                 return;
             }
         }

@@ -15,6 +15,8 @@ namespace Client.UserControls
         public UCDefault()
         {
             InitializeComponent();
+            this.BackgroundImage = Client.AppResources.AutoskolaBackground;
+            this.BackgroundImageLayout = ImageLayout.Zoom;
         }
     }
 }

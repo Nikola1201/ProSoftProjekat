@@ -40,7 +40,7 @@ namespace Server
                 {
                     Socket clientSocket = socket.Accept();
                     ClientHandler handler = new ClientHandler(clientSocket);
-                    clients.Add(handler);
+                    lock (clients) { clients.Add(handler); }
                     Thread clientThread = new Thread(handler.Handle);
                     clientThread.Start();
                 }
@@ -52,11 +52,14 @@ namespace Server
         }
         public void Stop()
         {
-            foreach (ClientHandler handler in clients) {
+            ClientHandler[] snapshot;
+            lock (clients) { snapshot = clients.ToArray(); }
+            foreach (ClientHandler handler in snapshot)
+            {
                 handler.Close();
             }
-            loggedIn.Clear();
-            clients.Clear();
+            lock (loggedIn) { loggedIn.Clear(); }
+            lock (clients) { clients.Clear(); }
             socket.Close();
         }
     }

@@ -1,36 +1,54 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data.Common;
 
 namespace Common.Domain
 {
+    /// <summary>Predstavlja upis kandidata u određeni paket obuke.</summary>
     [Serializable]
     public class Upis : IEntity
     {
+        /// <summary>Jedinstveni identifikator upisa (PK).</summary>
         public int UpisId { get; set; }
+
+        /// <summary>Identifikator kandidata koji je upisan (FK na Kandidat).</summary>
         public int KandidatId { get; set; }
+
+        /// <summary>Identifikator paketa obuke u koji je kandidat upisan (FK na PaketObuke).</summary>
         public int PaketId { get; set; }
+
+        /// <summary>Datum kada je kandidat upisan u paket obuke.</summary>
         public DateTime DatumUpisa { get; set; }
+
+        /// <summary>Trenutni status upisa: "aktivan", "polozio", "pao" ili "odustao".</summary>
         public string Status { get; set; }  // 'aktivan', 'polozio', 'pao', 'odustao'
 
+        /// <summary>Navigacioni objekat ka kandidatu koji je upisan.</summary>
+        public Kandidat Kandidat { get; set; }
+
+        /// <summary>Navigacioni objekat ka paketu obuke u koji je kandidat upisan.</summary>
+        public PaketObuke Paket { get; set; }
+
+        /// <inheritdoc/>
         public string TableName => "Upis";
 
+        /// <inheritdoc/>
         public string Values =>
             $"{KandidatId}, {PaketId}, '{DatumUpisa:yyyy-MM-dd}', '{Status}'";
 
-        public object Query =>
-            $"INSERT INTO Upis (KandidatId, PaketId, DatumUpisa, Status) " +
-            $"VALUES ({Values})";
+        /// <inheritdoc/>
+        public string Query =>
+            $"KandidatId = {KandidatId}";
 
-        public object TableKeyColumn => "UpisId";
+        /// <inheritdoc/>
+        public string TableKeyColumn => "UpisId";
 
-        public object SearchQuery =>
-            $"SELECT * FROM Upis WHERE KandidatId = {KandidatId}";
+        /// <inheritdoc/>
+        public string TableKeyQuery =>
+            $"{TableKeyColumn} = {UpisId}";
 
-        public object TableKeyQuery =>
-            $"SELECT * FROM Upis WHERE UpisId = {UpisId}";
-
-        public object Update =>
+        /// <inheritdoc/>
+        public string Update =>
             $"UPDATE Upis SET " +
             $"KandidatId = {KandidatId}, " +
             $"PaketId = {PaketId}, " +
@@ -38,24 +56,41 @@ namespace Common.Domain
             $"Status = '{Status}' " +
             $"WHERE UpisId = {UpisId}";
 
-        public List<IEntity> GetReaderList(SqlDataReader reader)
+        /// <inheritdoc/>
+        public List<IEntity> GetReaderList(DbDataReader reader)
         {
             var list = new List<IEntity>();
             while (reader.Read())
-                list.Add(GetReaderResult(reader));
+            {
+                list.Add(new Upis
+                    {
+                        UpisId = (int)reader["UpisId"],
+                        KandidatId = (int)reader["KandidatId"],
+                        PaketId = (int)reader["PaketId"],
+                        DatumUpisa = (DateTime)reader["DatumUpisa"],
+                        Status = reader["Status"].ToString()
+                    }
+                );
+            }
+
             return list;
         }
 
-        public IEntity GetReaderResult(SqlDataReader reader)
+        /// <inheritdoc/>
+        public IEntity GetReaderResult(DbDataReader reader)
         {
-            return new Upis
+            if (reader.Read())
             {
-                UpisId = (int)reader["UpisId"],
-                KandidatId = (int)reader["KandidatId"],
-                PaketId = (int)reader["PaketId"],
-                DatumUpisa = (DateTime)reader["DatumUpisa"],
-                Status = reader["Status"].ToString()
-            };
+                return new Upis
+                {
+                    UpisId = (int)reader["UpisId"],
+                    KandidatId = (int)reader["KandidatId"],
+                    PaketId = (int)reader["PaketId"],
+                    DatumUpisa = (DateTime)reader["DatumUpisa"],
+                    Status = reader["Status"].ToString()
+                };
+            }
+            return null;
         }
     }
 }
