@@ -7,6 +7,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <ProjectGuid>{E10FCCB7-900F-44C4-A2EF-3197707C5C8A}</ProjectGuid>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1701;1702</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

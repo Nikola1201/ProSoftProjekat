@@ -10,6 +10,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
     <ProjectGuid>{DD9C0FC8-B918-471A-9B9F-3210D3C20373}</ProjectGuid>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
