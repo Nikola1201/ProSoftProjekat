@@ -1,31 +1,49 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 
 namespace Common.Domain
 {
+    /// <summary>Predstavlja paket obuke koji auto-škola nudi kandidatima (kombinacija kategorije, broja časova i cene).</summary>
     [Serializable]
     public class PaketObuke : IEntity
     {
+        /// <summary>Jedinstveni identifikator paketa obuke (PK).</summary>
         public int PaketId { get; set; }
+
+        /// <summary>Naziv paketa obuke (npr. "Osnovna B kategorija").</summary>
         public string Naziv { get; set; }
+
+        /// <summary>Kategorija vozačke dozvole na koju se paket odnosi.</summary>
         public Kategorija Kategorija { get; set; }
+
+        /// <summary>Ukupan broj časova vožnje predviđen paketom.</summary>
         public int BrojCasova { get; set; }
+
+        /// <summary>Cena paketa obuke u dinarima.</summary>
         public decimal Cena { get; set; }
+
+        /// <summary>Opis sadržaja i posebnosti paketa obuke.</summary>
         public string Opis { get; set; }
 
+        /// <inheritdoc/>
         public string TableName => "PaketObuke";
 
+        /// <inheritdoc/>
         public string Values =>
             $"'{Naziv}', '{Kategorija.KategorijaID}', {BrojCasova}, {Cena.ToString(System.Globalization.CultureInfo.InvariantCulture)}, '{Opis}'";
 
+        /// <inheritdoc/>
         public string Query => $"Naziv = '{Naziv}'";
 
+        /// <inheritdoc/>
         public string TableKeyColumn => "PaketId";
 
+        /// <inheritdoc/>
         public string TableKeyQuery =>
             $"{TableKeyColumn} = {PaketId}";
 
+        /// <inheritdoc/>
         public string Update =>
             $"UPDATE PaketObuke SET " +
             $"Naziv = '{Naziv}', " +
@@ -35,6 +53,7 @@ namespace Common.Domain
             $"Opis = '{Opis}' " +
             $"WHERE PaketId = {PaketId}";
 
+        /// <inheritdoc/>
         public List<IEntity> GetReaderList(DbDataReader reader)
         {
             var list = new List<IEntity>();
@@ -54,10 +73,11 @@ namespace Common.Domain
                     }
                 );
             }
-                
+
             return list;
         }
 
+        /// <inheritdoc/>
         public IEntity GetReaderResult(DbDataReader reader)
         {
             if (reader.Read())
@@ -78,6 +98,7 @@ namespace Common.Domain
             return null;
         }
 
+        /// <summary>Tekstualna reprezentacija paketa: "Naziv (Kategorija)".</summary>
         public override string ToString()
         {
             return $"{Naziv} ({Kategorija})";
