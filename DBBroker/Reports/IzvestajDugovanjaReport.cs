@@ -5,15 +5,22 @@ using System.Collections.Generic;
 
 namespace DBBroker.Reports
 {
+    /// <summary>
+    /// Implementacija izveštaja dugovanja kandidata za zadati period i kategoriju.
+    /// Sabira cene upisa i uplate i izračunava preostalo dugovanje po kandidatu.
+    /// </summary>
     public class IzvestajDugovanjaReport : IReport<IzvestajDugovanjaStavkaDto>
     {
         private readonly IzvestajDugovanjaKriterijum _kriterijum;
 
+        /// <summary>Inicijalizuje izveštaj sa zadatim kriterijumima pretrage.</summary>
+        /// <param name="kriterijum">Kriterijumi koji definišu period, kategoriju i filtere.</param>
         public IzvestajDugovanjaReport(IzvestajDugovanjaKriterijum kriterijum)
         {
             _kriterijum = kriterijum;
         }
 
+        /// <inheritdoc/>
         public string Sql => @"
 WITH DugovanjaKandidata AS
 (
@@ -71,6 +78,7 @@ WHERE
     OR (UkupnaCenaObuke - UkupnoPlaceno) > 0
 ORDER BY Prezime, Ime;";
 
+        /// <inheritdoc/>
         public IEnumerable<SqlParameter> Parameters
         {
             get
@@ -83,6 +91,7 @@ ORDER BY Prezime, Ime;";
             }
         }
 
+        /// <inheritdoc/>
         public List<IzvestajDugovanjaStavkaDto> Hydrate(SqlDataReader reader)
         {
             List<IzvestajDugovanjaStavkaDto> rezultat = new List<IzvestajDugovanjaStavkaDto>();

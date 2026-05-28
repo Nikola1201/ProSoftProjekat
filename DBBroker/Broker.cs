@@ -5,40 +5,48 @@ using Common.DTO.Izvestaji;
 
 namespace DBBroker
 {
+    /// <summary>Konkretna implementacija <see cref="IBroker"/> nad <see cref="DBConnection"/>.</summary>
     public class Broker : IBroker
     {
         private DBConnection _connection;
 
+        /// <summary>Inicijalizuje broker sa novom DB konekcijom.</summary>
         public Broker()
         {
             _connection = new DBConnection();
         }
 
+        /// <inheritdoc/>
         public void OpenConnection()
         {
             _connection.OpenConnection();
         }
 
+        /// <inheritdoc/>
         public void CloseConnection()
         {
             _connection.CloseConnection();
         }
 
+        /// <inheritdoc/>
         public void BeginTransaction()
         {
             _connection.BeginTransaction();
         }
 
+        /// <inheritdoc/>
         public void Commit()
         {
             _connection.Commit();
         }
 
+        /// <inheritdoc/>
         public void Rollback()
         {
             _connection.Rollback();
         }
 
+        /// <inheritdoc/>
         public IEntity Add(IEntity entity)
         {
             SqlCommand command = _connection.CreateCommand();
@@ -48,6 +56,7 @@ namespace DBBroker
             return entity;
         }
 
+        /// <inheritdoc/>
         public void Update(IEntity entity)
         {
             SqlCommand command = _connection.CreateCommand();
@@ -56,6 +65,7 @@ namespace DBBroker
             command.Dispose();
         }
 
+        /// <inheritdoc/>
         public void Delete(IEntity entity)
         {
             SqlCommand command = _connection.CreateCommand();
@@ -64,6 +74,7 @@ namespace DBBroker
             command.Dispose();
         }
 
+        /// <inheritdoc/>
         public List<IEntity> GetAll(IEntity entity)
         {
             SqlCommand command = _connection.CreateCommand();
@@ -75,6 +86,7 @@ namespace DBBroker
             return entities;
         }
 
+        /// <inheritdoc/>
         public IEntity GetEntityByID(IEntity entity)
         {
             SqlCommand command = _connection.CreateCommand();
@@ -86,6 +98,7 @@ namespace DBBroker
             return result;
         }
 
+        /// <inheritdoc/>
         public IEntity GetEntityByQuery(IEntity entity)
         {
             SqlCommand command = _connection.CreateCommand();
@@ -97,6 +110,7 @@ namespace DBBroker
             return result;
         }
 
+        /// <inheritdoc/>
         public List<IEntity> GetEntitiesByQuery(IEntity entity)
         {
             SqlCommand command = _connection.CreateCommand();
@@ -108,6 +122,7 @@ namespace DBBroker
             return entities;
         }
 
+        /// <inheritdoc/>
         public List<T> ExecuteReport<T>(IReport<T> report)
         {
             SqlCommand command = _connection.CreateCommand();

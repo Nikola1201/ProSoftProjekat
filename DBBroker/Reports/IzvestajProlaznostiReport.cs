@@ -5,15 +5,22 @@ using System.Collections.Generic;
 
 namespace DBBroker.Reports
 {
+    /// <summary>
+    /// Implementacija izveštaja prolaznosti kandidata za zadati period i kategoriju.
+    /// Grupišu se pokušaji teorijskog i praktičnog ispita i dodjeljuje status prolaznosti.
+    /// </summary>
     public class IzvestajProlaznostiReport : IReport<IzvestajProlaznostiStavkaDto>
     {
         private readonly IzvestajProlaznostiKriterijum _kriterijum;
 
+        /// <summary>Inicijalizuje izveštaj sa zadatim kriterijumima pretrage.</summary>
+        /// <param name="kriterijum">Kriterijumi koji definišu period, kategoriju i filtere.</param>
         public IzvestajProlaznostiReport(IzvestajProlaznostiKriterijum kriterijum)
         {
             _kriterijum = kriterijum;
         }
 
+        /// <inheritdoc/>
         public string Sql => @"
 WITH KandidatAgregat AS
 (
@@ -87,6 +94,7 @@ FROM KandidatStatusi
 WHERE @IncludeNoData = 1 OR StatusKod <> 2
 ORDER BY Prezime, Ime;";
 
+        /// <inheritdoc/>
         public IEnumerable<SqlParameter> Parameters
         {
             get
@@ -100,6 +108,7 @@ ORDER BY Prezime, Ime;";
             }
         }
 
+        /// <inheritdoc/>
         public List<IzvestajProlaznostiStavkaDto> Hydrate(SqlDataReader reader)
         {
             List<IzvestajProlaznostiStavkaDto> stavke = new List<IzvestajProlaznostiStavkaDto>();

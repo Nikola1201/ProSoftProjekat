@@ -5,8 +5,13 @@ using System.Collections.Generic;
 
 namespace DBBroker.Reports
 {
+    /// <summary>
+    /// Implementacija izveštaja koji vraća sve kandidate sa aktivnim dugovanjem,
+    /// sortirane opadajuće po iznosu dugovanja.
+    /// </summary>
     public class KandidatiSaDugovanjemReport : IReport<KandidatDugovanjeDto>
     {
+        /// <inheritdoc/>
         public string Sql => @"
 WITH AgregatPoKandidatu AS
 (
@@ -38,8 +43,10 @@ FROM AgregatPoKandidatu
 WHERE (UkupnaCena - UkupnoPlaceno) > 0
 ORDER BY Dugovanje DESC, PunoIme;";
 
+        /// <inheritdoc/>
         public IEnumerable<SqlParameter> Parameters => Array.Empty<SqlParameter>();
 
+        /// <inheritdoc/>
         public List<KandidatDugovanjeDto> Hydrate(SqlDataReader reader)
         {
             List<KandidatDugovanjeDto> result = new List<KandidatDugovanjeDto>();
