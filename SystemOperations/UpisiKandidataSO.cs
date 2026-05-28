@@ -7,24 +7,43 @@ using System.Linq;
 
 namespace SystemOperations
 {
+    /// <summary>
+    /// Sistemska operacija za upis kandidata na paket obuke.
+    /// Validira obavezne podatke, proverava da li kandidat i paket postoje,
+    /// i sprečava dupli aktivni upis za istog kandidata.
+    /// </summary>
     public class UpisiKandidataSO : SystemOperationBase
     {
         private readonly Upis _upis;
 
+        /// <summary>Konstruktor za produkcijsku upotrebu (podrazumevani broker).</summary>
+        /// <param name="upis">Podaci o upisu koji se kreira.</param>
         public UpisiKandidataSO(Upis upis) : this(upis, null) { }
+
+        /// <summary>Konstruktor sa injektovanim brokerom (test-friendly).</summary>
+        /// <param name="upis">Podaci o upisu koji se kreira.</param>
+        /// <param name="broker">Broker za pristup bazi.</param>
         public UpisiKandidataSO(Upis upis, IBroker? broker) : base(broker)
         {
             _upis = upis;
         }
 
+        /// <summary>Rezultat operacije — sačuvani upis.</summary>
         public IEntity Result { get; private set; }
 
+        /// <inheritdoc/>
         protected override void ExecuteConcreteOperation()
         {
             Validate(_upis);
             Result = _broker.Add(_upis);
         }
 
+        /// <summary>
+        /// Proverava obavezna polja upisa, validnost datuma, egzistenciju kandidata i paketa,
+        /// i jedinstvenost aktivnog upisa za kandidata.
+        /// </summary>
+        /// <param name="upis">Upis za validaciju.</param>
+        /// <exception cref="ValidacijaException">Baca se ako neko od ograničenja nije zadovoljeno.</exception>
         private void Validate(Upis upis)
         {
             if (upis == null)

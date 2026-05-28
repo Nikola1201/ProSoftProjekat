@@ -8,18 +8,31 @@ using System.Linq;
 
 namespace SystemOperations
 {
+    /// <summary>
+    /// Sistemska operacija za kreiranje novog instruktora.
+    /// Validira podatke o instruktoru, jedinstvenost JMBG i email adrese,
+    /// proverava postojanje kategorije i kreira vezu instruktor–kategorija (InstrKat).
+    /// </summary>
     public class KreirajInstruktoraSO : SystemOperationBase
     {
         private readonly KreirajInstruktoraRequest _request;
 
+        /// <summary>Konstruktor za produkcijsku upotrebu (podrazumevani broker).</summary>
+        /// <param name="request">Zahtev sa podacima o instruktoru i ID kategorije.</param>
         public KreirajInstruktoraSO(KreirajInstruktoraRequest request) : this(request, null) { }
+
+        /// <summary>Konstruktor sa injektovanim brokerom (test-friendly).</summary>
+        /// <param name="request">Zahtev sa podacima o instruktoru i ID kategorije.</param>
+        /// <param name="broker">Broker za pristup bazi.</param>
         public KreirajInstruktoraSO(KreirajInstruktoraRequest request, IBroker? broker) : base(broker)
         {
             _request = request;
         }
 
+        /// <summary>Rezultat operacije — sačuvani instruktor.</summary>
         public IEntity Result { get; internal set; }
 
+        /// <inheritdoc/>
         protected override void ExecuteConcreteOperation()
         {
             if (_request == null)
@@ -51,6 +64,11 @@ namespace SystemOperations
             Result = saved;
         }
 
+        /// <summary>
+        /// Proverava da li kategorija postoji u bazi i da li je ID validan.
+        /// </summary>
+        /// <param name="kategorijaId">ID kategorije za proveru.</param>
+        /// <exception cref="ValidacijaException">Baca se ako kategorija ne postoji ili ID nije validan.</exception>
         private void ValidateKategorija(int kategorijaId)
         {
             if (kategorijaId <= 0)
@@ -65,6 +83,12 @@ namespace SystemOperations
             }
         }
 
+        /// <summary>
+        /// Proverava strukturna i vrednosna ograničenja instruktora,
+        /// kao i jedinstvenost JMBG i email adrese u sistemu.
+        /// </summary>
+        /// <param name="argument">Instruktor za validaciju.</param>
+        /// <exception cref="ValidacijaException">Baca se ako neko od ograničenja nije zadovoljeno.</exception>
         private void Validate(Instruktor argument)
         {
             if (argument == null)

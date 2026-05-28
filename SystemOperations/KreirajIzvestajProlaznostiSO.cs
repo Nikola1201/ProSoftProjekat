@@ -9,17 +9,31 @@ using System.Linq;
 
 namespace SystemOperations
 {
+    /// <summary>
+    /// Sistemska operacija za generisanje izveštaja prolaznosti kandidata na ispitima.
+    /// Validira kriterijum, izvršava SQL izveštaj i izračunava sumarnu statistiku
+    /// (broj položenih, palih, u toku i procenat prolaznosti).
+    /// </summary>
     public class KreirajIzvestajProlaznostiSO : SystemOperationBase
     {
         private readonly IzvestajProlaznostiKriterijum _kriterijum;
+
+        /// <summary>Rezultat operacije — izveštaj sa stavkama i sumarnom statistikom.</summary>
         public IzvestajProlaznostiResponseDto Result { get; private set; }
 
+        /// <summary>Konstruktor za produkcijsku upotrebu (podrazumevani broker).</summary>
+        /// <param name="kriterijum">Kriterijum za filtriranje izveštaja (period, kategorija, tip ispita).</param>
         public KreirajIzvestajProlaznostiSO(IzvestajProlaznostiKriterijum kriterijum) : this(kriterijum, null) { }
+
+        /// <summary>Konstruktor sa injektovanim brokerom (test-friendly).</summary>
+        /// <param name="kriterijum">Kriterijum za filtriranje izveštaja (period, kategorija, tip ispita).</param>
+        /// <param name="broker">Broker za pristup bazi.</param>
         public KreirajIzvestajProlaznostiSO(IzvestajProlaznostiKriterijum kriterijum, IBroker? broker) : base(broker)
         {
             _kriterijum = kriterijum;
         }
 
+        /// <inheritdoc/>
         protected override void ExecuteConcreteOperation()
         {
             Validate(_kriterijum);
@@ -51,6 +65,12 @@ namespace SystemOperations
                 summary.UkupnoUToku, summary.ProcenatProlaznosti));
         }
 
+        /// <summary>
+        /// Proverava ispravnost kriterijuma za izveštaj:
+        /// prisustvo objekta, validnost datumskog opsega, obaveznost kategorije i tip ispita.
+        /// </summary>
+        /// <param name="kriterijum">Kriterijum za validaciju.</param>
+        /// <exception cref="ValidacijaException">Baca se ako neko od ograničenja nije zadovoljeno.</exception>
         private void Validate(IzvestajProlaznostiKriterijum kriterijum)
         {
             if (kriterijum == null)

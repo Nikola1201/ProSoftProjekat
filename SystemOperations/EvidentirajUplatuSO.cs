@@ -9,6 +9,11 @@ using System.Linq;
 
 namespace SystemOperations
 {
+    /// <summary>
+    /// Sistemska operacija za evidentiranje uplate po osnovu upisa.
+    /// Validira zahtev, pronalazi ciljni upis (eksplicitno ili po poslednjem aktivnom),
+    /// proverava da iznos ne prelazi preostalo dugovanje i kreira novi zapis o plaćanju.
+    /// </summary>
     public class EvidentirajUplatuSO : SystemOperationBase
     {
         private static readonly HashSet<string> DozvoljeniNaciniPlacanja = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -20,14 +25,22 @@ namespace SystemOperations
 
         private readonly EvidentirajUplatuRequest _request;
 
+        /// <summary>Konstruktor za produkcijsku upotrebu (podrazumevani broker).</summary>
+        /// <param name="request">Podaci o uplati koja se evidentira.</param>
         public EvidentirajUplatuSO(EvidentirajUplatuRequest request) : this(request, null) { }
+
+        /// <summary>Konstruktor sa injektovanim brokerom (test-friendly).</summary>
+        /// <param name="request">Podaci o uplati koja se evidentira.</param>
+        /// <param name="broker">Broker za pristup bazi.</param>
         public EvidentirajUplatuSO(EvidentirajUplatuRequest request, IBroker? broker) : base(broker)
         {
             _request = request;
         }
 
+        /// <summary>Rezultat operacije — evidentirano plaćanje i preostalo dugovanje.</summary>
         public EvidentirajUplatuResponse Result { get; private set; }
 
+        /// <inheritdoc/>
         protected override void ExecuteConcreteOperation()
         {
             ValidateRequest(_request);
@@ -91,6 +104,12 @@ namespace SystemOperations
             };
         }
 
+        /// <summary>
+        /// Izračunava preostalo dugovanje za dati upis:
+        /// cena paketa umanjena za sumu svih dosadašnjih plaćanja.
+        /// </summary>
+        /// <param name="upis">Upis za koji se računa dugovanje.</param>
+        /// <returns>Preostalo dugovanje u RSD; minimalno <c>0</c>.</returns>
         private decimal IzracunajPreostaloDugovanje(Upis upis)
         {
             PaketObuke paket = (PaketObuke)_broker.GetEntityByID(new PaketObuke { PaketId = upis.PaketId });
@@ -107,6 +126,12 @@ namespace SystemOperations
             return preostalo < 0m ? 0m : preostalo;
         }
 
+        /// <summary>
+        /// Proverava obaveznost i ispravnost svih polja zahteva za evidentiranje uplate:
+        /// identifikator kandidata/upisa, iznos, datum i način plaćanja, kao i dužinu napomene.
+        /// </summary>
+        /// <param name="request">Zahtev za validaciju.</param>
+        /// <exception cref="ValidacijaException">Baca se ako neko od ograničenja nije zadovoljeno.</exception>
         private void ValidateRequest(EvidentirajUplatuRequest request)
         {
             if (request == null)

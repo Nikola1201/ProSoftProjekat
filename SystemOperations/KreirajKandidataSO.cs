@@ -9,22 +9,42 @@ using System.Threading.Tasks;
 
 namespace SystemOperations
 {
+    /// <summary>
+    /// Sistemska operacija za kreiranje novog kandidata.
+    /// Validira sve obavezne podatke i jedinstvenost JMBG i email adrese pre upisa.
+    /// </summary>
     public class KreirajKandidataSO : SystemOperationBase
     {
         private readonly Kandidat _kandidat;
+
+        /// <summary>Rezultat operacije — sačuvan kandidat.</summary>
         public IEntity Result { get; set; }
 
+        /// <summary>Konstruktor za produkcijsku upotrebu (podrazumevani broker).</summary>
+        /// <param name="kandidat">Kandidat za upis.</param>
         public KreirajKandidataSO(Kandidat kandidat) : this(kandidat, null) { }
+
+        /// <summary>Konstruktor sa injektovanim brokerom (test-friendly).</summary>
+        /// <param name="kandidat">Kandidat za upis.</param>
+        /// <param name="broker">Broker za pristup bazi.</param>
         public KreirajKandidataSO(Kandidat kandidat, IBroker? broker) : base(broker)
         {
             _kandidat = kandidat;
         }
+
+        /// <inheritdoc/>
         protected override void ExecuteConcreteOperation()
         {
             Validate(_kandidat);
             Result = _broker.Add(_kandidat);
         }
 
+        /// <summary>
+        /// Proverava strukturna i vrednosna ograničenja kandidata,
+        /// kao i jedinstvenost JMBG i email adrese u sistemu.
+        /// </summary>
+        /// <param name="kandidat">Kandidat za validaciju.</param>
+        /// <exception cref="ValidacijaException">Baca se ako neko od ograničenja nije zadovoljeno.</exception>
         private void Validate(Kandidat kandidat)
         {
             if (kandidat == null)

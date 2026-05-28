@@ -8,6 +8,11 @@ using System.Linq;
 
 namespace SystemOperations
 {
+    /// <summary>
+    /// Sistemska operacija za evidentiranje ispita kandidata.
+    /// Validira zahtev, proverava egzistenciju kandidata i upisa, sprečava duplikate
+    /// i automatski ažurira status upisa na <c>polozio</c> kada kandidat položi oba tipa ispita.
+    /// </summary>
     public class EvidentirajIspitSO : SystemOperationBase
     {
         private static readonly HashSet<string> DozvoljeniTipovi = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -25,14 +30,22 @@ namespace SystemOperations
 
         private readonly EvidentirajIspitRequest _request;
 
+        /// <summary>Konstruktor za produkcijsku upotrebu (podrazumevani broker).</summary>
+        /// <param name="request">Podaci o ispitu koji se evidentira.</param>
         public EvidentirajIspitSO(EvidentirajIspitRequest request) : this(request, null) { }
+
+        /// <summary>Konstruktor sa injektovanim brokerom (test-friendly).</summary>
+        /// <param name="request">Podaci o ispitu koji se evidentira.</param>
+        /// <param name="broker">Broker za pristup bazi.</param>
         public EvidentirajIspitSO(EvidentirajIspitRequest request, IBroker? broker) : base(broker)
         {
             _request = request;
         }
 
+        /// <summary>Rezultat operacije — evidentirani ispit i ažurirani status upisa.</summary>
         public EvidentirajIspitResponse Result { get; private set; }
 
+        /// <inheritdoc/>
         protected override void ExecuteConcreteOperation()
         {
             ValidateRequest(_request);
@@ -115,6 +128,12 @@ namespace SystemOperations
             };
         }
 
+        /// <summary>
+        /// Proverava obaveznost i ispravnost svih polja zahteva za evidentiranje ispita:
+        /// kandidat, datum, tip i rezultat ispita, kao i dužinu napomene.
+        /// </summary>
+        /// <param name="request">Zahtev za validaciju.</param>
+        /// <exception cref="ValidacijaException">Baca se ako neko od ograničenja nije zadovoljeno.</exception>
         private void ValidateRequest(EvidentirajIspitRequest request)
         {
             if (request == null)

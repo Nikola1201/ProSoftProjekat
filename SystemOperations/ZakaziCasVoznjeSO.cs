@@ -7,24 +7,43 @@ using System.Linq;
 
 namespace SystemOperations
 {
+    /// <summary>
+    /// Sistemska operacija za zakazivanje časa vožnje.
+    /// Validira sve obavezne podatke, provjerava aktivnost upisa, instruktora i vozila,
+    /// ovlašćenje instruktora za kategoriju vozila i odsustvo terminalnih konflikata.
+    /// </summary>
     public class ZakaziCasVoznjeSO : SystemOperationBase
     {
         private readonly CasVoznje _casVoznje;
 
+        /// <summary>Konstruktor za produkcijsku upotrebu (podrazumevani broker).</summary>
+        /// <param name="casVoznje">Podaci o času vožnje koji se zakazuje.</param>
         public ZakaziCasVoznjeSO(CasVoznje casVoznje) : this(casVoznje, null) { }
+
+        /// <summary>Konstruktor sa injektovanim brokerom (test-friendly).</summary>
+        /// <param name="casVoznje">Podaci o času vožnje koji se zakazuje.</param>
+        /// <param name="broker">Broker za pristup bazi.</param>
         public ZakaziCasVoznjeSO(CasVoznje casVoznje, IBroker? broker) : base(broker)
         {
             _casVoznje = casVoznje;
         }
 
+        /// <summary>Rezultat operacije — sačuvani čas vožnje.</summary>
         public IEntity Result { get; private set; }
 
+        /// <inheritdoc/>
         protected override void ExecuteConcreteOperation()
         {
             Validate(_casVoznje);
             Result = _broker.Add(_casVoznje);
         }
 
+        /// <summary>
+        /// Proverava sve obavezne atribute časa, validnost upisa/instruktora/vozila,
+        /// ovlašćenje instruktora i odsustvo terminalnih konflikata.
+        /// </summary>
+        /// <param name="cas">Čas vožnje za validaciju.</param>
+        /// <exception cref="ValidacijaException">Baca se ako neko od ograničenja nije zadovoljeno.</exception>
         private void Validate(CasVoznje cas)
         {
             if (cas == null)
@@ -90,6 +109,12 @@ namespace SystemOperations
             cas.Status = "zakazan";
         }
 
+        /// <summary>
+        /// Proverava da li instruktor ima aktivnu vezu sa traženom kategorijom vozila.
+        /// </summary>
+        /// <param name="instruktorId">ID instruktora.</param>
+        /// <param name="kategorijaId">ID kategorije vozila.</param>
+        /// <exception cref="ValidacijaException">Baca se ako instruktor nije ovlašćen za datu kategoriju.</exception>
         private void ValidateInstruktorOvlascen(int instruktorId, int kategorijaId)
         {
             InstrKat veza = (InstrKat)_broker.GetEntityByID(new InstrKat
@@ -104,6 +129,12 @@ namespace SystemOperations
             }
         }
 
+        /// <summary>
+        /// Proverava da li novi čas vožnje vremenski konflikta sa već zakazanim časovima
+        /// za istog instruktora ili isto vozilo.
+        /// </summary>
+        /// <param name="noviCas">Novi čas čiji se termin proverava.</param>
+        /// <exception cref="ValidacijaException">Baca se ako postoji konflikt termina za instruktora ili vozilo.</exception>
         private void ValidateTerminKonflikt(CasVoznje noviCas)
         {
             DateTime noviPocetak = noviCas.DatumCas;
@@ -133,6 +164,14 @@ namespace SystemOperations
             }
         }
 
+        /// <summary>
+        /// Utvrđuje da li se dva vremenska intervala preklapaju.
+        /// </summary>
+        /// <param name="noviPocetak">Početak novog termina.</param>
+        /// <param name="noviKraj">Kraj novog termina.</param>
+        /// <param name="postojeciPocetak">Početak postojećeg termina.</param>
+        /// <param name="postojeciKraj">Kraj postojećeg termina.</param>
+        /// <returns><see langword="true"/> ako se intervali preklapaju; inače <see langword="false"/>.</returns>
         private bool TerminSePreklapa(DateTime noviPocetak, DateTime noviKraj, DateTime postojeciPocetak, DateTime postojeciKraj)
         {
             return noviPocetak < postojeciKraj && postojeciPocetak < noviKraj;
