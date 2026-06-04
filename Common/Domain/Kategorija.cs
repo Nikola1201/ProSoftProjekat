@@ -10,12 +10,13 @@ namespace Common.Domain
     {
         private string _nazivKategorije;
 
-        /// <summary>Jedinstveni identifikator kategorije (PK).</summary>
+        /// <summary>Jedinstveni identifikator kategorije (PK). Dozvoljene vrednosti: auto-generisan PK; ne validira se.</summary>
         public int KategorijaID { get; set; }
 
         /// <summary>
         /// Naziv kategorije vozačke dozvole. Maksimalna dužina su 2 karaktera.
         /// Baca <see cref="ArgumentException"/> ako vrednost prelazi 2 karaktera.
+        /// Dozvoljene vrednosti: obavezno; 1–2 karaktera (npr. "A", "B", "C", "AM", "B1"). Validira setter (ArgumentException za > 2) i <see cref="Common.Validation.KategorijaValidator"/>.
         /// </summary>
         public string NazivKategorije
         {
