@@ -8,25 +8,25 @@ namespace Common.Domain
     [Serializable]
     public class Admin : IEntity
     {
-        /// <summary>Jedinstveni identifikator administratora (PK).</summary>
+        /// <summary>Jedinstveni identifikator administratora (PK). Dozvoljene vrednosti: auto-generisan PK; ne validira se.</summary>
         public int AdminId { get; set; }
 
-        /// <summary>Ime administratora.</summary>
+        /// <summary>Ime administratora. Dozvoljene vrednosti: obavezno; 1–50 karaktera. Validira <see cref="Common.Validation.AdminValidator"/>.</summary>
         public string Ime { get; set; }
 
-        /// <summary>Prezime administratora.</summary>
+        /// <summary>Prezime administratora. Dozvoljene vrednosti: obavezno; 1–50 karaktera. Validira <see cref="Common.Validation.AdminValidator"/>.</summary>
         public string Prezime { get; set; }
 
-        /// <summary>Korisničko ime za prijavu na sistem.</summary>
+        /// <summary>Korisničko ime za prijavu na sistem. Dozvoljene vrednosti: obavezno; 3–30 karaktera; bez razmaka. Validira <see cref="Common.Validation.AdminValidator"/>.</summary>
         public string Username { get; set; }
 
-        /// <summary>Lozinka administratora. Pažnja: čuva se u čistom tekstu — videti CLAUDE.md §11 #6.</summary>
+        /// <summary>Lozinka administratora. Pažnja: čuva se u čistom tekstu — videti CLAUDE.md §11 #6. Dozvoljene vrednosti: obavezno; 6–100 karaktera. Validira <see cref="Common.Validation.AdminValidator"/>.</summary>
         public string Lozinka { get; set; }
 
-        /// <summary>Email adresa administratora.</summary>
+        /// <summary>Email adresa administratora. Dozvoljene vrednosti: obavezno; ispravan email format. Validira <see cref="Common.Validation.AdminValidator"/>.</summary>
         public string Email { get; set; }
 
-        /// <summary>Datum i vreme kada je nalog kreiran.</summary>
+        /// <summary>Datum i vreme kada je nalog kreiran. Dozvoljene vrednosti: obavezno; ne sme biti podrazumevani datum. Validira <see cref="Common.Validation.AdminValidator"/>.</summary>
         public DateTime DatumKreiranja { get; set; }
 
         /// <inheritdoc/>
