@@ -8,28 +8,28 @@ namespace Common.Domain
     [Serializable]
     public class CasVoznje : IEntity
     {
-        /// <summary>Jedinstveni identifikator časa vožnje (PK).</summary>
+        /// <summary>Jedinstveni identifikator časa vožnje (PK). Dozvoljene vrednosti: auto-generisan PK; ne validira se.</summary>
         public int CasId { get; set; }
 
-        /// <summary>Identifikator upisa u okviru kojeg se odvija čas (FK na Upis).</summary>
+        /// <summary>Identifikator upisa u okviru kojeg se odvija čas (FK na Upis). Dozvoljene vrednosti: strani ključ; mora biti veće od nule. Validira <see cref="Common.Validation.CasVoznjeValidator"/>.</summary>
         public int UpisId { get; set; }
 
-        /// <summary>Identifikator instruktora koji vodi čas (FK na Instruktor).</summary>
+        /// <summary>Identifikator instruktora koji vodi čas (FK na Instruktor). Dozvoljene vrednosti: strani ključ; mora biti veće od nule. Validira <see cref="Common.Validation.CasVoznjeValidator"/>.</summary>
         public int InstruktorId { get; set; }
 
-        /// <summary>Identifikator vozila koje se koristi na času (FK na Vozilo).</summary>
+        /// <summary>Identifikator vozila koje se koristi na času (FK na Vozilo). Dozvoljene vrednosti: strani ključ; mora biti veće od nule. Validira <see cref="Common.Validation.CasVoznjeValidator"/>.</summary>
         public int VoziloId { get; set; }
 
-        /// <summary>Datum i vreme početka časa vožnje.</summary>
+        /// <summary>Datum i vreme početka časa vožnje. Dozvoljene vrednosti: obavezno; ne sme biti podrazumevani datum. Validira <see cref="Common.Validation.CasVoznjeValidator"/>.</summary>
         public DateTime DatumCas { get; set; }
 
-        /// <summary>Trajanje časa vožnje u minutima.</summary>
+        /// <summary>Trajanje časa vožnje u minutima. Dozvoljene vrednosti: celobrojno, između 1 i 600 (minuta). Validira <see cref="Common.Validation.CasVoznjeValidator"/>.</summary>
         public int TrajanjMin { get; set; }
 
-        /// <summary>Trenutni status časa: "zakazan", "odrzan" ili "otkazan".</summary>
+        /// <summary>Trenutni status časa: "zakazan", "odrzan" ili "otkazan". Dozvoljene vrednosti: jedna od: zakazan, odrzan, otkazan. Validira <see cref="Common.Validation.CasVoznjeValidator"/>.</summary>
         public string Status { get; set; }  // 'zakazan', 'odrzan', 'otkazan'
 
-        /// <summary>Opcionalna napomena uz čas vožnje.</summary>
+        /// <summary>Opcionalna napomena uz čas vožnje. Dozvoljene vrednosti: opciono; najviše 200 karaktera. Validira <see cref="Common.Validation.CasVoznjeValidator"/>.</summary>
         public string Napomena { get; set; }
 
         /// <inheritdoc/>
