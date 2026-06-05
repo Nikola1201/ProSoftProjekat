@@ -8,22 +8,22 @@ namespace Common.Domain
     [Serializable]
     public class Ispit : IEntity
     {
-        /// <summary>Jedinstveni identifikator ispita (PK).</summary>
+        /// <summary>Jedinstveni identifikator ispita (PK). Dozvoljene vrednosti: auto-generisan PK; ne validira se.</summary>
         public int IspitId { get; set; }
 
-        /// <summary>Identifikator upisa u okviru kojeg se polaže ispit (FK na Upis).</summary>
+        /// <summary>Identifikator upisa u okviru kojeg se polaže ispit (FK na Upis). Dozvoljene vrednosti: strani ključ; mora biti veće od nule. Validira <see cref="Common.Validation.IspitValidator"/>.</summary>
         public int UpisId { get; set; }
 
-        /// <summary>Datum kada je ispit održan.</summary>
+        /// <summary>Datum kada je ispit održan. Dozvoljene vrednosti: obavezno; ne sme biti podrazumevani datum. Validira <see cref="Common.Validation.IspitValidator"/>.</summary>
         public DateTime DatumIspita { get; set; }
 
-        /// <summary>Tip ispita (npr. "teorijski" ili "prakticni").</summary>
+        /// <summary>Tip ispita (npr. "teorijski" ili "prakticni"). Dozvoljene vrednosti: jedna od: teorijski, prakticni. Validira <see cref="Common.Validation.IspitValidator"/>.</summary>
         public string Tip { get; set; }
 
-        /// <summary>Rezultat ispita (npr. "polozio" ili "pao").</summary>
+        /// <summary>Rezultat ispita (npr. "polozio" ili "pao"). Dozvoljene vrednosti: jedna od: polozio, pao. Validira <see cref="Common.Validation.IspitValidator"/>.</summary>
         public string Rezultat { get; set; }
 
-        /// <summary>Opcionalna napomena uz ispit.</summary>
+        /// <summary>Opcionalna napomena uz ispit. Dozvoljene vrednosti: opciono; najviše 200 karaktera. Validira <see cref="Common.Validation.IspitValidator"/>.</summary>
         public string Napomena { get; set; }
 
         /// <inheritdoc/>
