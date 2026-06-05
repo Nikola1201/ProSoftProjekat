@@ -8,16 +8,16 @@ namespace Common.Domain
     [Serializable]
     public class InstrKat : IEntity
     {
-        /// <summary>Identifikator instruktora (deo složenog PK, FK na Instruktor).</summary>
+        /// <summary>Identifikator instruktora (deo složenog PK, FK na Instruktor). Dozvoljene vrednosti: deo složenog PK / strani ključ; mora biti veće od nule. Validira <see cref="Common.Validation.InstrKatValidator"/>.</summary>
         public int InstruktorId { get; set; }
 
-        /// <summary>Identifikator kategorije (deo složenog PK, FK na Kategorija).</summary>
+        /// <summary>Identifikator kategorije (deo složenog PK, FK na Kategorija). Dozvoljene vrednosti: deo složenog PK / strani ključ; mora biti veće od nule. Validira <see cref="Common.Validation.InstrKatValidator"/>.</summary>
         public int KategorijaID { get; set; }
 
-        /// <summary>Datum i vreme kada je kategorija dodeljena instruktoru.</summary>
+        /// <summary>Datum i vreme kada je kategorija dodeljena instruktoru. Dozvoljene vrednosti: obavezno; ne sme biti podrazumevani datum. Validira <see cref="Common.Validation.InstrKatValidator"/>.</summary>
         public DateTime DatumDodele { get; set; }
 
-        /// <summary>Označava da li je veza između instruktora i kategorije trenutno aktivna.</summary>
+        /// <summary>Označava da li je veza između instruktora i kategorije trenutno aktivna. Dozvoljene vrednosti: true ili false; ne validira se.</summary>
         public bool Aktivno { get; set; }
 
         /// <inheritdoc/>
