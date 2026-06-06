@@ -8,22 +8,22 @@ namespace Common.Domain
     [Serializable]
     public class PaketObuke : IEntity
     {
-        /// <summary>Jedinstveni identifikator paketa obuke (PK).</summary>
+        /// <summary>Jedinstveni identifikator paketa obuke (PK). Dozvoljene vrednosti: auto-generisan PK; ne validira se.</summary>
         public int PaketId { get; set; }
 
-        /// <summary>Naziv paketa obuke (npr. "Osnovna B kategorija").</summary>
+        /// <summary>Naziv paketa obuke (npr. "Osnovna B kategorija"). Dozvoljene vrednosti: obavezno; 1–50 karaktera. Validira <see cref="Common.Validation.PaketObukeValidator"/>.</summary>
         public string Naziv { get; set; }
 
-        /// <summary>Kategorija vozačke dozvole na koju se paket odnosi.</summary>
+        /// <summary>Kategorija vozačke dozvole na koju se paket odnosi. Dozvoljene vrednosti: obavezno; referenca na kategoriju (ne sme biti null). Validira <see cref="Common.Validation.PaketObukeValidator"/>.</summary>
         public Kategorija Kategorija { get; set; }
 
-        /// <summary>Ukupan broj časova vožnje predviđen paketom.</summary>
+        /// <summary>Ukupan broj časova vožnje predviđen paketom. Dozvoljene vrednosti: celobrojno, između 1 i 200. Validira <see cref="Common.Validation.PaketObukeValidator"/>.</summary>
         public int BrojCasova { get; set; }
 
-        /// <summary>Cena paketa obuke u dinarima.</summary>
+        /// <summary>Cena paketa obuke u dinarima. Dozvoljene vrednosti: decimalno; mora biti veće od nule. Validira <see cref="Common.Validation.PaketObukeValidator"/>.</summary>
         public decimal Cena { get; set; }
 
-        /// <summary>Opis sadržaja i posebnosti paketa obuke.</summary>
+        /// <summary>Opis sadržaja i posebnosti paketa obuke. Dozvoljene vrednosti: opciono; najviše 500 karaktera. Validira <see cref="Common.Validation.PaketObukeValidator"/>.</summary>
         public string Opis { get; set; }
 
         /// <inheritdoc/>

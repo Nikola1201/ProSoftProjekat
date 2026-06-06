@@ -8,28 +8,28 @@ namespace Common.Domain
     [Serializable]
     public class Instruktor : IEntity
     {
-        /// <summary>Jedinstveni identifikator instruktora (PK).</summary>
+        /// <summary>Jedinstveni identifikator instruktora (PK). Dozvoljene vrednosti: auto-generisan PK; ne validira se.</summary>
         public int InstruktorId { get; set; }
 
-        /// <summary>Ime instruktora. Obavezno.</summary>
+        /// <summary>Ime instruktora. Obavezno. Dozvoljene vrednosti: obavezno; 1–50 karaktera. Validira <see cref="Common.Validation.InstruktorValidator"/>.</summary>
         public string Ime { get; set; }
 
-        /// <summary>Prezime instruktora. Obavezno.</summary>
+        /// <summary>Prezime instruktora. Obavezno. Dozvoljene vrednosti: obavezno; 1–50 karaktera. Validira <see cref="Common.Validation.InstruktorValidator"/>.</summary>
         public string Prezime { get; set; }
 
-        /// <summary>Jedinstveni matični broj građana instruktora.</summary>
+        /// <summary>Jedinstveni matični broj građana instruktora. Dozvoljene vrednosti: obavezno; tačno 13 cifara. Validira <see cref="Common.Validation.InstruktorValidator"/>.</summary>
         public string JMBG { get; set; }
 
-        /// <summary>Kontakt telefon instruktora.</summary>
+        /// <summary>Kontakt telefon instruktora. Dozvoljene vrednosti: obavezno; 6–20 cifara uz opcioni vodeći '+'. Validira <see cref="Common.Validation.InstruktorValidator"/>.</summary>
         public string Telefon { get; set; }
 
-        /// <summary>Email adresa instruktora.</summary>
+        /// <summary>Email adresa instruktora. Dozvoljene vrednosti: obavezno; ispravan email format. Validira <see cref="Common.Validation.InstruktorValidator"/>.</summary>
         public string Email { get; set; }
 
-        /// <summary>Datum kada je instruktor zaposlen u auto-školi.</summary>
+        /// <summary>Datum kada je instruktor zaposlen u auto-školi. Dozvoljene vrednosti: obavezno; ne sme biti podrazumevani datum. Validira <see cref="Common.Validation.InstruktorValidator"/>.</summary>
         public DateTime DatumZaposlenja { get; set; }
 
-        /// <summary>Označava da li je instruktor trenutno aktivan (zaposlen).</summary>
+        /// <summary>Označava da li je instruktor trenutno aktivan (zaposlen). Dozvoljene vrednosti: true ili false; ne validira se.</summary>
         public bool Aktivan { get; set; }
 
         /// <summary>Spojeno ime i prezime za prikaz u korisničkom interfejsu.</summary>

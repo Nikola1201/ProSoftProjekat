@@ -8,25 +8,25 @@ namespace Common.Domain
     [Serializable]
     public class Upis : IEntity
     {
-        /// <summary>Jedinstveni identifikator upisa (PK).</summary>
+        /// <summary>Jedinstveni identifikator upisa (PK). Dozvoljene vrednosti: auto-generisan PK; ne validira se.</summary>
         public int UpisId { get; set; }
 
-        /// <summary>Identifikator kandidata koji je upisan (FK na Kandidat).</summary>
+        /// <summary>Identifikator kandidata koji je upisan (FK na Kandidat). Dozvoljene vrednosti: strani ključ; mora biti veće od nule. Validira <see cref="Common.Validation.UpisValidator"/>.</summary>
         public int KandidatId { get; set; }
 
-        /// <summary>Identifikator paketa obuke u koji je kandidat upisan (FK na PaketObuke).</summary>
+        /// <summary>Identifikator paketa obuke u koji je kandidat upisan (FK na PaketObuke). Dozvoljene vrednosti: strani ključ; mora biti veće od nule. Validira <see cref="Common.Validation.UpisValidator"/>.</summary>
         public int PaketId { get; set; }
 
-        /// <summary>Datum kada je kandidat upisan u paket obuke.</summary>
+        /// <summary>Datum kada je kandidat upisan u paket obuke. Dozvoljene vrednosti: obavezno; ne sme biti podrazumevani datum. Validira <see cref="Common.Validation.UpisValidator"/>.</summary>
         public DateTime DatumUpisa { get; set; }
 
-        /// <summary>Trenutni status upisa: "aktivan", "polozio", "pao" ili "odustao".</summary>
+        /// <summary>Trenutni status upisa: "aktivan", "polozio", "pao" ili "odustao". Dozvoljene vrednosti: jedna od: aktivan, polozio, pao, odustao. Validira <see cref="Common.Validation.UpisValidator"/>.</summary>
         public string Status { get; set; }  // 'aktivan', 'polozio', 'pao', 'odustao'
 
-        /// <summary>Navigacioni objekat ka kandidatu koji je upisan.</summary>
+        /// <summary>Navigacioni objekat ka kandidatu koji je upisan. Dozvoljene vrednosti: opcioni navigacioni objekat; ne validira se.</summary>
         public Kandidat Kandidat { get; set; }
 
-        /// <summary>Navigacioni objekat ka paketu obuke u koji je kandidat upisan.</summary>
+        /// <summary>Navigacioni objekat ka paketu obuke u koji je kandidat upisan. Dozvoljene vrednosti: opcioni navigacioni objekat; ne validira se.</summary>
         public PaketObuke Paket { get; set; }
 
         /// <inheritdoc/>

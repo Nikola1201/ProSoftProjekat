@@ -8,25 +8,25 @@ namespace Common.Domain
     [Serializable]
     public class Vozilo : IEntity
     {
-        /// <summary>Jedinstveni identifikator vozila (PK).</summary>
+        /// <summary>Jedinstveni identifikator vozila (PK). Dozvoljene vrednosti: auto-generisan PK; ne validira se.</summary>
         public int VoziloId { get; set; }
 
-        /// <summary>Marka vozila (npr. "Volkswagen", "Renault").</summary>
+        /// <summary>Marka vozila (npr. "Volkswagen", "Renault"). Dozvoljene vrednosti: obavezno; 1–30 karaktera. Validira <see cref="Common.Validation.VoziloValidator"/>.</summary>
         public string Marka { get; set; }
 
-        /// <summary>Model vozila (npr. "Golf", "Clio").</summary>
+        /// <summary>Model vozila (npr. "Golf", "Clio"). Dozvoljene vrednosti: obavezno; 1–30 karaktera. Validira <see cref="Common.Validation.VoziloValidator"/>.</summary>
         public string Model { get; set; }
 
-        /// <summary>Godina proizvodnje vozila.</summary>
+        /// <summary>Godina proizvodnje vozila. Dozvoljene vrednosti: celobrojno, između 1950 i 2100. Validira <see cref="Common.Validation.VoziloValidator"/>.</summary>
         public int Godiste { get; set; }
 
-        /// <summary>Registarski broj (tablica) vozila. Jedinstven u sistemu.</summary>
+        /// <summary>Registarski broj (tablica) vozila. Jedinstven u sistemu. Dozvoljene vrednosti: obavezno; 1–15 karaktera. Validira <see cref="Common.Validation.VoziloValidator"/>.</summary>
         public string Tablica { get; set; }
 
-        /// <summary>Identifikator kategorije kojoj vozilo pripada (FK na Kategorija).</summary>
+        /// <summary>Identifikator kategorije kojoj vozilo pripada (FK na Kategorija). Dozvoljene vrednosti: strani ključ; mora biti veće od nule. Validira <see cref="Common.Validation.VoziloValidator"/>.</summary>
         public int KategorijaID { get; set; }
 
-        /// <summary>Označava da li je vozilo trenutno aktivno i dostupno za obuku.</summary>
+        /// <summary>Označava da li je vozilo trenutno aktivno i dostupno za obuku. Dozvoljene vrednosti: true ili false; ne validira se.</summary>
         public bool Aktivno { get; set; }
 
         /// <inheritdoc/>
